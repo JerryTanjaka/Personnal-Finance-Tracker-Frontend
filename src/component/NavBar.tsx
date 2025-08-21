@@ -5,13 +5,13 @@ export default function NavBar() {
 
     return (
         <nav
-            className={`flex flex-col justify-between rounded-lg bg-gray-100 p-6 h-[94vh] m-6 shadow-[0px_0px_5px_5px_rgba(0,0,0,0.25)] transition-all duration-300 ${isExpanded ? 'w-64' : 'w-20'}`}
+            className={`flex flex-col justify-between rounded-lg bg-gray-100 p-6 h-[94vh] m-6 shadow-[0px_0px_5px_5px_rgba(0,0,0,0.25)] transition-all duration-300 ${isExpanded ? 'w-64' : 'w-20'} text-nowrap`}
             onMouseEnter={() => setIsExpanded(true)}
             onMouseLeave={() => setIsExpanded(false)}
         >
             <div className="flex flex-col items-center gap-3">
                 <i className='bxr bx-user text-3xl rounded-full border-4 border-b-blue-600 p-2'></i>
-                {isExpanded && <span className='text-xl font-medium text-gray-800'>User</span>}
+                <span className='text-xl font-medium text-gray-800'>User</span>
             </div>
             <div className="flex flex-col gap-4 text-gray-700 font-medium">
                 <div className="flex items-center space-x-2 hover:text-blue-600 cursor-pointer">
