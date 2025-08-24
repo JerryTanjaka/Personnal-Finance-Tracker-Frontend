@@ -1,6 +1,9 @@
-import {Link} from "react-router-dom";
+import { useState } from "react";
+import { Link } from "react-router-dom";
 
 export default function LogIn() {
+    const [password, setPassword] = useState("")
+
     return (
         <div className="min-h-screen bg-gray-100 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
             <div className="sm:mx-auto sm:w-full sm:max-w-md">
@@ -11,7 +14,6 @@ export default function LogIn() {
                     Welcome back! Please sign in to continue.
                 </p>
             </div>
-
             <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
                 <div className="bg-white py-8 px-4 shadow-2xl sm:rounded-lg sm:px-10">
                     <form className="space-y-6" action="#" method="POST">
@@ -43,6 +45,8 @@ export default function LogIn() {
                                     type="password"
                                     autoComplete="current-password"
                                     required
+                                    value={password}
+                                    onChange={(e) => setPassword(e.target.value)}
                                     className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                                     placeholder="••••••••"
                                 />
