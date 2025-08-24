@@ -1,10 +1,10 @@
-import NavBar from "./component/NavBar.tsx";
+import NavBar from './component/NavBar.tsx';
 
-function App(){
-    return (
-        <>
-            <NavBar/>
-        </>
-    )
+function App() {
+  return (
+    <>
+      <NavBar />
+    </>
+  );
 }
 export default App;
