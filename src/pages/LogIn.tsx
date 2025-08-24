@@ -1,10 +1,11 @@
-import type { FormEvent } from 'react';
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import type { FormEvent } from 'react';
+import { Link, useNavigate } from 'react-router-dom'; 
 
 export default function LogIn() {
    const [email, setEmail] = useState<string>('');
    const [password, setPassword] = useState<string>('');
+   const navigate = useNavigate();
 
    const handleLogIn = async (e: FormEvent<HTMLFormElement>) => {
       e.preventDefault();
@@ -12,27 +13,36 @@ export default function LogIn() {
       try {
          const res = await fetch('http://localhost:3000/api/auth/login', {
             method: 'POST',
-            headers: {
-               'Content-Type': 'application/json',
-            },
+            headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ email, password }),
          });
-         const data = await res.json();
+
+         console.log('Status:', res.status);
+
+         const text = await res.text();
+         console.log('RAW response:', text);
+
+         let data;
+         try {
+            data = JSON.parse(text);
+         } catch {
+            throw new Error('Réponse non JSON');
+         }
 
          if (res.ok) {
-            console.log('Access Token:', data.accessToken);
-            console.log('Refresh Token:', data.refreshToken);
-
-            // tu peux stocker le token dans localStorage ou dans un cookie
+            console.log('Tokens:', data);
             localStorage.setItem('accessToken', data.accessToken);
+
+            navigate('/dashboard');
          } else {
             alert(data.message || 'Erreur de connexion');
          }
       } catch (err) {
-         console.error(err);
-         alert(' mots de passe ou email invalid');
+         console.error('Erreur fetch:', err);
+         alert('Impossible de se connecter au serveur');
       }
    };
+
    return (
       <div className="flex min-h-screen flex-col justify-center bg-gray-100 py-12 sm:px-6 lg:px-8">
          <div className="sm:mx-auto sm:w-full sm:max-w-md">
