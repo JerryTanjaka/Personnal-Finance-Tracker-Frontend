@@ -1,17 +1,20 @@
 import { useState, type FormEvent } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import ErrorMessage from '../component/ErrorMessage.tsx';
+import LoadingSpinner from '../component/LoadingSpinner.tsx'
 
 export default function LogIn() {
     const [email, setEmail] = useState<string>('');
     const [password, setPassword] = useState<string>('');
     const [error, setError] = useState<string>('');
+    const [loading, setLoading] = useState<boolean>(false);
     const navigate = useNavigate();
 
     const handleLogIn = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
         try {
+            setLoading(true);
             const res = await fetch('http://localhost:3000/api/auth/login', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -34,6 +37,7 @@ export default function LogIn() {
             }
         } catch (err) {
             setError(err instanceof Error ? err.message : 'Erreur inconnue');
+            setLoading(false)
         }
     };
 
@@ -118,9 +122,9 @@ export default function LogIn() {
                         <div>
                             <button
                                 type="submit"
-                                className="flex w-full justify-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:outline-none"
+                                className="cursor-pointer flex w-full justify-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:outline-none"
                             >
-                                Sign in
+                                {loading ? <LoadingSpinner /> : 'Sign in'}
                             </button>
                         </div>
                     </form>
@@ -139,7 +143,7 @@ export default function LogIn() {
 
                         <div className="mt-6">
                             <Link to="/signup">
-                                <button className="flex w-full justify-center rounded-md border border-transparent bg-green-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-green-700 focus:ring-2 focus:ring-green-500 focus:ring-offset-2 focus:outline-none">
+                                <button className="cursor-pointer flex w-full justify-center rounded-md border border-transparent bg-green-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-green-700 focus:ring-2 focus:ring-green-500 focus:ring-offset-2 focus:outline-none">
                                     Create an account
                                 </button>
                             </Link>
