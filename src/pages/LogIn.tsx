@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import type { FormEvent } from 'react';
-import { Link, useNavigate } from 'react-router-dom'; 
+import { Link, useNavigate } from 'react-router-dom';
 import ErrorMessage from '../component/ErrorMessage.tsx';
 
 export default function LogIn() {
@@ -40,12 +40,12 @@ export default function LogIn() {
 
    return (
       <div className="flex min-h-screen flex-col justify-center bg-gray-100 py-12 sm:px-6 lg:px-8 relative">
-         {/* Show error popup */}
          {error && (
             <div className="absolute bottom-4 left-1/2 -translate-x-1/2 w-full max-w-md">
-               <ErrorMessage message={error} />
+               <ErrorMessage message={error} onClose={() => setError('')} />
             </div>
          )}
+
 
          <div className="sm:mx-auto sm:w-full sm:max-w-md">
             <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
