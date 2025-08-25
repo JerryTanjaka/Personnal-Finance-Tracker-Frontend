@@ -1,5 +1,6 @@
 import NavBar from "../component/NavBar.tsx";
 import StatCard from "../component/StatCard.tsx";
+import { PieChart } from "../component/PieChart.tsx";
 
 export default function Dashboard() {
     return (
@@ -12,6 +13,7 @@ export default function Dashboard() {
                     <StatCard title={'Total Expenses'} amount={1000} color={'text-red-600'} />
                     <StatCard title={'Remaining Balance'} amount={1000} color={'text-blue-600'}/>
                 </div>
+            <PieChart />
             </div>
         </section>
     );
