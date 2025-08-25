@@ -2,7 +2,7 @@ import { FaSearch } from 'react-icons/fa';
 import ExpenseCard from './ExpenseCard.tsx';
 
 export default function Expense() {
-    //exemple sans back pour le moment
+    
     const sampleExpenses = [
         {
             id: 1,
