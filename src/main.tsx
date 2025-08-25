@@ -14,7 +14,6 @@ const router = createBrowserRouter([
   { path: '/', element: <Navigate to="/login" /> },
   { path: '/login', element: <LogIn /> },
   { path: '/signup', element: <SignUp /> },
-  { path: '/dashboard', element: <App /> },
 ]);
 
 createRoot(document.getElementById('root')!).render(
