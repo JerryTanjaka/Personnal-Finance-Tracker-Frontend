@@ -27,10 +27,13 @@ export default function NavBar() {
                     <i className="bxr bx-list-ul-square text-2xl"></i>
                     {isExpanded && <span>Spending History</span>}
                 </div>
+                <Link to={'/expense'}>
+
                 <div className="flex cursor-pointer items-center space-x-2 hover:text-indigo-600 text-nowrap">
                     <i className="bxr bx-repeat-alt text-2xl"></i>
                     {isExpanded && <span>Reccuring Expenses</span>}
                 </div>
+                </Link>
                 <div className="my-6 w-full border border-b-gray-300"></div>
                 <div className="flex cursor-pointer items-center space-x-2 hover:text-slate-600 text-nowrap">
                     <i className="bxr bx-cog text-2xl"></i>
