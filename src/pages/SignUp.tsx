@@ -2,14 +2,22 @@ import type { FormEvent } from 'react';
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import ErrorMessage from '../component/ErrorMessage.tsx';
+import LoadingSpinner from '../component/LoadingSpinner.tsx';
 
 export default function SignUp() {
    const [email, setEmail] = useState<string>('');
    const [password, setPassword] = useState<string>('');
    const [error, setError] = useState<string>('');
+   const [loading, setLoading] = useState<boolean>(false);
+
 
    const handleSignUp = async (e: FormEvent<HTMLFormElement>) => {
       e.preventDefault();
+      setLoading(true);
+
+      const timeout = setTimeout(() => {
+         setLoading(false);
+      }, 5000);
 
       try {
          const res = await fetch('http://localhost:3000/api/auth/signup', {
@@ -21,7 +29,6 @@ export default function SignUp() {
          });
 
          if (res.status === 201) {
-            alert('Compte créé avec succès !');
             setEmail('');
             setPassword('');
             setError('');
@@ -31,6 +38,10 @@ export default function SignUp() {
          }
       } catch (err) {
          setError(err instanceof Error ? err.message : 'Erreur inconnue');
+         setLoading(false);
+      } finally {
+         clearTimeout(timeout);
+         setLoading(false);
       }
    };
 
@@ -125,9 +136,9 @@ export default function SignUp() {
                   <div>
                      <button
                         type="submit"
-                        className="flex w-full justify-center rounded-md bg-indigo-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                        className="cursor-pointer flex w-full justify-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:outline-none"
                      >
-                        Sign up
+                        {loading ? <LoadingSpinner /> : 'Sign in'}
                      </button>
                   </div>
                </form>
