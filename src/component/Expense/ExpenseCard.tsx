@@ -29,7 +29,7 @@ export default function ExpenseCard({ expense }: ExpenseCardProps) {
     });
 
     return (
-        <div className="group relative rounded-xl border border-gray-200 bg-white p-4 shadow-md transition-transform duration-200 hover:scale-105 hover:shadow-xl">
+        <div className="group relative rounded-xl border border-gray-300 bg-white p-4 shadow-[0px_0px_2px_2px_rgba(0,0,0,0.1)] transition-transform duration-200 hover:scale-101 hover:shadow-lg">
             <div
                 className={`absolute -top-3 left-3 flex h-10 w-10 items-center justify-center rounded-full ${
                     categoryColors[expense.category] || 'bg-gray-400'
@@ -40,15 +40,30 @@ export default function ExpenseCard({ expense }: ExpenseCardProps) {
                 )}
             </div>
 
-            <div className="ml-12">
-                <h2 className="text-lg font-semibold text-gray-800">
-                    {expense.name}
-                </h2>
-                <p className="mt-1 text-sm text-gray-500">{expense.category}</p>
-                <p className="mt-2 text-xl font-bold text-gray-900">
-                    ${expense.amount.toFixed(2)}
-                </p>
-                <p className="mt-1 text-sm text-gray-400">{formattedDate}</p>
+            <div className="flex justify-between ml-12 ">
+                <div>
+                    <h2 className="text-3xl font-semibold text-gray-800">
+                        {expense.name}
+                    </h2>
+                    <p className="mt-1 text-sm text-gray-500">
+                        {expense.category}
+                    </p>
+                    <p className="mt-2 text-2xl font-bold text-red-700">
+                        ${expense.amount.toFixed(2)}
+                    </p>
+                    <p className="mt-1 text-sm text-gray-400">
+                        {formattedDate}
+                    </p>
+                </div>
+                <div className=" flex flex-col space-y-2 justify-around">
+                    <button className="transform rounded bg-sky-800 px-3 py-2 text-white shadow-md transition duration-100 ease-in-out hover:bg-sky-600 active:scale-95">
+                        Change
+                    </button>
+
+                    <button className="transform rounded bg-neutral-800/95 px-3 py-2 text-white shadow-md transition duration-100 ease-in-out hover:bg-neutral-600 active:scale-95">
+                        delete
+                    </button>
+                </div>
             </div>
         </div>
     );

@@ -64,7 +64,7 @@ export default function Expense() {
                                 placeholder="Search"
                             />
                         </div>
-                        <button className="h-11 w-60 rounded bg-sky-600 px-3 py-1 text-xl text-white shadow-md transition duration-100 ease-in-out hover:bg-sky-500 active:scale-95">
+                        <button className="h-11 w-60 rounded bg-emerald-600 px-3 py-1 text-xl text-white shadow-md transition duration-100 ease-in-out hover:bg-emerald-500 active:scale-95">
                             New Expense
                         </button>
                     </div>
