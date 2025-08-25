@@ -10,7 +10,7 @@ export default function SignUp() {
       e.preventDefault();
 
       try {
-         const res = await fetch('http://localhost:3000/api/auth/sign', {
+         const res = await fetch('http://localhost:3000/api/auth/signup', {
             method: 'POST',
             headers: {
                'Content-Type': 'application/json',
