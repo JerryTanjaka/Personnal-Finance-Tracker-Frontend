@@ -1,10 +1,12 @@
 import type { FormEvent } from 'react';
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
+import ErrorMessage from '../component/ErrorMessage.tsx';
 
 export default function SignUp() {
    const [email, setEmail] = useState<string>('');
    const [password, setPassword] = useState<string>('');
+   const [error, setError] = useState<string>('');
 
    const handleSignUp = async (e: FormEvent<HTMLFormElement>) => {
       e.preventDefault();
@@ -19,21 +21,22 @@ export default function SignUp() {
          });
 
          if (res.status === 201) {
-            alert(' Compte créé avec succès !');
+            alert('Compte créé avec succès !');
             setEmail('');
             setPassword('');
+            setError('');
          } else {
             const errorData = await res.json();
-            alert(` Erreur: ${errorData.message || res.statusText}`);
+            setError(errorData.message || 'Erreur inconnue');
          }
       } catch (err) {
-         console.error(err);
-         alert(' Erreur de connexion au serveur');
+         setError(err instanceof Error ? err.message : 'Erreur inconnue');
       }
    };
 
    return (
       <div className="flex min-h-screen flex-col justify-center bg-gray-100 py-12 sm:px-6 lg:px-8">
+         {error && <ErrorMessage message={error} onClose={() => setError('')} />}
          <div className="sm:mx-auto sm:w-full sm:max-w-md">
             <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
                Create your account
@@ -48,15 +51,11 @@ export default function SignUp() {
                </Link>
             </p>
          </div>
-
          <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
             <div className="bg-white px-4 py-8 shadow-2xl sm:rounded-lg sm:px-10">
                <form className="space-y-6" onSubmit={handleSignUp}>
                   <div>
-                     <label
-                        htmlFor="name"
-                        className="block text-sm font-medium text-gray-700"
-                     >
+                     <label htmlFor="name" className="block text-sm font-medium text-gray-700">
                         Full name
                      </label>
                      <div className="mt-1">
@@ -66,17 +65,13 @@ export default function SignUp() {
                            type="text"
                            autoComplete="name"
                            required
-                           className="block w-full appearance-none rounded-md border border-gray-300 px-3 py-2 placeholder-gray-400 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 focus:outline-none sm:text-sm"
+                           className="block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm placeholder-gray-400 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                            placeholder="John Doe"
                         />
                      </div>
                   </div>
-
                   <div>
-                     <label
-                        htmlFor="email"
-                        className="block text-sm font-medium text-gray-700"
-                     >
+                     <label htmlFor="email" className="block text-sm font-medium text-gray-700">
                         Email address
                      </label>
                      <div className="mt-1">
@@ -88,17 +83,13 @@ export default function SignUp() {
                            value={email}
                            onChange={(e) => setEmail(e.target.value)}
                            required
-                           className="block w-full appearance-none rounded-md border border-gray-300 px-3 py-2 placeholder-gray-400 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 focus:outline-none sm:text-sm"
+                           className="block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm placeholder-gray-400 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                            placeholder="you@example.com"
                         />
                      </div>
                   </div>
-
                   <div>
-                     <label
-                        htmlFor="password"
-                        className="block text-sm font-medium text-gray-700"
-                     >
+                     <label htmlFor="password" className="block text-sm font-medium text-gray-700">
                         Password
                      </label>
                      <div className="mt-1">
@@ -110,17 +101,13 @@ export default function SignUp() {
                            value={password}
                            onChange={(e) => setPassword(e.target.value)}
                            required
-                           className="block w-full appearance-none rounded-md border border-gray-300 px-3 py-2 placeholder-gray-400 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 focus:outline-none sm:text-sm"
+                           className="block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm placeholder-gray-400 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                            placeholder="••••••••"
                         />
                      </div>
                   </div>
-
                   <div>
-                     <label
-                        htmlFor="confirm-password"
-                        className="block text-sm font-medium text-gray-700"
-                     >
+                     <label htmlFor="confirm-password" className="block text-sm font-medium text-gray-700">
                         Confirm Password
                      </label>
                      <div className="mt-1">
@@ -130,16 +117,15 @@ export default function SignUp() {
                            type="password"
                            autoComplete="new-password"
                            required
-                           className="block w-full appearance-none rounded-md border border-gray-300 px-3 py-2 placeholder-gray-400 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 focus:outline-none sm:text-sm"
+                           className="block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm placeholder-gray-400 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                            placeholder="••••••••"
                         />
                      </div>
                   </div>
-
                   <div>
                      <button
                         type="submit"
-                        className="flex w-full justify-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:outline-none"
+                        className="flex w-full justify-center rounded-md bg-indigo-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
                      >
                         Sign up
                      </button>

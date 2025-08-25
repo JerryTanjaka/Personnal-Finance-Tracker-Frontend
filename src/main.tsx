@@ -11,13 +11,11 @@ import {
 import LogIn from './pages/LogIn.tsx';
 import SignUp from './pages/SignUp.tsx';
 
-import Dashboard from './pages/Dashboard.tsx';
-
 const router = createBrowserRouter([
   { path: '/', element: <Navigate to="/login" /> },
   { path: '/login', element: <LogIn /> },
   { path: '/signup', element: <SignUp /> },
-  { path: '/dashboard', element: <Dashboard /> }
+  { path: '/dashboard', element: <App /> },
 ]);
 
 createRoot(document.getElementById('root')!).render(
