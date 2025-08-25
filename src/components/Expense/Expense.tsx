@@ -14,6 +14,10 @@ export default function Expense() {
         setView(newView);
         localStorage.setItem('expenseView', newView);
     };
+    const [isModalOpen, setIsModalOpen] = useState(false);
+
+    const openModal = () => setIsModalOpen(true);
+    const closeModal = () => setIsModalOpen(false);
 
     const sampleExpenses = [
         {
@@ -79,7 +83,10 @@ export default function Expense() {
                         </div>
 
                         <div className="flex space-x-2">
-                            <button className="h-11 rounded bg-emerald-600 px-3 py-1 text-xl text-white shadow-md transition hover:bg-emerald-500 active:scale-95">
+                            <button
+                                onClick={openModal}
+                                className="h-11 rounded bg-emerald-600 px-3 py-1 text-xl text-white shadow-md transition hover:bg-emerald-500 active:scale-95"
+                            >
                                 New Expense
                             </button>
 
@@ -110,6 +117,41 @@ export default function Expense() {
                     ))}
                 </div>
             </div>
+                     {isModalOpen && (
+                <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
+                    <div className="w-full max-w-md rounded-xl bg-white p-6 shadow-lg">
+                        <h2 className="mb-4 text-2xl font-bold">Add New Expense</h2>
+                        <form className="flex flex-col space-y-4">
+                            <input type="text" placeholder="Name" className="rounded border p-2" />
+                            <input type="number" placeholder="Amount" className="rounded border p-2" />
+                            <input type="date" className="rounded border p-2" />
+                            <select className="rounded border p-2">
+                                <option>Food</option>
+                                <option>Entertainment</option>
+                                <option>Transport</option>
+                                <option>Utilities</option>
+                                <option>Coffee</option>
+                            </select>
+                            <div className="flex justify-end space-x-2">
+                                <button
+                                    type="button"
+                                    onClick={closeModal}
+                                    className="rounded bg-gray-300 px-4 py-2"
+                                >
+                                    Cancel
+                                </button>
+                                <button
+                                    type="submit"
+                                    className="rounded bg-emerald-600 px-4 py-2 text-white"
+                                >
+                                    Add
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            )}
         </div>
     );
+    
 }
