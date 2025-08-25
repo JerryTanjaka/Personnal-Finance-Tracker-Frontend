@@ -1,10 +1,12 @@
 import { useState } from 'react';
 import type { FormEvent } from 'react';
 import { Link, useNavigate } from 'react-router-dom'; 
+import ErrorMessage from '../component/ErrorMessage.tsx';
 
 export default function LogIn() {
    const [email, setEmail] = useState<string>('');
    const [password, setPassword] = useState<string>('');
+   const [error, setError] = useState<string>('');
    const navigate = useNavigate();
 
    const handleLogIn = async (e: FormEvent<HTMLFormElement>) => {
@@ -17,11 +19,7 @@ export default function LogIn() {
             body: JSON.stringify({ email, password }),
          });
 
-         console.log('Status:', res.status);
-
          const text = await res.text();
-         console.log('RAW response:', text);
-
          let data;
          try {
             data = JSON.parse(text);
@@ -30,21 +28,25 @@ export default function LogIn() {
          }
 
          if (res.ok) {
-            console.log('Tokens:', data);
             localStorage.setItem('accessToken', data.accessToken);
-
             navigate('/dashboard');
          } else {
-            alert(data.message || 'Erreur de connexion');
+            setError(data.message || 'Erreur inconnue');
          }
       } catch (err) {
-         console.error('Erreur fetch:', err);
-         alert('Impossible de se connecter au serveur');
+         setError(err instanceof Error ? err.message : 'Erreur inconnue');
       }
    };
 
    return (
-      <div className="flex min-h-screen flex-col justify-center bg-gray-100 py-12 sm:px-6 lg:px-8">
+      <div className="flex min-h-screen flex-col justify-center bg-gray-100 py-12 sm:px-6 lg:px-8 relative">
+         {/* Show error popup */}
+         {error && (
+            <div className="absolute bottom-4 left-1/2 -translate-x-1/2 w-full max-w-md">
+               <ErrorMessage message={error} />
+            </div>
+         )}
+
          <div className="sm:mx-auto sm:w-full sm:max-w-md">
             <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
                Personal Finance Tracker
@@ -55,17 +57,9 @@ export default function LogIn() {
          </div>
          <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
             <div className="bg-white px-4 py-8 shadow-2xl sm:rounded-lg sm:px-10">
-               <form
-                  action="#"
-                  method="POST"
-                  className="space-y-6"
-                  onSubmit={handleLogIn}
-               >
+               <form onSubmit={handleLogIn} className="space-y-6">
                   <div>
-                     <label
-                        htmlFor="email"
-                        className="block text-sm font-medium text-gray-700"
-                     >
+                     <label htmlFor="email" className="block text-sm font-medium text-gray-700">
                         Email address
                      </label>
                      <div className="mt-1">
@@ -82,12 +76,8 @@ export default function LogIn() {
                         />
                      </div>
                   </div>
-
                   <div>
-                     <label
-                        htmlFor="password"
-                        className="block text-sm font-medium text-gray-700"
-                     >
+                     <label htmlFor="password" className="block text-sm font-medium text-gray-700">
                         Password
                      </label>
                      <div className="mt-1">
@@ -104,7 +94,6 @@ export default function LogIn() {
                         />
                      </div>
                   </div>
-
                   <div className="flex items-center justify-between">
                      <div className="flex items-center">
                         <input
@@ -113,24 +102,16 @@ export default function LogIn() {
                            type="checkbox"
                            className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
                         />
-                        <label
-                           htmlFor="remember-me"
-                           className="ml-2 block text-sm text-gray-900"
-                        >
+                        <label htmlFor="remember-me" className="ml-2 block text-sm text-gray-900">
                            Remember me
                         </label>
                      </div>
-
                      <div className="text-sm">
-                        <a
-                           href="#"
-                           className="font-medium text-indigo-600 hover:text-indigo-500"
-                        >
+                        <a href="#" className="font-medium text-indigo-600 hover:text-indigo-500">
                            Forgot your password?
                         </a>
                      </div>
                   </div>
-
                   <div>
                      <button
                         type="submit"
@@ -151,7 +132,6 @@ export default function LogIn() {
                         </span>
                      </div>
                   </div>
-
                   <div className="mt-6">
                      <div>
                         <Link to={'/signup'}>
