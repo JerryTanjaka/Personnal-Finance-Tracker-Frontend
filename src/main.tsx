@@ -13,6 +13,7 @@ import LogIn from './pages/LogIn';
 import SignUp from './pages/SignUp';
 import Dashboard from './pages/Dashboard';
 import Expense from './components/Expense/Expense';
+import Settings from './pages/Settings.tsx';
 
 const router = createBrowserRouter([
     {
@@ -21,6 +22,7 @@ const router = createBrowserRouter([
             { path: '/', element: <Navigate to="/dashboard" /> },
             { path: '/dashboard', element: <Dashboard /> },
             { path: '/expense', element: <Expense /> },
+            { path: '/settings', element: <Settings /> }
         ],
     },
     { path: '/login', element: <LogIn /> },
