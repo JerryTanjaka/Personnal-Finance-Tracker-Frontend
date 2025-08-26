@@ -1,6 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import NavBar from "../component/NavBar";
-import ErrorMessage from "../component/ErrorMessage";
+import ErrorMessage from "../components/UI/ErrorMessage";
 import { AnimatePresence, motion } from 'framer-motion'
 
 type Category = {
@@ -80,9 +79,7 @@ export default function Categories() {
                 method: 'DELETE',
                 headers: { 'Authorization': "Bearer " + localStorage.getItem('accessToken') },
             })
-                .then(res => handleNotification(res))
                 .then(() => setCategoryReload(true))
-                .catch(async rej => await handleNotification(rej))
                 .finally(() => clearSidePanel())
         }
         return;
@@ -96,17 +93,16 @@ export default function Categories() {
 
     return (
         <>
-            <NavBar />
             <AnimatePresence>
                 {notificationMessage ? (
                     <ErrorMessage message={notificationMessage?.error || notificationMessage?.message} onClose={() => { setNotificationMessage(null) }} />
                 ) : null}
             </AnimatePresence>
-            <div className="absolute top-0 left-0 w-full p-10 pl-30">
-                <div className="w-full p-10 bg-gray-100 xl:px-15 rounded-[10px]">
+            <div className="h-[94vh] w-full">
+                <div className="w-full p-10 h-full bg-gray-100 xl:px-15 rounded-[10px]">
                     <h3 className="text-3xl pl-10">Available expense category:</h3>
                     <div className="w-full h-fit my-10 flex flex-col-reverse flex-wrap gap-2 justify-around items-center xl:items-start xl:flex-row-reverse">
-                        <div className="w-full xl:w-7/10 h-[70vh] flex flex-col gap-3 rounded-2xl overflow-y-scroll">
+                        <div className="w-full xl:w-7/10 h-[75vh] flex flex-col gap-3 rounded-2xl overflow-y-scroll">
                             <div className="bg-white w-full p-3 rounded-[5px] shadow-xs grid grid-cols-4 gap-x-5 items-center">
                                 <div>Name</div>
                                 <div>ID</div>
