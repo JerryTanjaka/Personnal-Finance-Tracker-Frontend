@@ -6,7 +6,7 @@ export default function NavBar() {
 
     return (
         <nav
-            className={`sticky left-0 top-6 m-6 flex h-[94vh] flex-col justify-between rounded-lg bg-gray-100 p-6 shadow-[0px_0px_5px_5px_rgba(0,0,0,0.25)] transition-all duration-200 ${isExpanded ? 'w-64' : 'w-20'}`}
+            className={`sticky left-0 top-6 m-6 flex h-[94vh] flex-col justify-between rounded-lg bg-gray-100 p-6 transition-all duration-200 ${isExpanded ? 'w-64' : 'w-20'}`}
             onMouseEnter={() => setIsExpanded(true)}
             onMouseLeave={() => setIsExpanded(false)}
         >
