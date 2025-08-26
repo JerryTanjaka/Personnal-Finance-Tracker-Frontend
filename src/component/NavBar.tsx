@@ -1,12 +1,12 @@
-import {useState} from 'react';
-import {Link} from "react-router-dom";
+import { useState } from 'react';
+import { Link } from "react-router-dom";
 
 export default function NavBar() {
     const [isExpanded, setIsExpanded] = useState(false);
 
     return (
         <nav
-            className={`sticky left-0 top-6 m-6 flex h-[94vh] flex-col justify-between rounded-lg bg-gray-100 p-6 shadow-[0px_0px_5px_5px_rgba(0,0,0,0.25)] transition-all duration-200 ${isExpanded ? 'w-64' : 'w-20'}`}
+            className={`sticky left-0 top-6 m-6 flex h-[94vh] flex-col justify-between rounded-lg bg-gray-100 p-6 z-50 shadow-[0px_0px_5px_5px_rgba(0,0,0,0.25)] transition-all duration-200 ${isExpanded ? 'w-64' : 'w-20'}`}
             onMouseEnter={() => setIsExpanded(true)}
             onMouseLeave={() => setIsExpanded(false)}
         >
@@ -21,6 +21,12 @@ export default function NavBar() {
                     <div className="flex cursor-pointer items-center space-x-2 hover:text-blue-600 text-nowrap">
                         <i className="bxr bx-pie-chart-alt text-2xl"></i>
                         {isExpanded && <span>DashBoard</span>}
+                    </div>
+                </Link>
+                <Link to={'/categories'}>
+                    <div className="flex cursor-pointer items-center space-x-2 hover:text-blue-600 text-nowrap">
+                        <i className='bxr bx-folder text-2xl'></i>
+                        {isExpanded && <span>Category</span>}
                     </div>
                 </Link>
                 <div className="flex cursor-pointer items-center space-x-2 hover:text-green-600 text-nowrap">
