@@ -4,3 +4,6 @@
 * {
   font-family: 'Nata Sans', sans-serif;
 }
+body {
+    overflow-y: hidden;
+}
