@@ -1,5 +1,5 @@
 import StatCard from '../components/StatCard.tsx';
-import {PieChart} from "../component/PieChart.tsx";
+// import {PieChart} from "../component/PieChart.tsx";
 
 
 export default function Dashboard() {

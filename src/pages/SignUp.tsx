@@ -1,8 +1,8 @@
 import type { FormEvent } from 'react';
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import ErrorMessage from '../components/ErrorMessage.tsx';
-import LoadingSpinner from '../components/LoadingSpinner.tsx';
+import ErrorMessage from '../components/UI/ErrorMessage.tsx';
+import LoadingSpinner from '../components/UI/LoadingSpinner.tsx';
 
 export default function SignUp() {
     const [email, setEmail] = useState<string>('');
