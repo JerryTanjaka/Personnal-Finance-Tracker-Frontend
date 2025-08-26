@@ -1,5 +1,13 @@
 import React from 'react';
-import { FaBolt, FaCoffee, FaFilm, FaTaxi, FaUtensils } from 'react-icons/fa';
+import {
+    FaBolt,
+    FaCoffee,
+    FaExchangeAlt,
+    FaFilm,
+    FaTaxi,
+    FaTrash,
+    FaUtensils,
+} from 'react-icons/fa';
 
 type ExpenseCardProps = {
     expense: { name: string; amount: number; date: string; category: string };
@@ -16,11 +24,11 @@ export default function ExpenseCard({ expense, view }: ExpenseCardProps) {
     };
 
     const categoryColors: Record<string, string> = {
-        Food: 'bg-red-500',
-        Entertainment: 'bg-purple-500',
-        Transport: 'bg-green-500',
-        Utilities: 'bg-yellow-500',
-        Coffee: 'bg-orange-500',
+        Food: 'bg-red-700',
+        Entertainment: 'bg-purple-700',
+        Transport: 'bg-green-700',
+        Utilities: 'bg-yellow-700',
+        Coffee: 'bg-orange-700',
     };
 
     const formattedDate = new Date(expense.date).toLocaleDateString('en-US', {
@@ -31,7 +39,7 @@ export default function ExpenseCard({ expense, view }: ExpenseCardProps) {
 
     return (
         <div
-            className={`group relative rounded-xl border-[1px] border-gray-300 bg-gray-50 p-4  border-b-1 transition-transform duration-200 hover:scale-101 hover:shadow-sm ${
+            className={`group relative rounded-xl border-[1px] border-b-1 border-gray-300 bg-gray-50 p-4 transition-transform duration-200 hover:scale-101 hover:shadow-sm ${
                 view === 'list' ? 'h-20' : 'h-auto'
             }`}
         >
@@ -72,11 +80,17 @@ export default function ExpenseCard({ expense, view }: ExpenseCardProps) {
                             : 'flex-row space-x-5'
                     }`}
                 >
-                    <button className="transform rounded bg-sky-800 px-3 py-3 text-white shadow-md transition duration-100 ease-in-out hover:bg-sky-600 active:scale-95">
+                    <button
+                        className={`flex transform items-center gap-2 rounded bg-gray-300 text-black  transition duration-100 ease-in-out hover:bg-gray-400 active:scale-95 ${view === 'grid' ? 'px-2 py-2 text-sm' : 'px-3 py-3 text-base'}`}
+                    >
+                        <FaExchangeAlt />
                         Change
                     </button>
 
-                    <button className="transform rounded bg-neutral-800/95 px-3 py-3 text-white shadow-md transition duration-100 ease-in-out hover:bg-neutral-600 active:scale-95">
+                    <button
+                        className={`flex transform items-center gap-2 rounded bg-neutral-950/90 text-white  transition duration-100 ease-in-out hover:bg-neutral-700 active:scale-95 ${view === 'grid' ? 'px-2 py-2 text-sm' : 'px-3 py-3 text-base'}`}
+                    >
+                        <FaTrash />
                         Delete
                     </button>
                 </div>

@@ -100,10 +100,10 @@ export default function Expense() {
     ];
 
     return (
-        <div className="z-50 flex h-[94vh] w-full flex-col items-center rounded-lg bg-gray-100 p-4">
+        <div className="z-50 flex h-[94vh] w-full flex-col items-center rounded-lg bg-gray-100">
             <div className="flex min-h-full w-full max-w-7xl flex-col rounded-2xl p-6">
-                <div className="flex flex-col border-b-2 pb-4 md:flex-row md:items-center md:justify-between">
-                    <h1 className="text-2xl font-bold">Expense Tracker</h1>
+                <div className="flex flex-col border-b-1 border-gray-300 pb-2 md:flex-row md:items-center md:justify-between text-3xl font-bold">
+                    <h1 className="text-3xl font-bold">Expense Tracker</h1>
 
                     <div className="flex flex-col items-start space-y-2 md:flex-row md:items-center md:space-y-0 md:space-x-4">
                         <div className="relative flex items-center">
@@ -122,10 +122,9 @@ export default function Expense() {
                             >
                                 New Expense
                             </button>
-
                             <button
                                 onClick={toggleView}
-                                className="flex h-11 w-11 items-center justify-center rounded bg-gray-200 text-gray-800 shadow-md transition hover:bg-gray-300 active:scale-95"
+                                className="flex h-11 w-11 items-center justify-center rounded bg-gray-200 text-gray-800 border-[1px] border-gray-300 transition hover:bg-gray-300 active:scale-95"
                             >
                                 {view === 'grid' ? <FaList /> : <FaThLarge />}
                             </button>
@@ -134,7 +133,7 @@ export default function Expense() {
                 </div>
 
                 <div
-                    className={`mt-6 w-[100%] overflow-y-auto pl-2 pt-3 ${
+                    className={`mt-6 w-[100%] overflow-y-auto pt-3 pl-2 ${
                         view === 'grid'
                             ? 'grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3'
                             : 'flex flex-col space-y-4'
