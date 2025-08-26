@@ -1,7 +1,7 @@
 import { useState, type FormEvent } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import ErrorMessage from '../components/ErrorMessage.tsx';
-import LoadingSpinner from '../components/LoadingSpinner.tsx';
+import ErrorMessage from '../components/UI/ErrorMessage.tsx';
+import LoadingSpinner from '../components/UI/LoadingSpinner.tsx';
 
 export default function LogIn() {
     const [email, setEmail] = useState<string>('');
