@@ -1,5 +1,5 @@
 import StatCard from '../components/StatCard.tsx';
-import { PieChart } from "../component/PieChart.tsx";
+import {PieChart} from "../component/PieChart.tsx";
 
 
 export default function Dashboard() {
@@ -30,7 +30,10 @@ export default function Dashboard() {
                         color={'text-blue-600'}
                     />
                 </div>
-            <PieChart />
+                <div className={`flex flex-col gap-4`}>
+                    <h1>Expenses Categoires</h1>
+                    <PieChart/>
+                </div>
             </div>
         </section>
     );
