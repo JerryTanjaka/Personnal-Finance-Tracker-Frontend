@@ -65,10 +65,10 @@ export default function Expense() {
     ];
 
     return (
-        <div className="z-50 flex h-[100%] w-full flex-col items-center bg-gray-200 p-4">
-            <div className="mx-auto flex h-full w-full max-w-7xl flex-col rounded-2xl bg-white p-6 shadow-[0px_0px_7px_4px_rgba(0,0,0,0.2)]">
+        <div className="z-50 flex h-[94vh] w-full flex-col items-center rounded-lg p-4 bg-gray-100">
+            <div className=" flex min-h-full w-full max-w-7xl flex-col rounded-2xl  p-6">
                 <div className="flex flex-col border-b-2 pb-4 md:flex-row md:items-center md:justify-between">
-                    <h1 className="mb-4 text-3xl font-bold md:mb-0">
+                    <h1 className=" text-2xl font-bold ">
                         Expense Tracker
                     </h1>
 
@@ -117,13 +117,23 @@ export default function Expense() {
                     ))}
                 </div>
             </div>
-                     {isModalOpen && (
+            {isModalOpen && (
                 <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
                     <div className="w-full max-w-md rounded-xl bg-white p-6 shadow-lg">
-                        <h2 className="mb-4 text-2xl font-bold">Add New Expense</h2>
+                        <h2 className=" text-2xl font-bold">
+                            Add New Expense
+                        </h2>
                         <form className="flex flex-col space-y-4">
-                            <input type="text" placeholder="Name" className="rounded border p-2" />
-                            <input type="number" placeholder="Amount" className="rounded border p-2" />
+                            <input
+                                type="text"
+                                placeholder="Name"
+                                className="rounded border p-2"
+                            />
+                            <input
+                                type="number"
+                                placeholder="Amount"
+                                className="rounded border p-2"
+                            />
                             <input type="date" className="rounded border p-2" />
                             <select className="rounded border p-2">
                                 <option>Food</option>
@@ -153,5 +163,4 @@ export default function Expense() {
             )}
         </div>
     );
-    
 }
