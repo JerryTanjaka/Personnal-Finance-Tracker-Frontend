@@ -1,11 +1,12 @@
 import StatCard from '../components/StatCard.tsx';
-// import {PieChart} from "../component/PieChart.tsx";
+import {PieChart} from "../components/PieChart.tsx";
+import ExpenseList from "../components/ExpenseList.tsx";
 
 
 export default function Dashboard() {
     return (
         <section className={'flex'}>
-            <div className="mr-6 h-[94vh] w-full rounded-lg bg-gray-100">
+            <div className="mr-6 h-[94vh] w-full rounded-lg bg-gray-100 overflow-scroll">
                 <h1
                     className={
                         'm-5 border-b-1 border-gray-300 p-2 text-3xl font-bold'
@@ -30,9 +31,15 @@ export default function Dashboard() {
                         color={'text-blue-600'}
                     />
                 </div>
-                <div className={`flex flex-col gap-4`}>
-                    <h1>Expenses Categoires</h1>
+                <div className={`flex flex-col m-5`}>
+                    <h1 className={`text-2xl font-semibold`}>Expenses Categoires</h1>
                     <PieChart/>
+                </div>
+                <div className={`flex flex-col mt-5`}>
+                    <h1 className={`text-2xl font-semibold border-b-1 border-gray-300 mx-6 pb-3`}>Recent Expenses</h1>
+                    <div className={`flex flex-col`}>
+                        <ExpenseList/>
+                    </div>
                 </div>
             </div>
         </section>
