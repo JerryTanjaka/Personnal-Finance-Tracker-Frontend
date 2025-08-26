@@ -1,36 +1,39 @@
 import StatCard from '../components/StatCard.tsx';
+import { useTranslation } from 'react-i18next';
 // import { PieChart } from "../component/PieChart.tsx";
 
 
 export default function Dashboard() {
+    const { t } = useTranslation();
+
     return (
         <section className={'flex'}>
-            <div className="h-[94vh] w-full rounded-lg bg-gray-100">
-                <h1
-                    className={
-                        'm-5 border-b-1 border-gray-300 p-2 text-3xl font-bold'
-                    }
-                >
-                    Dashboard
-                </h1>
-                <div className={'m-5 flex justify-evenly gap-6'}>
+            <div className="h-[94vh] w-full rounded-lg bg-gray-100 p-5">
+                <div className="flex justify-between border-b border-gray-300 items-center mb-5">
+                    <h1 className="text-3xl font-bold p-2 mb-3">
+                        {t("dashboard_title", "Dashboard")}
+                    </h1>
+                </div>
+
+                <div className={'flex justify-evenly gap-6'}>
                     <StatCard
-                        title={'Total Income'}
+                        title={t('total_income', 'Total Income')}
                         amount={1000}
                         color={'text-green-600'}
                     />
                     <StatCard
-                        title={'Total Expenses'}
+                        title={t('total_expenses', 'Total Expenses')}
                         amount={1000}
                         color={'text-red-600'}
                     />
                     <StatCard
-                        title={'Remaining Balance'}
+                        title={t('remaining_balance', 'Remaining Balance')}
                         amount={1000}
                         color={'text-blue-600'}
                     />
                 </div>
-            {/* <PieChart /> */}
+
+                {/* <PieChart /> */}
             </div>
         </section>
     );
