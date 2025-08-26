@@ -14,7 +14,7 @@ export default function Settings() {
     };
 
     return (
-        <div className="bg-gray-100 shadow-md rounded-lg p-8 mx-auto">
+        <div className="bg-gray-100 shadow-md rounded-lg p-8 mx-auto h-[94vh] ">
             <h1 className="text-3xl font-bold text-gray-800 border-b pb-4 mb-6">
                 {t("settings_title", "Settings")}
             </h1>
