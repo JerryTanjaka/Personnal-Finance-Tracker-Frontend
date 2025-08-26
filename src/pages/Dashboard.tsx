@@ -1,7 +1,7 @@
 
 import NavBar from '../components/NavBar.tsx';
 import StatCard from '../components/StatCard.tsx';
-import { PieChart } from "../component/PieChart.tsx";
+// import { PieChart } from "../component/PieChart.tsx";
 
 
 export default function Dashboard() {
@@ -32,7 +32,7 @@ export default function Dashboard() {
                         color={'text-blue-600'}
                     />
                 </div>
-            <PieChart />
+            {/* <PieChart /> */}
             </div>
         </section>
     );

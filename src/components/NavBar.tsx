@@ -18,7 +18,7 @@ export default function NavBar() {
             </div>
             <div className="flex flex-col gap-4 font-medium text-gray-700">
                 <Link to={'/dashboard'}>
-                    <div className="flex cursor-pointer items-center space-x-2 hover:text-blue-600 text-nowrap">
+                    <div className="flex cursor-pointer items-center space-x-2  hover:text-blue-600 text-nowrap">
                         <i className="bxr bx-pie-chart-alt text-2xl"></i>
                         {isExpanded && <span>DashBoard</span>}
                     </div>
