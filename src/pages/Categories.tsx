@@ -167,12 +167,12 @@ export default function Categories() {
                                         whileHover={{ scale: 1.05 }}
                                         whileTap={{ scale: 0.95 }}
                                         onClick={clearSidePanel}
-                                        className="text-slate-800 font-medium border-3 border-slate-300 py-1 px-3 rounded-[4px]">Cancel</motion.button>
+                                        className="text-slate-800 font-medium border-2 border-slate-300 py-1 px-3 rounded-[7px]">Cancel</motion.button>
                                     <motion.button
                                         type="submit"
                                         whileHover={{ scale: 1.05 }}
                                         whileTap={{ scale: 0.95 }}
-                                        className="text-green-800 font-medium border-3 border-green-700 py-1 px-3 rounded-[4px]"
+                                        className="text-green-900 font-medium bg-green-100 py-1 px-3 rounded-[7px]"
                                     >{(isUpdating) ? 'Rename' : 'Create'}</motion.button>
                                 </div>
                             </form>

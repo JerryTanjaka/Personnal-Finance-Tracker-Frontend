@@ -5,17 +5,18 @@ import { useTranslation } from "react-i18next";
 export default function Settings() {
     const [isChangePasswordOpen, setIsChangePasswordOpen] = useState<boolean>(false);
     const { i18n, t } = useTranslation();
-    const [language, setLanguage] = useState<string>(i18n.language || "en");
+    const [language, setLanguage] = useState<string>(localStorage.getItem("appLanguage") || i18n.language || "en");
 
     const toggleLanguage = () => {
         const newLang = language === "en" ? "fr" : "en";
         i18n.changeLanguage(newLang);
         setLanguage(newLang);
+        localStorage.setItem("appLanguage", newLang);
     };
 
     return (
-        <div className="bg-gray-100 shadow-md rounded-lg p-8 mx-auto">
-            <h1 className="text-3xl font-bold text-gray-800 border-b pb-4 mb-6">
+        <div className="bg-gray-100 shadow-md rounded-lg p-8 mx-auto h-[94vh] ">
+            <h1 className="text-3xl font-bold text-gray-800 border-b border-gray-300 pb-4 mb-6">
                 {t("settings_title", "Settings")}
             </h1>
 

@@ -15,6 +15,7 @@ import Dashboard from './pages/Dashboard';
 import Expense from './components/Expense/Expense';
 import Categories from './pages/Categories.tsx';
 import Settings from './pages/Settings.tsx';
+import Support from './pages/Support.tsx';
 import './i18n'
 
 const router = createBrowserRouter([
@@ -25,7 +26,8 @@ const router = createBrowserRouter([
             { path: '/dashboard', element: <Dashboard /> },
             { path: '/expense', element: <Expense /> },
             { path: '/categories', element: <Categories /> },
-            { path: '/settings', element: <Settings /> }
+            { path: '/settings', element: <Settings /> },
+            { path: '/support', element: <Support /> }
         ],
     },
     { path: '/login', element: <LogIn /> },

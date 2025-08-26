@@ -58,10 +58,12 @@ export default function NavBar() {
                     </div>
                 </Link>
 
-                <div className="flex cursor-pointer items-center space-x-2 hover:text-sky-600">
-                    <i className="bxr bx-message-question-mark text-2xl"></i>
-                    <span className={textAnimation()}>Support</span>
-                </div>
+                <Link to={"/support"}>
+                    <div className="flex cursor-pointer items-center space-x-2 hover:text-sky-600">
+                        <i className="bxr bx-message-question-mark text-2xl"></i>
+                        <span className={textAnimation()}>Support</span>
+                    </div>
+                </Link>
             </div>
 
             <Link to={"/login"}>
