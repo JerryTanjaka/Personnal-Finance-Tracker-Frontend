@@ -62,15 +62,48 @@ export default function Expense() {
             date: '2025-08-21',
             category: 'Fsqsood',
         },
+        {
+            id: 2,
+            name: 'Netflix',
+            amount: 12.99,
+            date: '2025-08-23',
+            category: 'Entertainment',
+        },
+        {
+            id: 3,
+            name: 'Taxi',
+            amount: 8.5,
+            date: '2025-08-22',
+            category: 'Transport',
+        },
+        {
+            id: 4,
+            name: 'Electricity Bill',
+            amount: 60.0,
+            date: '2025-08-20',
+            category: 'Utilities',
+        },
+        {
+            id: 5,
+            name: 'Coffee',
+            amount: 4.5,
+            date: '2025-08-21',
+            category: 'Food',
+        },
+        {
+            id: 6,
+            name: 'Coffsee',
+            amount: 4.5,
+            date: '2025-08-21',
+            category: 'Fsqsood',
+        },
     ];
 
     return (
-        <div className="z-50 flex h-[94vh] w-full flex-col items-center rounded-lg p-4 bg-gray-100">
-            <div className=" flex min-h-full w-full max-w-7xl flex-col rounded-2xl  p-6">
+        <div className="z-50 flex h-[94vh] w-full flex-col items-center rounded-lg bg-gray-100 p-4">
+            <div className="flex min-h-full w-full max-w-7xl flex-col rounded-2xl p-6">
                 <div className="flex flex-col border-b-2 pb-4 md:flex-row md:items-center md:justify-between">
-                    <h1 className=" text-2xl font-bold ">
-                        Expense Tracker
-                    </h1>
+                    <h1 className="text-2xl font-bold">Expense Tracker</h1>
 
                     <div className="flex flex-col items-start space-y-2 md:flex-row md:items-center md:space-y-0 md:space-x-4">
                         <div className="relative flex items-center">
@@ -101,7 +134,7 @@ export default function Expense() {
                 </div>
 
                 <div
-                    className={`mt-6 w-full overflow-y-auto pt-4 pr-2 ${
+                    className={`mt-6 w-[100%] overflow-y-auto pl-2 pt-3 ${
                         view === 'grid'
                             ? 'grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3'
                             : 'flex flex-col space-y-4'
@@ -120,9 +153,7 @@ export default function Expense() {
             {isModalOpen && (
                 <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
                     <div className="w-full max-w-md rounded-xl bg-white p-6 shadow-lg">
-                        <h2 className=" text-2xl font-bold">
-                            Add New Expense
-                        </h2>
+                        <h2 className="text-2xl font-bold">Add New Expense</h2>
                         <form className="flex flex-col space-y-4">
                             <input
                                 type="text"

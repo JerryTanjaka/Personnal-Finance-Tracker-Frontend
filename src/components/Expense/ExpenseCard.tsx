@@ -31,7 +31,7 @@ export default function ExpenseCard({ expense, view }: ExpenseCardProps) {
 
     return (
         <div
-            className={`group relative rounded-xl border-2 border-gray-300 bg-white p-4 shadow-[0px_0px_2px_2px_rgba(0,0,0,0.1)] transition-transform duration-200 hover:scale-101 hover:shadow-lg ${
+            className={`group relative rounded-xl border-[1px] border-gray-300 bg-gray-50 p-4  border-b-1 transition-transform duration-200 hover:scale-101 hover:shadow-sm ${
                 view === 'list' ? 'h-20' : 'h-auto'
             }`}
         >
@@ -51,7 +51,7 @@ export default function ExpenseCard({ expense, view }: ExpenseCardProps) {
                         view === 'list' ? 'flex items-center space-x-10' : ''
                     }
                 >
-                    <h2 className="text-3xl font-semibold text-gray-800">
+                    <h2 className="text-2xl font-semibold text-gray-800">
                         {expense.name}
                     </h2>
                     <p className="mt-1 text-sm text-gray-500">
