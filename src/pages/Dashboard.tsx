@@ -5,7 +5,7 @@ import StatCard from '../components/StatCard.tsx';
 export default function Dashboard() {
     return (
         <section className={'flex'}>
-            <div className="mr-6 h-[94vh] w-full rounded-lg bg-gray-100">
+            <div className="h-[94vh] w-full rounded-lg bg-gray-100">
                 <h1
                     className={
                         'm-5 border-b-1 border-gray-300 p-2 text-3xl font-bold'
