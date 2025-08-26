@@ -6,7 +6,7 @@ export default function Layout() {
     <div className="flex min-h-screen bg-gray-300">
       <NavBar />
       <main className="flex-1 p-6">
-        <Outlet /> {/* ici s’affichera Dashboard, Expense, etc. */}
+        <Outlet />
       </main>
     </div>
   );
