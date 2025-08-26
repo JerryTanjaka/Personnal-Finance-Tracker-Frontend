@@ -40,8 +40,15 @@ export default function NavBar() {
 
                 <Link to={"/expense"}>
                     <div className="flex cursor-pointer items-center space-x-2 hover:text-indigo-600">
-                        <i className='bxr text-2xl bx-dollar-circle'  ></i> 
+                        <i className='bxr text-2xl bx-dollar-circle'  ></i>
                         <span className={textAnimation()}>Expenses</span>
+                    </div>
+                </Link>
+
+                <Link to={'/categories'}>
+                    <div className="flex cursor-pointer items-center space-x-2 hover:text-blue-600 text-nowrap">
+                        <i className='bxr bx-folder text-2xl'></i>
+                        <span className={textAnimation()}>Category</span>
                     </div>
                 </Link>
 
@@ -61,7 +68,7 @@ export default function NavBar() {
                     </div>
                 </Link>
             </div>
-            
+
             <Link to={"/login"}>
                 <div className="flex cursor-pointer items-center space-x-2 text-gray-700 hover:text-red-600">
                     <i className="bxr bx-arrow-out-left-square-half text-2xl"></i>
