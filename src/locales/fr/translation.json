@@ -1,0 +1,9 @@
+{
+  "settings_title": "Paramètres",
+  "managing_account_title": "Gérer le compte",
+  "managing_account_description": "Modifiez les paramètres et préférences de votre compte.",
+  "change_password": "Changer le mot de passe",
+  "change_password_description": "Changez votre mot de passe pour sécuriser votre compte.",
+  "change_language": "Changer de langue",
+  "language_preference": "Choisissez la langue dans laquelle vous êtes le plus à l'aise."
+}

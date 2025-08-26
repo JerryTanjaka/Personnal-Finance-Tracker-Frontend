@@ -14,6 +14,7 @@ import SignUp from './pages/SignUp';
 import Dashboard from './pages/Dashboard';
 import Expense from './components/Expense/Expense';
 import Settings from './pages/Settings.tsx';
+import './i18n'
 
 const router = createBrowserRouter([
     {
