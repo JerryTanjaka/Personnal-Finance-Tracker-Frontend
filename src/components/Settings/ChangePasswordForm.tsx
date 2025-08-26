@@ -1,12 +1,15 @@
 import changePassword from "../../utils/changePassword";
-import { useState } from "react";
+import { useRef } from "react";
 
 export default function ChangePasswordForm() {
-    const [currentPassword, setCurrentPassword] = useState("");
-    const [newPassword, setNewPassword] = useState("");
+    const currentPasswordRef = useRef<HTMLInputElement>(null);
+    const newPasswordRef = useRef<HTMLInputElement>(null);
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
+        const currentPassword = currentPasswordRef.current?.value || "";
+        const newPassword = newPasswordRef.current?.value || "";
+
         try {
             const result = await changePassword(currentPassword, newPassword);
             console.log("Password changed successfully:", result);
@@ -20,18 +23,16 @@ export default function ChangePasswordForm() {
             <input
                 type="password"
                 required
+                ref={currentPasswordRef}
                 className="border p-2 rounded mb-4 w-auto"
                 placeholder="Your current Password"
-                value={currentPassword}
-                onChange={(e) => setCurrentPassword(e.target.value)}
             />
             <input
                 type="password"
                 required
+                ref={newPasswordRef}
                 className="border p-2 rounded mb-4 w-auto"
                 placeholder="Your new Password"
-                value={newPassword}
-                onChange={(e) => setNewPassword(e.target.value)}
             />
             <button
                 type="submit"
