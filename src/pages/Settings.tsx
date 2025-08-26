@@ -3,7 +3,6 @@ import ChangePasswordForm from "../components/Settings/ChangePasswordForm";
 
 export default function Settings() {
     const [isChangePasswordOpen, setIsChangePasswordOpen] = useState(false);
-    const [isLoading, setIsLoading] = useState(false);
 
     return (
         <div className="bg-gray-100 shadow-md rounded-lg p-8  mx-auto">
