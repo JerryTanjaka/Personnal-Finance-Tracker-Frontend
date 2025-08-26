@@ -1,16 +1,19 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import useLocalStorage from "../hooks/useLocalStorage";
 
 export default function NavBar() {
     const [isExpanded, setIsExpanded] = useState(false);
+    const [username] = useLocalStorage('username', 'User');
 
     const textAnimation = (extraClasses = "") =>
-        `transition-all duration-300 delay-150 transform ${isExpanded ? "opacity-100 translate-x-0" : "opacity-0 -translate-x-2"
+        `transition-all duration-300 delay-150 transform ${
+            isExpanded ? "opacity-100 translate-x-0" : "opacity-0 -translate-x-2"
         } ${extraClasses}`;
 
     return (
         <nav
-            className={`sticky left-0 top-6 m-6 mr-0 flex h-[94vh] flex-col justify-between rounded-lg bg-gray-100 p-6 transition-all duration-300 ${isExpanded ? "w-64" : "w-20"
+            className={`sticky left-0 top-6 m-6 mr-0 flex h-[94vh] shadow-md flex-col justify-between rounded-lg bg-gray-100 p-6 transition-all duration-300 ${isExpanded ? "w-64" : "w-20"
                 }`}
             onMouseEnter={() => setIsExpanded(true)}
             onMouseLeave={() => setIsExpanded(false)}
@@ -18,7 +21,7 @@ export default function NavBar() {
             <div className="flex flex-col items-center gap-3">
                 <i className="bxr bx-user rounded-full border-4 border-b-blue-600 p-2 text-3xl"></i>
                 <span className={textAnimation("text-xl font-medium text-gray-800")}>
-                    User
+                    {username}
                 </span>
             </div>
 

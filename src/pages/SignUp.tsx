@@ -5,6 +5,7 @@ import ErrorMessage from '../components/UI/ErrorMessage.tsx';
 import LoadingSpinner from '../components/UI/LoadingSpinner.tsx';
 
 export default function SignUp() {
+    const [username, setUsername] = useState<string>('')
     const [email, setEmail] = useState<string>('');
     const [password, setPassword] = useState<string>('');
     const [error, setError] = useState<string>('');
@@ -13,6 +14,8 @@ export default function SignUp() {
     const handleSignUp = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         setLoading(true);
+        localStorage.setItem('username', username)
+        console.log(localStorage.getItem('username'))
 
         const timeout = setTimeout(() => {
             setLoading(false);
@@ -71,7 +74,7 @@ export default function SignUp() {
                                 htmlFor="name"
                                 className="block text-sm font-medium text-gray-700"
                             >
-                                Full name
+                                Username
                             </label>
                             <div className="mt-1">
                                 <input
@@ -80,6 +83,8 @@ export default function SignUp() {
                                     type="text"
                                     autoComplete="name"
                                     required
+                                    value={username}
+                                    onChange={(e) => setUsername(e.target.value)}
                                     className="block w-full rounded-md border border-gray-300 px-3 py-2 placeholder-gray-400 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                                     placeholder="John Doe"
                                 />
