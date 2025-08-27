@@ -8,7 +8,7 @@ export default function Settings() {
     const [isChangePasswordOpen, setIsChangePasswordOpen] = useState<boolean>(false);
     const [isChangeUsernameOpen, setIsChangeUsernameOpen] = useState<boolean>(false)
 
-    const { i18n, t } = useTranslation();
+    const { t } = useTranslation();
 
     return (
         <div className="bg-gray-100 shadow-md rounded-lg p-8 mx-auto h-[94vh] overflow-y-scroll ">
@@ -97,7 +97,6 @@ export default function Settings() {
                     </div>
                 </div>
             </div>
-
             <LanguageToggle />
         </div>
     );
