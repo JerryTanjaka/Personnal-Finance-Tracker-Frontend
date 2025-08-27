@@ -5,13 +5,13 @@ import type { Transaction } from './Types';
 
 export default function Income() {
     const [view, setView] = useState<'grid' | 'list'>(
-        () => (localStorage.getItem('incomeView') as 'grid' | 'list') || 'grid',
+        () => (localStorage.getItem('transactionView') as 'grid' | 'list') || 'grid',
     );
 
     const toggleView = () => {
         const newView = view === 'grid' ? 'list' : 'grid';
         setView(newView);
-        localStorage.setItem('incomeView', newView);
+        localStorage.setItem('transactionView', newView);
     };
 
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -64,18 +64,18 @@ export default function Income() {
         <div className="z-50 flex h-[94vh] w-full flex-col items-center rounded-lg bg-gray-100">
             <div className="flex min-h-full w-full max-w-7xl flex-col rounded-2xl p-6">
                 {/* Header */}
-                 <div className="flex flex-col border-b border-gray-300 pb-2 text-3xl font-bold md:flex-row md:items-center md:justify-between">
+                <div className="flex flex-col border-b border-gray-300 pb-2 text-3xl font-bold md:flex-row md:items-center md:justify-between">
                     <h1 className="text-3xl font-bold">Expense Tracker</h1>
 
                     <div className="flex flex-col items-start space-y-2 md:flex-row md:items-center md:space-y-0 md:space-x-4">
                         {/* Search */}
-                            <button
-                                onClick={openModal}
-                                className="flex h-11  items-center space-x-2 rounded bg-emerald-600 px-3 py-1 text-xl text-white shadow-md transition hover:bg-emerald-500 active:scale-95"
-                            >
-                                <FaPlus className="pointer-events-none left-3 text-xl" />
-                                <p className='text-lg'>Add </p>
-                            </button>
+                        <button
+                            onClick={openModal}
+                            className="flex h-11 items-center space-x-2 rounded bg-emerald-600 px-3 py-1 text-xl text-white shadow-md transition hover:bg-emerald-500 active:scale-95"
+                        >
+                            <FaPlus className="pointer-events-none left-3 text-xl" />
+                            <p className="text-lg">Add </p>
+                        </button>
                         <div className="relative flex items-center">
                             <FaSearch className="pointer-events-none absolute left-3 text-xl text-gray-800" />
                             <input
@@ -87,7 +87,6 @@ export default function Income() {
 
                         {/* Actions */}
                         <div className="flex space-x-2">
-                        
                             <button
                                 onClick={toggleView}
                                 className="flex h-11 w-11 items-center justify-center rounded border border-gray-300 bg-gray-200 text-gray-800 transition hover:bg-gray-300 active:scale-95"

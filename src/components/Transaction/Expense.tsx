@@ -6,13 +6,13 @@ import type { Transaction } from './Types';
 export default function Expense() {
     const [view, setView] = useState<'grid' | 'list'>(
         () =>
-            (localStorage.getItem('expenseView') as 'grid' | 'list') || 'grid',
+            (localStorage.getItem('transactionView') as 'grid' | 'list') || 'grid',
     );
 
     const toggleView = () => {
         const newView = view === 'grid' ? 'list' : 'grid';
         setView(newView);
-        localStorage.setItem('expenseView', newView);
+        localStorage.setItem('transactionView', newView);
     };
 
     const [isModalOpen, setIsModalOpen] = useState(false);
