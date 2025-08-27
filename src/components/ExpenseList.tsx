@@ -43,7 +43,7 @@ export default function ExpenseList() {
     }
 
     return (
-        <div className="w-full max-w-4xl mx-auto p-4">
+        <div className="w-full mx-auto p-4">
             <div className="bg-white shadow-md rounded-lg overflow-hidden">
                 <table className="min-w-full">
                     <thead className="bg-gray-50">

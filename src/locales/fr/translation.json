@@ -22,5 +22,12 @@
     "dashboard_title": "Tableau de bord",
     "total_income": "Revenus Totaux",
     "total_expenses": "Dépenses Totales",
-    "remaining_balance": "Solde Restant"
+    "remaining_balance": "Solde Restant",
+    "dashboard": "Tableau de bord",
+    "incomes": "Revenus",
+    "expenses" : "Dépenses",
+    "categories": "Categories",
+    "settings": "Paramètres",
+    "support": "Support",
+    "logout": "Se Déconnecter"
 }

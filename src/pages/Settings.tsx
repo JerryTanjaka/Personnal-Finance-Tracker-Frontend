@@ -8,15 +8,7 @@ export default function Settings() {
     const [isChangePasswordOpen, setIsChangePasswordOpen] = useState<boolean>(false);
     const [isChangeUsernameOpen, setIsChangeUsernameOpen] = useState<boolean>(false)
 
-    const { i18n, t } = useTranslation();
-    const [language, setLanguage] = useState<string>(localStorage.getItem("appLanguage") || i18n.language || "en");
-
-    const toggleLanguage = () => {
-        const newLang = language === "en" ? "fr" : "en";
-        i18n.changeLanguage(newLang);
-        setLanguage(newLang);
-        localStorage.setItem("appLanguage", newLang);
-    };
+    const { t } = useTranslation();
 
     return (
         <div className="bg-gray-100 shadow-md rounded-lg p-8 mx-auto h-[94vh] overflow-y-scroll ">
@@ -105,16 +97,6 @@ export default function Settings() {
                     </div>
                 </div>
             </div>
-
-            <h2 className="font-semibold text-xl mt-6 text-gray-900 mb-2">
-                {t("change_language", "Change Language")}
-            </h2>
-            <p className="text-gray-600 mb-6">
-                {t(
-                    "language_preference",
-                    "Choose in which language you are more comfortable."
-                )}
-            </p>
             <LanguageToggle />
         </div>
     );
