@@ -17,8 +17,17 @@
     "disclaimer_text": "FinanceTracker est un outil de finances personnelles fourni 'tel quel' et destiné uniquement à des fins d'information, d'éducation et de suivi. Les développeurs ne font aucune déclaration ni garantie d'aucune sorte, expresse ou implicite, concernant l'exactitude, l'exhaustivité ou la fiabilité des informations affichées ou générées par l'application. En aucun cas, FinanceTracker ou ses développeurs ne pourront être tenus responsables de tout dommage direct, indirect, accessoire, consécutif ou punitif résultant de l'utilisation de l'application, y compris, mais sans s'y limiter, les pertes financières, les erreurs de calcul, la mauvaise gestion des comptes ou tout autre résultat découlant de la confiance accordée aux informations fournies par l'application. Les utilisateurs sont fortement encouragés à vérifier leurs propres dossiers, à consulter des conseillers financiers professionnels et à faire preuve de jugement indépendant avant de prendre des décisions financières. L'utilisation de cette application constitue une reconnaissance et une acceptation de ces avertissements.",
     "changes_title": "Modifications des termes",
     "changes_text": "FinanceTracker se réserve le droit de mettre à jour, modifier ou remplacer ces termes et conditions à tout moment sans préavis à l'utilisateur. Les termes mis à jour deviennent effectifs immédiatement après leur publication dans l'application, et l'utilisation continue de l'application après ces mises à jour constitue une acceptation des termes révisés. Les utilisateurs sont responsables de consulter régulièrement les termes et conditions afin d'assurer le respect continu. Le non-respect des termes mis à jour n'exonère pas les utilisateurs de leurs obligations et ne diminue en rien l'applicabilité des termes et conditions révisés. En continuant à utiliser FinanceTracker après les mises à jour, vous reconnaissez avoir lu, compris et accepté toutes les modifications, amendements ou révisions dans leur intégralité.",
+    "change_username": "Changer le nom",
+    "change_username_description": "Vous pouvez changer votre surnom quand vous le voulez.",
     "dashboard_title": "Tableau de bord",
     "total_income": "Revenus Totaux",
     "total_expenses": "Dépenses Totales",
-    "remaining_balance": "Solde Restant"
+    "remaining_balance": "Solde Restant",
+    "dashboard": "Tableau de bord",
+    "incomes": "Revenus",
+    "expenses" : "Dépenses",
+    "categories": "Categories",
+    "settings": "Paramètres",
+    "support": "Support",
+    "logout": "Se Déconnecter"
 }
