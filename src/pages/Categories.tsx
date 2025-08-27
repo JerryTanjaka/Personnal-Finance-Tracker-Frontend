@@ -23,7 +23,7 @@ export default function Categories() {
     const categoryIdRef = useRef<string>('')
 
     useEffect(() => {
-        fetch('http://localhost:3000/api/categories/',
+        fetch('http://localhost:8080/api/categories/',
             { headers: { "Authorization": "Bearer " + localStorage.getItem('accessToken') } }
         )
             .then(async res => {
@@ -51,7 +51,7 @@ export default function Categories() {
     }
 
     function handleCreate(categoryName: string) {
-        fetch(`http://localhost:3000/api/categories/`, {
+        fetch(`http://localhost:8080/api/categories/`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json', Authorization: "Bearer " + localStorage.getItem('accessToken') },
             body: JSON.stringify({ name: categoryName })
@@ -63,7 +63,7 @@ export default function Categories() {
     }
 
     function handleUpdate(categoryId: string, categoryName: string) {
-        fetch(`http://localhost:3000/api/categories/${categoryId}`, {
+        fetch(`http://localhost:8080/api/categories/${categoryId}`, {
             method: 'PUT',
             headers: { 'Content-Type': 'application/json', Authorization: "Bearer " + localStorage.getItem('accessToken') },
             body: JSON.stringify({ name: categoryName })
@@ -75,7 +75,7 @@ export default function Categories() {
 
     function handleDelete(categoryId: string) {
         if (window.confirm('Are you sure to delete this category ?')) {
-            fetch(`http://localhost:3000/api/categories/${categoryId}`, {
+            fetch(`http://localhost:8080/api/categories/${categoryId}`, {
                 method: 'DELETE',
                 headers: { 'Authorization': "Bearer " + localStorage.getItem('accessToken') },
             })
