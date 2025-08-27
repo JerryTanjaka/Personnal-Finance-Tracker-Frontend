@@ -36,8 +36,9 @@ export default function ChangePasswordForm() {
             />
             <button
                 type="submit"
-                className="bg-blue-500 w-fit cursor-pointer active:scale-95 text-white p-2 rounded"
+                className="bg-blue-500 w-fit cursor-pointer flex items-center gap-2 active:scale-95 text-white p-2 rounded"
             >
+                <i className='bxr  bx-swap-horizontal'  ></i>
                 Change Password
             </button>
         </form>
