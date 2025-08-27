@@ -19,8 +19,8 @@ export default function Income() {
   const closeModal = () => setIsModalOpen(false);
 
   const [transactions, setTransactions] = useState<Transaction[]>([
-    { id: 6, name: "Salary", amount: 2500, date: "2025-08-19", type: "income", source: "Work" },
-    { id: 7, name: "Freelance Project", amount: 600, date: "2025-08-15", type: "income", source: "Freelance" },
+    { id: 1, name: "Salary", amount: 2500, date: "2025-08-19", type: "income", source: "Work" },
+    { id: 2, name: "Freelance Project", amount: 600, date: "2025-08-15", type: "income", source: "Freelance" },
   ]);
 
   const handleAddTransaction = (e: React.FormEvent<HTMLFormElement>) => {
