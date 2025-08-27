@@ -1,43 +1,56 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { FaList, FaPlus, FaSearch, FaThLarge } from 'react-icons/fa';
 import TransactionCard from './TransactionCard';
 import type { Transaction } from './Types';
 
 export default function Income() {
     const [view, setView] = useState<'grid' | 'list'>(
-        () => (localStorage.getItem('incomeView') as 'grid' | 'list') || 'grid',
+        () =>
+            (localStorage.getItem('transactionView') as 'grid' | 'list') ||
+            'grid',
     );
 
     const toggleView = () => {
         const newView = view === 'grid' ? 'list' : 'grid';
         setView(newView);
-        localStorage.setItem('incomeView', newView);
+        localStorage.setItem('transactionView', newView);
     };
 
     const [isModalOpen, setIsModalOpen] = useState(false);
     const openModal = () => setIsModalOpen(true);
     const closeModal = () => setIsModalOpen(false);
 
-    const [transactions, setTransactions] = useState<Transaction[]>([
-        {
-            id: 1,
-            name: 'Salary',
-            amount: 2500,
-            date: '2025-08-19',
-            type: 'income',
-            source: 'Work',
-        },
-        {
-            id: 2,
-            name: 'Freelance Project',
-            amount: 600,
-            date: '2025-08-15',
-            type: 'income',
-            source: 'Freelance',
-        },
-    ]);
+    const [transactions, setTransactions] = useState<Transaction[]>([]);
+    const token = localStorage.getItem('accessToken');
 
-    const handleAddTransaction = (e: React.FormEvent<HTMLFormElement>) => {
+    const fetchTransactions = async () => {
+        if (!token) return;
+        try {
+            const res = await fetch('http://localhost:8080/api/income', {
+                headers: { Authorization: `Bearer ${token}` },
+            });
+            const data = await res.json();
+            const formatted: Transaction[] = data.map((item: any) => ({
+                id: item.id,
+                name: item.description || item.source,
+                amount: parseFloat(item.amount),
+                date: item.income_date,
+                type: 'income',
+                source: item.source,
+            }));
+            setTransactions(formatted);
+        } catch (err) {
+            console.error('Error fetching incomes:', err);
+        }
+    };
+
+    useEffect(() => {
+        fetchTransactions();
+    }, [token]);
+
+    const handleAddTransaction = async (
+        e: React.FormEvent<HTMLFormElement>,
+    ) => {
         e.preventDefault();
         const form = e.currentTarget;
         const formData = new FormData(form);
@@ -46,36 +59,47 @@ export default function Income() {
         const date = formData.get('date') as string;
         const source = formData.get('source') as string;
 
-        const newTransaction: Transaction = {
-            id: transactions.length + 1,
-            name,
-            amount,
-            date,
-            type: 'income',
-            source,
-        };
+        try {
+            const res = await fetch('http://localhost:8080/api/income', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${token}`,
+                },
+                body: JSON.stringify({
+                    amount,
+                    date,
+                    source,
+                    description: name,
+                }),
+            });
 
-        setTransactions([newTransaction, ...transactions]);
-        closeModal();
-        form.reset();
+            if (!res.ok) throw new Error('Error creating income');
+
+            await fetchTransactions();
+            closeModal();
+            form.reset();
+        } catch (error) {
+            console.error('Failed to add income:', error);
+        }
     };
 
     return (
         <div className="z-50 flex h-[94vh] w-full flex-col items-center rounded-lg bg-gray-100">
             <div className="flex min-h-full w-full max-w-7xl flex-col rounded-2xl p-6">
                 {/* Header */}
-                 <div className="flex flex-col border-b border-gray-300 pb-2 text-3xl font-bold md:flex-row md:items-center md:justify-between">
+                <div className="flex flex-col border-b border-gray-300 pb-2 text-3xl font-bold md:flex-row md:items-center md:justify-between">
                     <h1 className="text-3xl font-bold">Expense Tracker</h1>
 
                     <div className="flex flex-col items-start space-y-2 md:flex-row md:items-center md:space-y-0 md:space-x-4">
                         {/* Search */}
-                            <button
-                                onClick={openModal}
-                                className="flex h-11  items-center space-x-2 rounded bg-emerald-600 px-3 py-1 text-xl text-white shadow-md transition hover:bg-emerald-500 active:scale-95"
-                            >
-                                <FaPlus className="pointer-events-none left-3 text-xl" />
-                                <p className='text-lg'>Add </p>
-                            </button>
+                        <button
+                            onClick={openModal}
+                            className="flex h-11 items-center space-x-2 rounded bg-emerald-600 px-3 py-1 text-xl text-white shadow-md transition hover:bg-emerald-500 active:scale-95"
+                        >
+                            <FaPlus className="pointer-events-none left-3 text-xl" />
+                            <p className="text-lg">Add </p>
+                        </button>
                         <div className="relative flex items-center">
                             <FaSearch className="pointer-events-none absolute left-3 text-xl text-gray-800" />
                             <input
@@ -87,7 +111,6 @@ export default function Income() {
 
                         {/* Actions */}
                         <div className="flex space-x-2">
-                        
                             <button
                                 onClick={toggleView}
                                 className="flex h-11 w-11 items-center justify-center rounded border border-gray-300 bg-gray-200 text-gray-800 transition hover:bg-gray-300 active:scale-95"

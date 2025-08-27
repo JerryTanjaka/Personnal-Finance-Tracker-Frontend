@@ -6,13 +6,13 @@ import type { Transaction } from './Types';
 export default function Expense() {
     const [view, setView] = useState<'grid' | 'list'>(
         () =>
-            (localStorage.getItem('expenseView') as 'grid' | 'list') || 'grid',
+            (localStorage.getItem('transactionView') as 'grid' | 'list') ||
+            'grid',
     );
-
     const toggleView = () => {
         const newView = view === 'grid' ? 'list' : 'grid';
         setView(newView);
-        localStorage.setItem('expenseView', newView);
+        localStorage.setItem('transactionView', newView);
     };
 
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -109,6 +109,7 @@ export default function Expense() {
             category: 'Food',
         },
     ]);
+    
 
     const handleAddTransaction = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
@@ -142,13 +143,13 @@ export default function Expense() {
 
                     <div className="flex flex-col items-start space-y-2 md:flex-row md:items-center md:space-y-0 md:space-x-4">
                         {/* Search */}
-                            <button
-                                onClick={openModal}
-                                className="flex h-11  items-center space-x-2 rounded bg-red-800/90 px-3 py-1 text-xl text-white shadow-md transition hover:bg-red-700 active:scale-95"
-                            >
-                                <FaPlus className="pointer-events-none left-3 text-xl" />
-                                <p className='text-lg'>Add </p>
-                            </button>
+                        <button
+                            onClick={openModal}
+                            className="flex h-11 items-center space-x-2 rounded bg-red-800/90 px-3 py-1 text-xl text-white shadow-md transition hover:bg-red-700 active:scale-95"
+                        >
+                            <FaPlus className="pointer-events-none left-3 text-xl" />
+                            <p className="text-lg">Add </p>
+                        </button>
                         <div className="relative flex items-center">
                             <FaSearch className="pointer-events-none absolute left-3 text-xl text-gray-800" />
                             <input
@@ -160,7 +161,6 @@ export default function Expense() {
 
                         {/* Actions */}
                         <div className="flex space-x-2">
-                        
                             <button
                                 onClick={toggleView}
                                 className="flex h-11 w-11 items-center justify-center rounded border border-gray-300 bg-gray-200 text-gray-800 transition hover:bg-gray-300 active:scale-95"
