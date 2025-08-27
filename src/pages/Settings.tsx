@@ -2,6 +2,7 @@ import { useState } from "react";
 import ChangePasswordForm from "../components/Settings/ChangePasswordForm";
 import { useTranslation } from "react-i18next";
 import ChangeUsernameForm from "../components/Settings/ChangeUsernameForm";
+import LanguageToggle from "../components/UI/LanguageToggle";
 
 export default function Settings() {
     const [isChangePasswordOpen, setIsChangePasswordOpen] = useState<boolean>(false);
@@ -76,7 +77,7 @@ export default function Settings() {
                     className="flex w-full items-center justify-between px-4 py-3 rounded-lg bg-gray-50 hover:bg-gray-100 border border-gray-200 transition duration-200 cursor-pointer"
                 >
                     <div className="flex items-center gap-3">
-                        <i className="bx bx-lock text-gray-700 text-xl"></i>
+                        <i className='bxr text-gray-700 text-xl bx-user-circle'  ></i> 
                         <span className="font-medium text-gray-800">
                             {t("change_username", "Change Username")}
                         </span>
@@ -114,20 +115,7 @@ export default function Settings() {
                     "Choose in which language you are more comfortable."
                 )}
             </p>
-            <div className="flex items-center gap-3">
-                <span className={`font-medium ${language === "fr" ? "text-gray-900" : "text-gray-500"}`}>FR</span>
-
-                <button
-                    onClick={toggleLanguage}
-                    className={`w-14 h-8 flex items-center cursor-pointer bg-gray-300 rounded-full p-1 relative transition-colors duration-300 focus:outline-none ${language === "en" ? "bg-blue-500" : "bg-gray-300"}`}
-                >
-                    <div
-                        className={`bg-white w-6 h-6 rounded-full shadow-md transform transition-transform duration-300 ${language === "en" ? "translate-x-6" : "translate-x-0"}`}
-                    ></div>
-                </button>
-
-                <span className={`font-medium ${language === "en" ? "text-gray-900" : "text-gray-500"}`}>EN</span>
-            </div>
+            <LanguageToggle />
         </div>
     );
 }

@@ -79,9 +79,8 @@ export default function NavBar() {
             <Link to={'/login'}>
                 <div className="flex cursor-pointer items-center space-x-2 text-gray-700 hover:text-red-600">
                     <i className="bxr bx-arrow-out-left-square-half text-2xl"></i>
-                    <span className={textAnimation('text-xl font-medium')}>
-                        Logout
-                    </span>
+
+                    <span onClick={() => localStorage.removeItem("accessToken")} className={textAnimation("text-xl font-medium")}>Logout</span>
                 </div>
             </Link>
         </nav>
