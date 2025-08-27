@@ -2,7 +2,7 @@ export async function getExpenses() {
     try {
         const token = localStorage.getItem('accessToken');
         console.log(token)
-        const response = await fetch("http://localhost:3000/api/expenses", {
+        const response = await fetch("http://localhost:8080/api/expenses", {
             headers: {
                 'Authorization': `Bearer ${token}`
             }
