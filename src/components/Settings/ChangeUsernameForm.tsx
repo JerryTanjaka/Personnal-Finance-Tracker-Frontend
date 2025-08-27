@@ -2,8 +2,8 @@ import { useState } from 'react'
 import useLocalStorage from '../../hooks/useLocalStorage'
 
 export default function ChangeUsernameForm() {
-    const [username, setUsername] = useLocalStorage('username', ''); 
-    const [inputValue, setInputValue] = useState(username); 
+    const [username, setUsername] = useLocalStorage('username', '');
+    const [inputValue, setInputValue] = useState(username);
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
@@ -17,17 +17,19 @@ export default function ChangeUsernameForm() {
             <input
                 type="text"
                 required
-                value={inputValue} 
+                value={inputValue}
                 onChange={(e) => setInputValue(e.target.value)}
                 className="border p-2 rounded mb-4 w-auto"
                 placeholder="Your new Username"
             />
             <button
                 type="submit"
-                className="bg-blue-500 w-fit cursor-pointer active:scale-95 text-white p-2 rounded"
+                className="bg-blue-500 w-fit cursor-pointer active:scale-95 text-white p-2 rounded flex items-center gap-2"
             >
+                <i className="bx bx-save"></i>
                 Save
             </button>
+
         </form>
     )
 }
