@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { FaList, FaSearch, FaThLarge } from "react-icons/fa";
 import TransactionCard from "./TransactionCard";
-import type{ Transaction } from "./Types";
+import type { Transaction } from "./Types";
 
 export default function Expense() {
   const [view, setView] = useState<"grid" | "list">(
@@ -24,29 +24,24 @@ export default function Expense() {
     { id: 3, name: "Taxi", amount: 8.5, date: "2025-08-22", type: "expense", category: "Transport" },
     { id: 4, name: "Electricity Bill", amount: 60.0, date: "2025-08-20", type: "expense", category: "Utilities" },
     { id: 5, name: "Coffee", amount: 4.5, date: "2025-08-21", type: "expense", category: "Food" },
-    { id: 6, name: "Salary", amount: 2500, date: "2025-08-19", type: "income", source: "Work" },
-    { id: 7, name: "Freelance Project", amount: 600, date: "2025-08-15", type: "income", source: "Freelance" },
   ]);
 
   const handleAddTransaction = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const form = e.currentTarget;
     const formData = new FormData(form);
-    const type = formData.get("type") as "income" | "expense";
     const name = formData.get("name") as string;
     const amount = parseFloat(formData.get("amount") as string);
     const date = formData.get("date") as string;
-    const category = type === "expense" ? (formData.get("category") as string) : undefined;
-    const source = type === "income" ? (formData.get("source") as string) : undefined;
+    const category = formData.get("category") as string;
 
     const newTransaction: Transaction = {
       id: transactions.length + 1,
       name,
       amount,
       date,
-      type,
+      type: "expense",
       category,
-      source,
     };
 
     setTransactions([newTransaction, ...transactions]);
@@ -59,7 +54,7 @@ export default function Expense() {
       <div className="flex min-h-full w-full max-w-7xl flex-col rounded-2xl p-6">
         {/* Header */}
         <div className="flex flex-col border-b border-gray-300 pb-2 md:flex-row md:items-center md:justify-between text-3xl font-bold">
-          <h1 className="text-3xl font-bold">Transaction Tracker</h1>
+          <h1 className="text-3xl font-bold">Expense Tracker</h1>
 
           <div className="flex flex-col items-start space-y-2 md:flex-row md:items-center md:space-y-0 md:space-x-4">
             {/* Search */}
@@ -78,7 +73,7 @@ export default function Expense() {
                 onClick={openModal}
                 className="h-11 rounded bg-emerald-600 px-3 py-1 text-xl text-white shadow-md transition hover:bg-emerald-500 active:scale-95"
               >
-                New Transaction
+                New Expense
               </button>
               <button
                 onClick={toggleView}
@@ -90,7 +85,7 @@ export default function Expense() {
           </div>
         </div>
 
-        {/* Liste des transactions */}
+        {/* Liste des dépenses */}
         <div
           className={`mt-6 w-full overflow-y-auto pt-3 pl-2 ${
             view === "grid"
@@ -109,17 +104,12 @@ export default function Expense() {
       {isModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
           <div className="w-full max-w-md rounded-xl bg-white p-6 shadow-lg">
-            <h2 className="text-2xl font-bold">Add New Transaction</h2>
+            <h2 className="text-2xl font-bold">Add New Expense</h2>
             <form className="flex flex-col space-y-4" onSubmit={handleAddTransaction}>
               <input name="name" type="text" placeholder="Name" className="rounded border p-2" required />
               <input name="amount" type="number" placeholder="Amount" className="rounded border p-2" required />
               <input name="date" type="date" className="rounded border p-2" required />
-              <select name="type" className="rounded border p-2">
-                <option value="expense">Expense</option>
-                <option value="income">Income</option>
-              </select>
-              <input name="category" type="text" placeholder="Category (for Expense)" className="rounded border p-2" />
-              <input name="source" type="text" placeholder="Source (for Income)" className="rounded border p-2" />
+              <input name="category" type="text" placeholder="Category" className="rounded border p-2" required />
               <div className="flex justify-end space-x-2">
                 <button type="button" onClick={closeModal} className="rounded bg-gray-300 px-4 py-2">Cancel</button>
                 <button type="submit" className="rounded bg-emerald-600 px-4 py-2 text-white">Add</button>
