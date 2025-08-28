@@ -110,9 +110,9 @@ export default function Categories() {
                 <div className="flex justify-between border-b border-gray-300 items-center mb-5">
                     <h3 className="text-3xl font-bold p-2 mb-3">Categories</h3>
                 </div>
-                <div className="w-full my-10 flex flex-col-reverse flex-wrap gap-2 justify-around items-center xl:items-start xl:flex-row-reverse">
-                    <div className="relative w-full h-[75vh] max-h-[75vh] xl:w-7/10 flex flex-col gap-3 rounded-2xl overflow-y-scroll">
-                        <div className="sticky top-0 bg-white font-semibold w-full p-3 rounded-[5px] shadow-xs grid grid-cols-4 gap-x-5 items-center">
+                <div className="w-full  flex flex-col-reverse flex-wrap gap-2 justify-around items-center xl:items-start xl:flex-row-reverse">
+                    <div className="relative w-full h-[75vh] max-h-[75vh] xl:w-7/10 flex flex-col gap-3 rounded-lg overflow-y-scroll">
+                        <div className="sticky top-0 bg-white font-semibold w-full z-10 p-3 rounded-[5px] shadow-xs grid grid-cols-4 gap-x-5 items-center">
                             <div>Name</div>
                             <div>ID</div>
                             <div className="text-center">Creation date</div>

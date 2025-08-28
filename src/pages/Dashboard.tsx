@@ -2,6 +2,7 @@ import StatCard from '../components/StatCard.tsx';
 import {PieChart} from "../components/PieChart.tsx";
 import ExpenseList from "../components/ExpenseList.tsx";
 import { useTranslation } from 'react-i18next';
+import BalanceCard from '../components/BalanceCard.tsx';
 
 export default function Dashboard() {
     const { t } = useTranslation();
@@ -26,7 +27,7 @@ export default function Dashboard() {
                         amount={1000}
                         color={'text-red-600'}
                     />
-                    <StatCard
+                    <BalanceCard
                         title={t('remaining_balance', 'Remaining Balance')}
                         amount={1000}
                         color={'text-blue-600'}
