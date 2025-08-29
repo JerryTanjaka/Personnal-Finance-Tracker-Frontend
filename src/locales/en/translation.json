@@ -23,12 +23,13 @@
     "total_income": "Total Income",
     "total_expenses": "Total Expenses",
     "remaining_balance": "Remaining Balance",
+    "uncategorized": "Uncategorized",
+    "no description": "No description",
     "dashboard": "Dashboard",
     "incomes": "Incomes",
-    "expenses" : "Expenses",
+    "expenses": "Expenses",
     "categories": "Categories",
     "settings": "Settings",
     "support": "Support",
     "logout": "Logout"
-
 }

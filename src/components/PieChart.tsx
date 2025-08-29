@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Pie } from "react-chartjs-2";
 import { Chart as ChartJS, Tooltip, Legend, ArcElement } from "chart.js";
 import { getExpenses } from "../data/DataFetch.ts";
+import { t } from "i18next";
 
 ChartJS.register(Tooltip, Legend, ArcElement);
 
@@ -38,7 +39,7 @@ export const PieChart = () => {
 
                 const expensesByCategory = expenses.reduce(
                     (acc: Record<string, number>, expense: any) => {
-                        const category = expense.category_fk.name;
+                        const category = expense.category_fk?.name || t("uncategorized");
                         acc[category] = (acc[category] || 0) + expense.amount;
                         return acc;
                     },
