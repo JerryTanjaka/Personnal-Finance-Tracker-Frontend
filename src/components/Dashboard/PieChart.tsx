@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Pie } from "react-chartjs-2";
 import { Chart as ChartJS, Tooltip, Legend, ArcElement } from "chart.js";
-import { getExpenses } from "../data/DataFetch.ts";
+import { getExpenses } from "../../data/DataFetch.ts";
 
 ChartJS.register(Tooltip, Legend, ArcElement);
 

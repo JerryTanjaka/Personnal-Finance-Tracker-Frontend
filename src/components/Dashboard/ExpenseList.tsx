@@ -1,7 +1,7 @@
 import {useEffect, useState} from "react";
-import {getExpenses} from "../data/DataFetch.ts";
-import LoadingSpinner from "./UI/LoadingSpinner.tsx";
-import ErrorMessage from "./UI/ErrorMessage.tsx";
+import {getExpenses} from "../../data/DataFetch.ts";
+import LoadingSpinner from "../UI/LoadingSpinner.tsx";
+import ErrorMessage from "../UI/ErrorMessage.tsx";
 
 interface Expense {
     id: number;

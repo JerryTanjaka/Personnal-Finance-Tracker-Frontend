@@ -1,8 +1,8 @@
-import StatCard from '../components/StatCard.tsx';
-import {PieChart} from "../components/PieChart.tsx";
-import ExpenseList from "../components/ExpenseList.tsx";
+import StatCard from '../components/Dashboard/StatCard.tsx';
+import {PieChart} from "../components/Dashboard/PieChart.tsx";
+import ExpenseList from "../components/Dashboard/ExpenseList.tsx";
 import { useTranslation } from 'react-i18next';
-import BalanceCard from '../components/BalanceCard.tsx';
+import BalanceCard from '../components/Dashboard/BalanceCard.tsx';
 
 export default function Dashboard() {
     const { t } = useTranslation();
