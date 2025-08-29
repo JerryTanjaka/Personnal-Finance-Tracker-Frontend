@@ -14,9 +14,13 @@ import type { Transaction } from "./Types";
 type TransactionCardProps = {
   transaction: Transaction;
   view: "grid" | "list";
+  actions?: {
+    onChange: () => void;
+    onDelete: () => void;
+  }
 };
 
-export default function TransactionCard({ transaction, view }: TransactionCardProps) {
+export default function TransactionCard({ transaction, view, actions }: TransactionCardProps) {
   const categoryIcons: Record<string, React.ReactNode> = {
     Food: <FaUtensils className="text-white" />,
     Entertainment: <FaFilm className="text-white" />,
@@ -51,9 +55,8 @@ export default function TransactionCard({ transaction, view }: TransactionCardPr
 
   return (
     <div
-      className={`group relative rounded-xl border border-gray-300 bg-gray-50 p-4 transition-transform duration-200 hover:scale-101 hover:shadow-sm ${
-        view === "list" ? "h-20" : "h-auto"
-      }`}
+      className={`group relative rounded-xl border border-gray-300 bg-gray-50 p-4 transition-transform duration-200 hover:scale-101 hover:shadow-sm ${view === "list" ? "h-20" : "h-auto"
+        }`}
     >
       {/* Badge icône */}
       <div className={`absolute -top-3 left-3 flex h-10 w-10 items-center justify-center rounded-full ${bgColor}`}>
@@ -68,9 +71,8 @@ export default function TransactionCard({ transaction, view }: TransactionCardPr
             {transaction.type === "expense" ? transaction.category : transaction.source}
           </p>
           <p
-            className={`mt-2 text-2xl font-bold ${
-              transaction.type === "expense" ? "text-red-700" : "text-green-700"
-            }`}
+            className={`mt-2 text-2xl font-bold ${transaction.type === "expense" ? "text-red-700" : "text-green-700"
+              }`}
           >
             {transaction.type === "expense" ? "-" : "+"}${transaction.amount.toFixed(2)}
           </p>
@@ -79,23 +81,22 @@ export default function TransactionCard({ transaction, view }: TransactionCardPr
 
         {/* Boutons */}
         <div
-          className={`flex justify-around ${
-            view === "grid" ? "flex-col space-y-2" : "flex-row space-x-5"
-          }`}
+          className={`flex justify-around ${view === "grid" ? "flex-col space-y-2" : "flex-row space-x-5"
+            }`}
         >
           <button
-            className={`flex transform items-center gap-2 rounded bg-gray-300 text-black transition duration-100 ease-in-out hover:bg-gray-400 active:scale-95 ${
-              view === "grid" ? "px-2 py-2 text-sm" : "px-3 py-3 text-base"
-            }`}
+            className={`flex transform items-center gap-2 rounded bg-gray-300 text-black transition duration-100 ease-in-out hover:bg-gray-400 active:scale-95 ${view === "grid" ? "px-2 py-2 text-sm" : "px-3 py-3 text-base"
+              }`}
+            onClick={actions?.onChange}
           >
             <FaExchangeAlt />
             Change
           </button>
 
           <button
-            className={`flex transform items-center gap-2 rounded bg-neutral-950/90 text-white transition duration-100 ease-in-out hover:bg-neutral-700 active:scale-95 ${
-              view === "grid" ? "px-2 py-2 text-sm" : "px-3 py-3 text-base"
-            }`}
+            className={`flex transform items-center gap-2 rounded bg-neutral-950/90 text-white transition duration-100 ease-in-out hover:bg-neutral-700 active:scale-95 ${view === "grid" ? "px-2 py-2 text-sm" : "px-3 py-3 text-base"
+              }`}
+            onClick={actions?.onDelete}
           >
             <FaTrash />
             Delete

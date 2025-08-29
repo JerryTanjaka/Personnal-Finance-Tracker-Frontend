@@ -14,6 +14,7 @@ type Message = {
 }
 
 export default function Categories() {
+    const token = localStorage.getItem('accessToken')
 
     const [categoryReload, setCategoryReload] = useState<boolean>(false)
     const [categoryList, setCategoryList] = useState<Array<Category> | null>(null)
@@ -32,7 +33,7 @@ export default function Categories() {
 
     useEffect(() => {
         fetch('http://localhost:8080/api/categories/',
-            { headers: { "Authorization": "Bearer " + localStorage.getItem('accessToken') } }
+            { headers: { "Authorization": "Bearer " + token } }
         )
             .then(async res => {
                 return await res.json()
@@ -61,7 +62,7 @@ export default function Categories() {
     function handleCreate(categoryName: string) {
         fetch(`http://localhost:8080/api/categories/`, {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json', Authorization: "Bearer " + localStorage.getItem('accessToken') },
+            headers: { 'Content-Type': 'application/json', Authorization: "Bearer " + token },
             body: JSON.stringify({ name: categoryName })
         })
             .then(async res => await handleNotification(res))
@@ -73,7 +74,7 @@ export default function Categories() {
     function handleUpdate(categoryId: string, categoryName: string) {
         fetch(`http://localhost:8080/api/categories/${categoryId}`, {
             method: 'PUT',
-            headers: { 'Content-Type': 'application/json', Authorization: "Bearer " + localStorage.getItem('accessToken') },
+            headers: { 'Content-Type': 'application/json', Authorization: "Bearer " + token },
             body: JSON.stringify({ name: categoryName })
         })
             .then(async res => await handleNotification(res))
@@ -84,10 +85,10 @@ export default function Categories() {
     function handleDelete(categoryId: string, force?: boolean) {
         fetch(`http://localhost:8080/api/categories/${categoryId}?force=${force}`, {
             method: 'DELETE',
-            headers: { 'Authorization': "Bearer " + localStorage.getItem('accessToken') },
+            headers: { 'Authorization': "Bearer " + token },
         })
             .then(async res => await handleNotification(res))
-            .then(() => setCategoryReload(true))
+            .catch(() => setCategoryReload(true))
             .finally(() => clearModal())
     }
 
@@ -112,7 +113,7 @@ export default function Categories() {
                 </div>
                 <div className="w-full my-10 flex flex-col-reverse flex-wrap gap-2 justify-around items-center xl:items-start xl:flex-row-reverse">
                     <div className="relative w-full h-[75vh] max-h-[75vh] xl:w-7/10 flex flex-col gap-3 rounded-2xl overflow-y-scroll">
-                        <div className="sticky top-0 bg-white font-semibold w-full p-3 rounded-[5px] shadow-xs grid grid-cols-4 gap-x-5 items-center">
+                        <div className="sticky top-0 bg-white font-semibold w-full px-6 py-3 rounded-[5px] shadow-xs grid grid-cols-4 gap-x-5 items-center uppercase text-gray-500">
                             <div>Name</div>
                             <div>ID</div>
                             <div className="text-center">Creation date</div>
@@ -120,7 +121,7 @@ export default function Categories() {
                         </div>
                         <AnimatePresence>
                             <motion.div
-                                className={`w-full p-3 rounded-[5px] shadow-md flex justify-center items-center bg-white hover:bg-gray-50 transition-colors`}
+                                className={`w-full px-6 py-3 rounded-[5px] shadow-md flex justify-center items-center bg-white hover:bg-gray-50 transition-colors`}
                                 layout
                                 onClick={() => {
                                     setIsCreating(true)
@@ -141,7 +142,7 @@ export default function Categories() {
                                 return (
                                     <motion.div
                                         key={category.id}
-                                        className={`w-full h-fit p-3 rounded-[5px] shadow-md grid grid-cols-4 gap-x-5 items-center bg-white hover:bg-gray-50 transition-colors`}
+                                        className={`w-full h-fit px-6 py-3 rounded-[5px] shadow-md grid grid-cols-4 gap-x-5 items-center bg-white hover:bg-gray-50 transition-colors text-gray-800`}
                                         layout
                                         whileHover={{ scale: 0.995 }}
                                         initial={{ opacity: 0, scale: 0.9 }}
