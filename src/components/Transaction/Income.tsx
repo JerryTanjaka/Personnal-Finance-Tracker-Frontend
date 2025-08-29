@@ -26,7 +26,11 @@ export default function Income() {
 
     const [isModalOpen, setIsModalOpen] = useState(false);
     const openModal = () => setIsModalOpen(true);
-    const closeModal = () => setIsModalOpen(false);
+    const closeModal = () => {
+        isModifying.current = { status: false, isDeleting: false }
+        cardIdRef.current = ''
+        setIsModalOpen(false)
+    };
 
     const [transactions, setTransactions] = useState<Transaction[]>([]);
     const token = localStorage.getItem('accessToken');
@@ -121,8 +125,6 @@ export default function Income() {
             }).then(() => fetchTransactions())
                 .catch(() => console.log("Error while updating"))
                 .finally(() => {
-                    isModifying.current = { status: false, isDeleting: false }
-                    cardIdRef.current = ''
                     closeModal();
                     form.reset();
                 })
@@ -145,17 +147,11 @@ export default function Income() {
             }).then(() => fetchTransactions())
                 .catch(() => console.log("Error while updating"))
                 .finally(() => {
-                    isModifying.current = { status: false, isDeleting: false }
-                    cardIdRef.current = ''
                     closeModal();
                 })
         } catch (error) {
             console.error('Failed to add income:', error);
         }
-
-        closeModal()
-        isModifying.current = { status: false, isDeleting: false }
-        cardIdRef.current = ''
     };
 
     return (
@@ -229,7 +225,7 @@ export default function Income() {
             {isModalOpen && (
                 <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
                     <div className="w-full max-w-md rounded-xl bg-white p-6 shadow-lg">
-                        <h2 className="text-2xl font-bold">{isModifying.current.status ? (isModifying.current.isDeleting ? 'Delete' : 'Update') : 'Add New'} Income</h2>
+                        <h2 className="text-2xl font-bold mb-3">{isModifying.current.status ? (isModifying.current.isDeleting ? 'Delete' : 'Update') : 'Add New'} Income</h2>
                         <form
                             className="flex flex-col space-y-4"
                             onSubmit={isModifying.current.status ? (isModifying.current.isDeleting ? handleDeleteTransaction : handleUpdateTransaction) : handleAddTransaction}
@@ -272,9 +268,9 @@ export default function Income() {
                                 </button>
                                 <button
                                     type="submit"
-                                    className="rounded bg-emerald-600 px-4 py-2 text-white"
+                                    className={"rounded " + (isModifying.current.isDeleting ? 'bg-neutral-950/90' : 'bg-emerald-600') + " px-4 py-2 text-white"}
                                 >
-                                    Add
+                                    {isModifying.current.status ? (isModifying.current.isDeleting ? 'Delete' : 'Update') : 'Add'}
                                 </button>
                             </div>
                         </form>
