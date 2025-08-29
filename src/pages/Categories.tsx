@@ -147,9 +147,9 @@ export default function Categories() {
                 ) : null}
             </AnimatePresence>
 
-            <div className="h-[94vh] w-full p-6 bg-gray-50 rounded-lg">
-                <div className="flex justify-between items-center mb-6">
-                    <h3 className="text-3xl font-bold text-gray-800">Categories</h3>
+            <div className="h-[94vh] w-full p-5 bg-gray-100 rounded-lg">
+                <div className="flex justify-between items-center mb-6 border-b border-gray-300">
+                    <h3 className="text-3xl font-bold text-gray-800 p-2 mb-3">Categories</h3>
                 </div>
 
                 <div className="w-full flex flex-col-reverse gap-6 xl:flex-row-reverse">
