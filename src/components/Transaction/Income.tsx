@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { FaList, FaPlus, FaSearch, FaThLarge } from 'react-icons/fa';
 import TransactionCard from './TransactionCard';
 import type { Transaction } from './Types';
+import { AnimatePresence, motion } from 'framer-motion';
 
 type ActionsModel = {
     status: boolean;
@@ -134,8 +135,10 @@ export default function Income() {
     };
 
     const handleDeleteTransaction = (
+        e: React.FormEvent<HTMLFormElement>,
         incomeId: string
     ) => {
+        e.preventDefault()
         incomeId = cardIdRef.current
         try {
             fetch('http://localhost:8080/api/income/' + incomeId, {
@@ -192,33 +195,46 @@ export default function Income() {
                 </div>
 
                 {/* Liste des revenus */}
-                <div
-                    className={`mt-6 w-full overflow-y-auto pt-3 pl-2 ${view === 'grid'
-                        ? 'grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3'
-                        : 'flex flex-col space-y-4'
-                        }`}
-                    style={{ maxHeight: 'calc(100vh - 220px)' }}
-                >
-                    {transactions.map((t) => (
-                        <TransactionCard
-                            key={t.id}
-                            transaction={t}
-                            view={view}
-                            actions={{
-                                onChange() {
-                                    isModifying.current = { status: true, isDeleting: false }
-                                    cardIdRef.current = t.id
-                                    openModal()
-                                },
-                                onDelete() {
-                                    isModifying.current = { status: true, isDeleting: true }
-                                    cardIdRef.current = t.id
-                                    openModal()
-                                }
-                            }}
-                        />
-                    ))}
-                </div>
+                <AnimatePresence>
+                    <motion.div
+                        layout
+                        className={`mt-6 w-full overflow-y-auto pt-3 pl-2 ${view === 'grid'
+                            ? 'grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3'
+                            : 'flex flex-col space-y-4'
+                            }`}
+                        style={{ maxHeight: 'calc(100vh - 220px)' }}
+                    >
+                        <AnimatePresence>
+                            {transactions.map((t) => (
+                                <motion.div
+                                    layout
+                                    key={t.id}
+                                    initial={{ scale: 0, opacity: 0 }}
+                                    animate={{ scale: 1, opacity: 1 }}
+                                    exit={{ scale: 0.1, opacity: 0 }}
+                                    transition={{duration: 0.25}}
+                                >
+                                    <TransactionCard
+                                        transaction={t}
+                                        view={view}
+                                        actions={{
+                                            onChange() {
+                                                isModifying.current = { status: true, isDeleting: false }
+                                                cardIdRef.current = t.id
+                                                openModal()
+                                            },
+                                            onDelete() {
+                                                isModifying.current = { status: true, isDeleting: true }
+                                                cardIdRef.current = t.id
+                                                openModal()
+                                            }
+                                        }}
+                                    />
+                                </motion.div>
+                            ))}
+                        </AnimatePresence>
+                    </motion.div>
+                </AnimatePresence>
             </div>
 
             {/* Modal */}
