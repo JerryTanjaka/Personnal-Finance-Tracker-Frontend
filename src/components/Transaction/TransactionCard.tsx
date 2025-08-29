@@ -55,7 +55,7 @@ export default function TransactionCard({ transaction, view, actions }: Transact
 
   return (
     <div
-      className={`group relative rounded-xl border border-gray-300 bg-gray-50 p-4 transition-transform duration-200 hover:scale-101 hover:shadow-sm ${view === "list" ? "h-20" : "h-auto"
+      className={`group relative rounded-xl border border-gray-300 bg-gray-50 p-4 transition-transform duration-200 scale-99 hover:scale-100 hover:shadow-sm ${view === "list" ? "h-20" : "h-auto"
         }`}
     >
       {/* Badge icône */}

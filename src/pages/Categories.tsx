@@ -112,7 +112,7 @@ export default function Categories() {
                     <h3 className="text-3xl font-bold p-2 mb-3">Categories</h3>
                 </div>
                 <div className="w-full my-10 flex flex-col-reverse flex-wrap gap-2 justify-around items-center xl:items-start xl:flex-row-reverse">
-                    <div className="relative w-full h-[75vh] max-h-[75vh] xl:w-7/10 flex flex-col gap-3 rounded-2xl overflow-y-scroll">
+                    <div className="relative w-full h-[calc(100vh-230px)] max-h-[calc(100vh-230px)] xl:w-7/10 flex flex-col gap-3 rounded-2xl overflow-y-scroll">
                         <div className="sticky top-0 bg-white font-semibold w-full px-6 py-3 rounded-[5px] shadow-xs grid grid-cols-4 gap-x-5 items-center uppercase text-gray-500">
                             <div>Name</div>
                             <div>ID</div>
