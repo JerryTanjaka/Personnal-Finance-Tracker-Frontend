@@ -38,6 +38,8 @@ export default function LogIn() {
         } catch (err) {
             setError(err instanceof Error ? err.message : 'Erreur inconnue');
             setLoading(false);
+        } finally{
+            setLoading(false);
         }
     };
 

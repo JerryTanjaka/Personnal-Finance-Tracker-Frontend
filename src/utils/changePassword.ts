@@ -1,7 +1,6 @@
 export default async function changePassword(currentPassword: string, newPassword: string) {
     try {
         const token = localStorage.getItem("accessToken");
-        console.log("Token envoyé:", token);
 
         const res = await fetch("http://localhost:8080/api/user/change-password", {
             method: "POST",
