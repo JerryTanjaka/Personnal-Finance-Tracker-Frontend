@@ -21,12 +21,13 @@ export default function Expense() {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const openModal = () => setIsModalOpen(true);
     const closeModal = () => setIsModalOpen(false);
+    const [editingId, setEditingId] = useState<string | null>(null);
 
     const [transactions, setTransactions] = useState<Transaction[]>([]);
     const [categories, setCategories] = useState<Category[]>([]);
     const token = localStorage.getItem('accessToken');
 
-    // --- Fetch categories ---
+    
     const fetchCategories = async (): Promise<Category[]> => {
         if (!token) return [];
         try {
@@ -44,7 +45,7 @@ export default function Expense() {
         }
     };
 
-    // --- Fetch expenses ---
+    
     const fetchExpenses = async (cats: Category[]) => {
         if (!token) return;
         try {
@@ -54,7 +55,6 @@ export default function Expense() {
             const data = await res.json();
             const formatted: Transaction[] = Array.isArray(data)
                 ? data.map((item: any) => {
-                
                       return {
                           id: item.id,
                           name: item.description || item.name,
@@ -73,7 +73,7 @@ export default function Expense() {
         }
     };
 
-    // --- Load categories puis transactions ---
+    
     useEffect(() => {
         const fetchData = async () => {
             if (!token) return;
@@ -83,7 +83,7 @@ export default function Expense() {
         fetchData();
     }, [token]);
 
-    // --- Add new transaction ---
+    //  Add new transaction ---
     const handleAddTransaction = async (
         event: React.FormEvent<HTMLFormElement>,
     ) => {
@@ -112,9 +112,68 @@ export default function Expense() {
                 body: formData,
             });
 
-            // Re-fetch pour mettre à jour les transactions
             await fetchExpenses(categories);
             closeModal();
+        } catch (err) {
+            console.error(err);
+        }
+    };
+
+    //  update transactions--
+
+    const handleUpdateTransaction = async (
+        event: React.FormEvent<HTMLFormElement>,
+    ) => {
+        event.preventDefault();
+        if (!editingId || !token) return;
+
+        const target = event.target as typeof event.target & {
+            description: { value: string };
+            amount: { value: string };
+            date: { value: string };
+            type: { value: string };
+            categoryId: { value: string };
+            receipt?: { files: FileList };
+        };
+
+        const formData = new FormData();
+        formData.append('description', target.description.value);
+        formData.append('amount', target.amount.value);
+        formData.append('date', target.date.value);
+        formData.append('type', target.type.value);
+        formData.append('categoryId', target.categoryId.value);
+
+        if (target.receipt?.files?.[0]) {
+            formData.append('receipt', target.receipt.files[0]);
+        }
+
+        try {
+            await fetch(`http://localhost:8080/api/expenses/${editingId}`, {
+                method: 'PUT',
+                headers: { Authorization: `Bearer ${token}` },
+                body: formData,
+            });
+
+            await fetchExpenses(categories);
+            closeModal();
+            setEditingId(null);
+        } catch (err) {
+            console.error(err);
+        }
+    };
+    const handleChangeTransaction = (id: string) => {
+        setEditingId(id); 
+        openModal(); 
+    };
+
+    const handleDeleteTransaction = async (id: string) => {
+        if (!token) return;
+        try {
+            await fetch(`http://localhost:8080/api/expenses/${id}`, {
+                method: 'DELETE',
+                headers: { Authorization: `Bearer ${token}` },
+            });
+            await fetchExpenses(categories); 
         } catch (err) {
             console.error(err);
         }
@@ -171,6 +230,12 @@ export default function Expense() {
                                 key={t.id}
                                 transaction={t}
                                 view={view}
+                                actions={{
+                                    onChange: () =>
+                                        handleChangeTransaction(t.id),
+                                    onDelete: () =>
+                                        handleDeleteTransaction(t.id),
+                                }}
                             />
                         ))}
                 </div>
@@ -183,7 +248,11 @@ export default function Expense() {
                         <h2 className="text-2xl font-bold">Add New Expense</h2>
                         <form
                             className="flex flex-col space-y-4"
-                            onSubmit={handleAddTransaction}
+                            onSubmit={
+                                editingId
+                                    ? handleUpdateTransaction
+                                    : handleAddTransaction
+                            }
                             encType="multipart/form-data"
                         >
                             <input
