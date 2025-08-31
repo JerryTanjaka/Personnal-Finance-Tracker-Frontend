@@ -167,7 +167,7 @@ export default function Income() {
             <div className="flex min-h-full w-full max-w-7xl flex-col rounded-2xl p-6">
                 {/* Header */}
                 <div className="flex flex-col border-b border-gray-300 pb-2 text-3xl font-bold md:flex-row md:items-center md:justify-between">
-                    <h1 className="text-3xl font-bold">Income </h1>
+                    <h1 className="text-3xl font-bold">Expense Tracker</h1>
 
                     <div className="flex flex-col items-start space-y-2 md:flex-row md:items-center md:space-y-0 md:space-x-4">
                         {/* Search */}
@@ -262,6 +262,7 @@ export default function Income() {
                             Income
                         </h2>
                         <form
+                                className="flex flex-col space-y-4"
                             onSubmit={(e) =>
                                 isModifying.current.status
                                     ? isModifying.current.isDeleting
