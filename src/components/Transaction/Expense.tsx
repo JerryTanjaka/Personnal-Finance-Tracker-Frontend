@@ -54,16 +54,14 @@ export default function Expense() {
             const data = await res.json();
             const formatted: Transaction[] = Array.isArray(data)
                 ? data.map((item: any) => {
-                      const category = cats.find(
-                          (cat) => cat.id === item.category_id,
-                      );
+                
                       return {
                           id: item.id,
                           name: item.description || item.name,
                           amount: parseFloat(item.amount),
                           date: item.date,
                           type: 'expense',
-                          category: category ? category.name : 'Uncategorized',
+                          category: item.category_fk?.name || 'Uncategorized',
                           source: item.source || '',
                       };
                   })
