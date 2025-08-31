@@ -1,11 +1,11 @@
 import type { FormEvent } from 'react';
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import ErrorMessage from '../components/UI/ErrorMessage.tsx';
 import LoadingSpinner from '../components/UI/LoadingSpinner.tsx';
-
 export default function SignUp() {
-    const [username, setUsername] = useState<string>('')
+    const navigate = useNavigate();
+    const [username, setUsername] = useState<string>('');
     const [email, setEmail] = useState<string>('');
     const [password, setPassword] = useState<string>('');
     const [error, setError] = useState<string>('');
@@ -14,8 +14,8 @@ export default function SignUp() {
     const handleSignUp = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         setLoading(true);
-        localStorage.setItem('username', username)
-        console.log(localStorage.getItem('username'))
+        localStorage.setItem('username', username);
+        console.log(localStorage.getItem('username'));
 
         const timeout = setTimeout(() => {
             setLoading(false);
@@ -34,6 +34,7 @@ export default function SignUp() {
                 setEmail('');
                 setPassword('');
                 setError('');
+                navigate('/login');
             } else {
                 const errorData = await res.json();
                 setError(errorData.message || 'Erreur inconnue');
@@ -84,7 +85,9 @@ export default function SignUp() {
                                     autoComplete="name"
                                     required
                                     value={username}
-                                    onChange={(e) => setUsername(e.target.value)}
+                                    onChange={(e) =>
+                                        setUsername(e.target.value)
+                                    }
                                     className="block w-full rounded-md border border-gray-300 px-3 py-2 placeholder-gray-400 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                                     placeholder="John Doe"
                                 />
