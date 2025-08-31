@@ -21,7 +21,7 @@ type TransactionCardProps = {
   };
 };
 
-// Icônes par catégorie
+
 const categoryIcons: Record<string, React.ReactNode> = {
   Food: <FaUtensils className="text-white" />,
   Entertainment: <FaFilm className="text-white" />,
@@ -32,7 +32,7 @@ const categoryIcons: Record<string, React.ReactNode> = {
   Other: <FaTrash className="text-white" />,
 };
 
-// Couleurs par catégorie
+
 const categoryColors: Record<string, string> = {
   Food: "bg-red-700",
   Entertainment: "bg-purple-700",
@@ -53,7 +53,7 @@ export default function TransactionCard({
     year: "numeric",
   });
 
-  // Choisir l'icône selon type/catégorie
+  
   const icon: React.ReactNode =
     transaction.type === "income"
       ? <FaMoneyBillWave className="text-white" />
