@@ -4,6 +4,7 @@ import { FaFilter, FaList, FaPlus, FaSearch, FaThLarge } from 'react-icons/fa';
 import Card from './CardFilter.tsx';
 import TransactionCard from './TransactionCard';
 import type { Transaction } from './Types';
+import Input from './../UI/searchButton.tsx';
 
 type Category = { id: string; name: string };
 
@@ -203,14 +204,8 @@ export default function Expense() {
 
                         {/* Search */}
                         <div className="relative flex items-center">
-                            <FaSearch className="pointer-events-none absolute left-3 text-xl text-gray-800" />
-                            <input
-                                type="text"
-                                value={searchTerm}
-                                onChange={(e) => setSearchTerm(e.target.value)}
-                                className="h-11 w-60 rounded-lg border-none bg-gray-200 pl-10 text-xl text-gray-800 placeholder-gray-800/70 outline-none"
-                                placeholder="Search"
-                            />
+                            <Input value={searchTerm} onChange={setSearchTerm} />
+
                         </div>
 
                         {/* View + Filter */}
