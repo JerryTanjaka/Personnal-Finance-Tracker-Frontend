@@ -39,6 +39,14 @@ export default function Income() {
     const [transactions, setTransactions] = useState<Transaction[]>([]);
     const token = localStorage.getItem('accessToken');
 
+    const [searchTerm, setSearchTerm] = useState('');
+    const filteredTransactions = transactions.filter((t) => {
+        const matchesSearch =
+            t.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            t.category?.toLowerCase().includes(searchTerm.toLowerCase());
+
+        return matchesSearch;
+    });
     const fetchTransactions = async () => {
         if (!token) return;
         try {
@@ -184,6 +192,7 @@ export default function Income() {
                                 type="text"
                                 className="h-11 w-60 rounded-lg border-none bg-gray-200 pl-10 text-xl text-gray-800 placeholder-gray-800/70 outline-none"
                                 placeholder="Search"
+                                onChange={(e) => setSearchTerm(e.target.value)}
                             />
                         </div>
 
@@ -211,7 +220,7 @@ export default function Income() {
                         style={{ maxHeight: 'calc(100vh - 220px)' }}
                     >
                         <AnimatePresence>
-                            {transactions.map((t) => (
+                            {filteredTransactions.map((t) => (
                                 <motion.div
                                     layout
                                     key={t.id}
@@ -262,7 +271,7 @@ export default function Income() {
                             Income
                         </h2>
                         <form
-                                className="flex flex-col space-y-4"
+                            className="flex flex-col space-y-4"
                             onSubmit={(e) =>
                                 isModifying.current.status
                                     ? isModifying.current.isDeleting
