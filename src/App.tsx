@@ -1,10 +1,9 @@
-import NavBar from './component/NavBar.tsx';
 
 function App() {
-  return (
-    <>
-      <NavBar />
-    </>
-  );
+    return (
+        <div className="flex">
+        
+        </div>
+    );
 }
 export default App;

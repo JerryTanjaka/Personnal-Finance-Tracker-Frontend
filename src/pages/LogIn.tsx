@@ -1,27 +1,27 @@
-import type { FormEvent } from 'react';
-import { useState } from 'react';
+import { useState, type FormEvent } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import ErrorMessage from '../components/UI/ErrorMessage.tsx';
+import LoadingSpinner from '../components/UI/LoadingSpinner.tsx';
 
 export default function LogIn() {
     const [email, setEmail] = useState<string>('');
     const [password, setPassword] = useState<string>('');
+    const [error, setError] = useState<string>('');
+    const [loading, setLoading] = useState<boolean>(false);
     const navigate = useNavigate();
 
     const handleLogIn = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
         try {
-            const res = await fetch('http://localhost:3000/api/auth/login', {
+            setLoading(true);
+            const res = await fetch('http://localhost:8080/api/auth/login', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ email, password }),
             });
 
-            console.log('Status:', res.status);
-
             const text = await res.text();
-            console.log('RAW response:', text);
-
             let data;
             try {
                 data = JSON.parse(text);
@@ -30,21 +30,28 @@ export default function LogIn() {
             }
 
             if (res.ok) {
-                console.log('Tokens:', data);
                 localStorage.setItem('accessToken', data.accessToken);
-
                 navigate('/dashboard');
             } else {
-                alert(data.message || 'Erreur de connexion');
+                setError(data.message || 'Erreur inconnue');
             }
         } catch (err) {
-            console.error('Erreur fetch:', err);
-            alert('Impossible de se connecter au serveur');
+            setError(err instanceof Error ? err.message : 'Erreur inconnue');
+            setLoading(false);
         }
     };
 
     return (
-        <div className="flex min-h-screen flex-col justify-center bg-gray-100 py-12 sm:px-6 lg:px-8">
+        <div className="relative flex min-h-screen flex-col justify-center bg-gray-100 py-12 sm:px-6 lg:px-8">
+            {error && (
+                <div className="absolute bottom-4 left-1/2 w-full max-w-md -translate-x-1/2">
+                    <ErrorMessage
+                        message={error}
+                        onClose={() => setError('')}
+                    />
+                </div>
+            )}
+
             <div className="sm:mx-auto sm:w-full sm:max-w-md">
                 <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
                     Personal Finance Tracker
@@ -53,14 +60,10 @@ export default function LogIn() {
                     Welcome back! Please sign in to continue.
                 </p>
             </div>
+
             <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
                 <div className="bg-white px-4 py-8 shadow-2xl sm:rounded-lg sm:px-10">
-                    <form
-                        action="#"
-                        method="POST"
-                        className="space-y-6"
-                        onSubmit={handleLogIn}
-                    >
+                    <form className="space-y-6" onSubmit={handleLogIn}>
                         <div>
                             <label
                                 htmlFor="email"
@@ -136,12 +139,13 @@ export default function LogIn() {
                         <div>
                             <button
                                 type="submit"
-                                className="flex w-full justify-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:outline-none"
+                                className="flex w-full cursor-pointer justify-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:outline-none"
                             >
-                                Sign in
+                                {loading ? <LoadingSpinner /> : 'Sign in'}
                             </button>
                         </div>
                     </form>
+
                     <div className="mt-6">
                         <div className="relative">
                             <div className="absolute inset-0 flex items-center">
@@ -155,13 +159,11 @@ export default function LogIn() {
                         </div>
 
                         <div className="mt-6">
-                            <div>
-                                <Link to={'/signup'}>
-                                    <button className="flex w-full justify-center rounded-md border border-transparent bg-green-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-green-700 focus:ring-2 focus:ring-green-500 focus:ring-offset-2 focus:outline-none">
-                                        Create an account
-                                    </button>
-                                </Link>
-                            </div>
+                            <Link to="/signup">
+                                <button className="flex w-full cursor-pointer justify-center rounded-md border border-transparent bg-green-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-green-700 focus:ring-2 focus:ring-green-500 focus:ring-offset-2 focus:outline-none">
+                                    Create an account
+                                </button>
+                            </Link>
                         </div>
                     </div>
                 </div>
