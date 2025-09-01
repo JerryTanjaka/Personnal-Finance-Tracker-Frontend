@@ -77,7 +77,7 @@ export default function LogIn() {
                             </label>
                             <div className="mt-1 relative">
                                 <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-                                    <FaUser className="text-gray-400" />
+                                    <FaUser className="text-gray-600" />
                                 </div>
                                 <input
                                     id="email"
@@ -103,7 +103,7 @@ export default function LogIn() {
                             </label>
                             <div className="mt-1 relative">
                                 <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-                                    <FaLock className="text-gray-400" />
+                                    <FaLock className="text-gray-600" />
                                 </div>
                                 <input
                                     id="password"
