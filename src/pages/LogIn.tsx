@@ -1,6 +1,6 @@
 import { useState, type FormEvent } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import applelogo from '../assets/Apple.png';
+import applelogo from '../assets/Apple.svg';
 import googleLogo from '../assets/Google.png';
 import { FaUser, FaLock } from 'react-icons/fa';
 import ErrorMessage from '../components/UI/ErrorMessage.tsx';
@@ -197,7 +197,7 @@ export default function LogIn() {
                             <img
                                 src={applelogo}
                                 alt="Apple Logo"
-                                className="h-5 w-5"
+                                className="h-5 w-4"
                             />
                             Apple
                         </button>
