@@ -1,6 +1,7 @@
 import { AnimatePresence, motion } from 'framer-motion';
 import { useEffect, useState } from 'react';
-import { FaList, FaPlus, FaSearch, FaThLarge } from 'react-icons/fa';
+import { FaFilter, FaList, FaPlus, FaSearch, FaThLarge } from 'react-icons/fa';
+import Card from './CardFilter.tsx';
 import TransactionCard from './TransactionCard';
 import type { Transaction } from './Types';
 
@@ -20,13 +21,25 @@ export default function Expense() {
     };
 
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const openModal = () => setIsModalOpen(true);
-    const closeModal = () => setIsModalOpen(false);
+    const [isFilterOpen, setIsFilterOpen] = useState(false); 
     const [editingId, setEditingId] = useState<string | null>(null);
+    const [searchTerm, setSearchTerm] = useState('');
+    const [selectedCategory, setSelectedCategory] = useState<string>('All');
 
     const [transactions, setTransactions] = useState<Transaction[]>([]);
     const [categories, setCategories] = useState<Category[]>([]);
     const token = localStorage.getItem('accessToken');
+
+    const filteredTransactions = transactions.filter((t) => {
+        const matchesSearch =
+            t.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            t.category?.toLowerCase().includes(searchTerm.toLowerCase());
+
+        const matchesCategory =
+            selectedCategory === 'All' || t.category === selectedCategory;
+
+        return matchesSearch && matchesCategory;
+    });
 
     const fetchCategories = async (): Promise<Category[]> => {
         if (!token) return [];
@@ -79,7 +92,9 @@ export default function Expense() {
         fetchData();
     }, [token]);
 
-    const handleAddTransaction = async (event: React.FormEvent<HTMLFormElement>) => {
+    const handleAddTransaction = async (
+        event: React.FormEvent<HTMLFormElement>,
+    ) => {
         event.preventDefault();
         const target = event.target as typeof event.target & {
             description: { value: string };
@@ -105,13 +120,15 @@ export default function Expense() {
                 body: formData,
             });
             await fetchExpenses(categories);
-            closeModal();
+            setIsModalOpen(false);
         } catch (err) {
             console.error(err);
         }
     };
 
-    const handleUpdateTransaction = async (event: React.FormEvent<HTMLFormElement>) => {
+    const handleUpdateTransaction = async (
+        event: React.FormEvent<HTMLFormElement>,
+    ) => {
         event.preventDefault();
         if (!editingId || !token) return;
 
@@ -142,7 +159,7 @@ export default function Expense() {
                 body: formData,
             });
             await fetchExpenses(categories);
-            closeModal();
+            setIsModalOpen(false);
             setEditingId(null);
         } catch (err) {
             console.error(err);
@@ -151,7 +168,7 @@ export default function Expense() {
 
     const handleChangeTransaction = (id: string) => {
         setEditingId(id);
-        openModal();
+        setIsModalOpen(true);
     };
 
     const handleDeleteTransaction = async (id: string) => {
@@ -172,26 +189,31 @@ export default function Expense() {
             <div className="flex min-h-full w-full max-w-7xl flex-col rounded-2xl p-6">
                 {/* Header */}
                 <div className="flex flex-col border-b border-gray-300 pb-2 text-3xl font-bold md:flex-row md:items-center md:justify-between">
-                    <h1 className="text-3xl font-bold">Expense </h1>
+                    <h1 className="text-3xl font-bold">Expense</h1>
 
                     <div className="flex flex-col items-start space-y-2 md:flex-row md:items-center md:space-y-0 md:space-x-4">
+                        {/* Add button */}
                         <button
-                            onClick={openModal}
+                            onClick={() => setIsModalOpen(true)}
                             className="flex h-11 items-center space-x-2 rounded bg-red-800/90 px-3 py-1 text-xl text-white shadow-md transition hover:bg-red-700 active:scale-95"
                         >
                             <FaPlus className="pointer-events-none left-3 text-xl" />
                             <p className="text-lg">Add</p>
                         </button>
 
+                        {/* Search */}
                         <div className="relative flex items-center">
                             <FaSearch className="pointer-events-none absolute left-3 text-xl text-gray-800" />
                             <input
                                 type="text"
+                                value={searchTerm}
+                                onChange={(e) => setSearchTerm(e.target.value)}
                                 className="h-11 w-60 rounded-lg border-none bg-gray-200 pl-10 text-xl text-gray-800 placeholder-gray-800/70 outline-none"
                                 placeholder="Search"
                             />
                         </div>
 
+                        {/* View + Filter */}
                         <div className="flex space-x-2">
                             <button
                                 onClick={toggleView}
@@ -199,10 +221,19 @@ export default function Expense() {
                             >
                                 {view === 'grid' ? <FaList /> : <FaThLarge />}
                             </button>
+
+                            {/* Nouveau bouton Filter */}
+                            <button
+                                onClick={() => setIsFilterOpen(true)}
+                                className="flex h-11 w-11 items-center justify-center rounded border border-gray-300 bg-gray-200 text-gray-800 transition hover:bg-gray-300 active:scale-95"
+                            >
+                                <FaFilter />
+                            </button>
                         </div>
                     </div>
                 </div>
 
+                {/* Transactions */}
                 <AnimatePresence>
                     <motion.div
                         layout
@@ -213,7 +244,7 @@ export default function Expense() {
                         }`}
                         style={{ maxHeight: 'calc(100vh - 220px)' }}
                     >
-                        {transactions.map((t) => (
+                        {filteredTransactions.map((t) => (
                             <motion.div
                                 layout
                                 key={t.id}
@@ -238,7 +269,7 @@ export default function Expense() {
                 </AnimatePresence>
             </div>
 
-            {/* Modal */}
+            {/* Modal Add/Edit Transaction */}
             {isModalOpen && (
                 <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
                     <div className="w-full max-w-md rounded-xl bg-white p-6 shadow-lg">
@@ -316,7 +347,7 @@ export default function Expense() {
                             <div className="flex justify-end space-x-2">
                                 <button
                                     type="button"
-                                    onClick={closeModal}
+                                    onClick={() => setIsModalOpen(false)}
                                     className="rounded bg-gray-300 px-4 py-2"
                                 >
                                     Cancel
@@ -329,6 +360,33 @@ export default function Expense() {
                                 </button>
                             </div>
                         </form>
+                    </div>
+                </div>
+            )}
+
+            {/* Modal Filter Categories */}
+            {isFilterOpen && (
+                <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
+                    <div className="w-[350px] rounded-xl bg-white p-6 shadow-lg">
+                        <h2 className="mb-4 text-xl font-bold">
+                            Filter by Category
+                        </h2>
+                        <Card
+                            categories={categories}
+                            selectedCategory={selectedCategory}
+                            onChange={(val) => {
+                                setSelectedCategory(val);
+                                setIsFilterOpen(false); //
+                            }}
+                        />
+                        <div className="mt-4 flex justify-end">
+                            <button
+                                onClick={() => setIsFilterOpen(false)}
+                                className="rounded bg-gray-300 px-4 py-2"
+                            >
+                                Close
+                            </button>
+                        </div>
                     </div>
                 </div>
             )}
