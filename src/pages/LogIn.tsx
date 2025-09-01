@@ -139,7 +139,7 @@ export default function LogIn() {
                         <div>
                             <button
                                 type="submit"
-                                className="flex w-full cursor-pointer justify-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:outline-none"
+                                className="flex w-full cursor-pointer justify-center rounded-md border border-transparent bg-black px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-indigo-800 focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:outline-none"
                             >
                                 {loading ? <LoadingSpinner /> : 'Sign in'}
                             </button>
@@ -160,10 +160,21 @@ export default function LogIn() {
 
                         <div className="mt-6">
                             <Link to="/signup">
-                                <button className="flex w-full cursor-pointer justify-center rounded-md border border-transparent bg-green-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-green-700 focus:ring-2 focus:ring-green-500 focus:ring-offset-2 focus:outline-none">
+                                <button className="flex w-full cursor-pointer justify-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:outline-none">
                                     Create an account
                                 </button>
                             </Link>
+                        </div>
+                        <div className="mt-4 flex justify-center text-gray-500">
+                            <h3>or with </h3>
+                        </div>
+                        <div className="mt-2 flex gap-4">
+                            <button className="flex-1 rounded-lg border border-gray-300 bg-white py-2 font-semibold text-black transition hover:bg-blue-50">
+                                Google
+                            </button>
+                            <button className="flex-1 rounded-lg border border-gray-300 bg-white py-2 font-semibold text-black transition hover:bg-gray-200">
+                                 Apple
+                            </button>
                         </div>
                     </div>
                 </div>
