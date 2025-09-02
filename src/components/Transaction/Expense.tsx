@@ -6,7 +6,7 @@ import TransactionCard from './TransactionCard';
 import type { Transaction } from './Types';
 import Input from './../UI/searchButton.tsx';
 
-type Category = { id: string; name: string };
+type Category = { id: string; name :string};
 
 export default function Expense() {
     const [view, setView] = useState<'grid' | 'list'>(
@@ -68,14 +68,14 @@ export default function Expense() {
             const data = await res.json();
             const formatted: Transaction[] = Array.isArray(data)
                 ? data.map((item: any) => ({
-                      id: item.id,
-                      name: item.description || item.name,
-                      amount: parseFloat(item.amount),
-                      date: item.date,
-                      type: 'expense',
-                      category: item.category_fk?.name || 'Uncategorized',
-                      source: item.source || '',
-                  }))
+                    id: item.id,
+                    name: item.description || item.name,
+                    amount: parseFloat(item.amount),
+                    date: item.date,
+                    type: 'expense',
+                    category: item.category_fk?.name || 'Uncategorized',
+                    source: item.source || '',
+                }))
                 : [];
             setTransactions(formatted);
         } catch (err) {
