@@ -132,7 +132,7 @@ export default function BarChart() {
     }
 
     return (
-        <div className="h-[40vh] w-full min-w-[600px] max-w-[720px] cursor-pointer">
+        <div className="h-[40vh] flex-1/2 min-w-[600px] max-w-[720px] cursor-pointer">
             {chartData && <Bar data={chartData} options={chartOptions} />}
         </div>
     )
