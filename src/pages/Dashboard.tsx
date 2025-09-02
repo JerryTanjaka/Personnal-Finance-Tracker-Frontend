@@ -6,11 +6,19 @@ import { useEffect, useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import BarChart from '../components/BarChart.tsx';
 
+type MonthlySummaryType = {
+    year: number
+    month: number
+    totalIncome: number
+    totalExpense: number
+    netSavings: number  
+}
+
 export default function Dashboard() {
     const token = localStorage.getItem('accessToken')
 
     const { t } = useTranslation();
-    const [monthlySummary, setMonthlySummary] = useState<{ year: number, month: number, totalIncome: number, totalExpense: number, netSavings: number } | null>(null)
+    const [monthlySummary, setMonthlySummary] = useState<MonthlySummaryType | null>(null)
     const [balanceAlert, setBalaceAlert] = useState<{ alert: boolean, message: string } | null>(null)
 
     function getMonthlySummary(month: string) {
@@ -81,7 +89,7 @@ export default function Dashboard() {
                 </div>
                 <div className={`flex flex-col m-5`}>
                     <h1 className={`text-2xl font-semibold`}>Expenses Categoires</h1>
-                    <div className='flex justify-evenly items-center'>
+                    <div className='flex justify-center space-x-9 items-center'>
                         <PieChart />
                         <BarChart />
                     </div>
