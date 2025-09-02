@@ -11,7 +11,6 @@ export default function BarChart() {
     const [error, setError] = useState<string | null>(null);
 
     const chartOptions = {
-        borderRadius: 100,
         base: 0,
         responsive: true,
         scales: {
