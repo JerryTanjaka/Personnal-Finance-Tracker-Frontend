@@ -81,7 +81,7 @@ export default function Dashboard() {
                 </div>
                 <div className={`flex flex-col m-5`}>
                     <h1 className={`text-2xl font-semibold`}>Expenses Categoires</h1>
-                    <div className='flex justify-between items-center'>
+                    <div className='flex justify-evenly items-center'>
                         <PieChart />
                         <BarChart />
                     </div>

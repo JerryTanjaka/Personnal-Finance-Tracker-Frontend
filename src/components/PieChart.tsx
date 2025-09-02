@@ -99,7 +99,7 @@ export const PieChart = () => {
     }
 
     return (
-        <div className="h-[40vh] flex-1/2 cursor-pointer">
+        <div className="h-[40vh] w-[40vh] flex-1/2 cursor-pointer">
             {chartData && <Pie options={options} data={chartData} className={`mx-auto`}/>}
         </div>
     );
