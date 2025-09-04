@@ -85,7 +85,6 @@ export default function NavBar() {
                     <span onClick={() => localStorage.removeItem("accessToken")} className={textAnimation("text-xl font-medium")}>{t("logout")}</span>
                 </div>
             </Link>
-            <Switch/>
         </nav>
     );
 }
