@@ -113,16 +113,16 @@ export default function Dashboard() {
                     />
                 </div>
                 <div className={`flex flex-col m-5`}>
-                    <h1 className={`text-2xl font-semibold`}>{t('expenses_categories','Expenses Categories')}</h1>
+                    <h1 className={`text-2xl font-semibold`}>{t('expenses_categories', 'Expenses Categories')}</h1>
                     <div className='flex justify-center space-x-9 items-center'>
                         <PieChart chartValueOptions={chartOptions} />
                         <BarChart chartValueOptions={chartOptions} />
-                        <div className="flex flex-row text-lg w-fit gap-5 justify-center items-center m-3">
-                            <div>
-                                <div>
-                                    <p>Start date:</p>
+                        <div className="flex flex-row text-lg w-fit gap-10 bg-white rounded-[20px] p-8 justify-center items-center m-3 shadow">
+                            <div className='flex flex-col gap-2 w-1/2'>
+                                <div className='w-full flex flex-col gap-1'>
+                                    <p className='font-medium text-[16px]'>Start date:</p>
                                     <input
-                                        className="border border-gray-300 p-1 rounded-[5px] bg-white"
+                                        className="border border-gray-300 p-2 rounded-[5px] bg-white"
                                         type="date"
                                         name="startExpenseDate"
                                         id="startExpenseDate"
@@ -134,10 +134,10 @@ export default function Dashboard() {
                                             type: chartOptions.type
                                         })} />
                                 </div>
-                                <div>
-                                    <p>End date:</p>
+                                <div className='w-full flex flex-col gap-1'>
+                                    <p className='font-medium text-[16px]'>End date:</p>
                                     <input
-                                        className="border border-gray-300 p-1 rounded-[5px] bg-white"
+                                        className="border border-gray-300 p-2 rounded-[5px] bg-white"
                                         type="date" name="endExpenseDate"
                                         id="endExpenseDate"
                                         defaultValue={new Date(new Date().setFullYear(new Date().getFullYear() + 1, 0, 1)).toISOString().split('T')[0]}
@@ -149,12 +149,12 @@ export default function Dashboard() {
                                         })} />
                                 </div>
                             </div>
-                            <div>
-                                <div>
-                                    <p>Category:</p>
+                            <div className='flex flex-col gap-2 w-1/2'>
+                                <div className='w-full flex flex-col gap-1'>
+                                    <p className='font-medium text-[16px]'>Category:</p>
                                     <select
                                         name="categoryId"
-                                        className="rounded border p-2"
+                                        className="rounded border border-gray-300 p-2"
                                         onChange={e => setChartOptions({
                                             start: chartOptions.start,
                                             end: chartOptions.end,
@@ -162,7 +162,7 @@ export default function Dashboard() {
                                             type: chartOptions.type
                                         })}
                                     >
-                                        <option value="">Select Category</option>
+                                        <option value="">Any</option>
                                         {Array.isArray(categoryList) &&
                                             categoryList.map((cat) => (
                                                 <option key={cat.name} value={cat.name}>
@@ -171,11 +171,11 @@ export default function Dashboard() {
                                             ))}
                                     </select>
                                 </div>
-                                <div>
-                                    <p>Expense type:</p>
+                                <div className='w-full flex flex-col gap-1'>
+                                    <p className='font-medium text-[16px]'>Expense type:</p>
                                     <select
                                         name="expenseType"
-                                        className="rounded border p-2"
+                                        className="rounded border border-gray-300 p-2"
                                         onChange={e => setChartOptions({
                                             start: chartOptions.start,
                                             end: chartOptions.end,
@@ -193,7 +193,7 @@ export default function Dashboard() {
                     </div>
                 </div>
                 <div className={`flex flex-col mt-5`}>
-                    <h1 className={`text-2xl font-semibold border-b-1 border-gray-300 mx-6 pb-3`}>{t('recent_expenses','Recent Expenses')}</h1>
+                    <h1 className={`text-2xl font-semibold border-b-1 border-gray-300 mx-6 pb-3`}>{t('recent_expenses', 'Recent Expenses')}</h1>
                     <div className={`flex flex-col`}>
                         <ExpenseList />
                     </div>
