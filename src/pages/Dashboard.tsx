@@ -91,11 +91,11 @@ export default function Dashboard() {
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         exit={{ opacity: 0 }}
-                        className='flex p-3 px-6 -mt-3 mb-2 items-center border border-amber-400 bg-yellow-300/40 rounded-[10px]'>
-                        <h3 className='font-medium text-lg text-red-500 flex items-center'>{balanceAlert.message}</h3>
+                        className='flex p-3 px-6 -mt-3 mb-2 items-center border border-amber-300 bg-yellow-100/70 rounded-[10px]'>
+                        <h3 className='font-medium text-lg text-gray-800 flex items-center gap-2'><i className="bxr bx-alert-triangle text-yellow-500 text-2xl" />{balanceAlert.message}</h3>
                     </motion.div>)}
                 </AnimatePresence>
-                <div className={'flex justify-evenly gap-6'}>
+                <div className={'xl:grid grid-cols-3 flex flex-row w-full justify-evenly gap-6 flex-wrap'}>
                     <StatCard
                         title={t('total_income', 'Total Income')}
                         amount={monthlySummary?.totalIncome}
@@ -114,15 +114,15 @@ export default function Dashboard() {
                 </div>
                 <div className={`flex flex-col m-5`}>
                     <h1 className={`text-2xl font-semibold`}>{t('expenses_categories', 'Expenses Categories')}</h1>
-                    <div className='flex justify-center space-x-9 items-center'>
+                    <div className='flex justify-center space-x-9 gap-y-3 items-center flex-wrap-reverse'>
                         <PieChart chartValueOptions={chartOptions} />
                         <BarChart chartValueOptions={chartOptions} />
-                        <div className="flex flex-row text-lg w-fit gap-10 bg-white rounded-[20px] p-8 justify-center items-center m-3 shadow">
+                        <div className="flex flex-row text-lg w-fit gap-10 bg-white rounded-[20px] px-7 py-5 justify-center items-center m-3 shadow">
                             <div className='flex flex-col gap-2 w-1/2'>
                                 <div className='w-full flex flex-col gap-1'>
                                     <p className='font-medium text-[16px]'>Start date:</p>
                                     <input
-                                        className="border border-gray-300 p-2 rounded-[5px] bg-white"
+                                        className="border border-gray-300 text-sm p-2 rounded-[5px] bg-white"
                                         type="date"
                                         name="startExpenseDate"
                                         id="startExpenseDate"
@@ -137,7 +137,7 @@ export default function Dashboard() {
                                 <div className='w-full flex flex-col gap-1'>
                                     <p className='font-medium text-[16px]'>End date:</p>
                                     <input
-                                        className="border border-gray-300 p-2 rounded-[5px] bg-white"
+                                        className="border border-gray-300 text-sm p-2 rounded-[5px] bg-white"
                                         type="date" name="endExpenseDate"
                                         id="endExpenseDate"
                                         defaultValue={new Date(new Date().setFullYear(new Date().getFullYear() + 1, 0, 1)).toISOString().split('T')[0]}
@@ -154,7 +154,7 @@ export default function Dashboard() {
                                     <p className='font-medium text-[16px]'>Category:</p>
                                     <select
                                         name="categoryId"
-                                        className="rounded border border-gray-300 p-2"
+                                        className="rounded border border-gray-300 text-sm p-2"
                                         onChange={e => setChartOptions({
                                             start: chartOptions.start,
                                             end: chartOptions.end,
@@ -175,7 +175,7 @@ export default function Dashboard() {
                                     <p className='font-medium text-[16px]'>Expense type:</p>
                                     <select
                                         name="expenseType"
-                                        className="rounded border border-gray-300 p-2"
+                                        className="rounded border border-gray-300 text-sm p-2"
                                         onChange={e => setChartOptions({
                                             start: chartOptions.start,
                                             end: chartOptions.end,
