@@ -177,7 +177,7 @@ export default function Expense() {
     const handleDeleteTransaction = async (id: string) => {
         if (!token) return;
         try {
-            await fetch(`http://localhost:8080/api/expenses/${id}`, {
+            await fetch(`${import.meta.env.VITE_API_URL}/api/expenses/${id}`, {
                 method: 'DELETE',
                 headers: { Authorization: `Bearer ${token}` },
             });
