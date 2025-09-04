@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import useLocalStorage from '../hooks/useLocalStorage';
 import { useTranslation } from 'react-i18next';
+import Switch from './UI/DarkModeButton';
 
 export default function NavBar() {
     const [isExpanded, setIsExpanded] = useState(false);
@@ -84,6 +85,7 @@ export default function NavBar() {
                     <span onClick={() => localStorage.removeItem("accessToken")} className={textAnimation("text-xl font-medium")}>{t("logout")}</span>
                 </div>
             </Link>
+            <Switch/>
         </nav>
     );
 }
