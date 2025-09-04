@@ -3,9 +3,11 @@ import React from 'react';
 type InputProps = {
   value: string;
   onChange: (value: string) => void;
+  placeholder?: string;
+  searchLabel?: string;
 };
 
-const Input: React.FC<InputProps> = ({ value, onChange }) => {
+const Input: React.FC<InputProps> = ({ value, onChange, placeholder = '...', searchLabel = 'Search' }) => {
   return (
     <div className="flex items-center justify-center px-5  ">
         <div className="flex rounded-lg shadow-[0px_0px_5px_rgba(0,0,0,0.14)] ">
@@ -21,13 +23,13 @@ const Input: React.FC<InputProps> = ({ value, onChange }) => {
           <input
             type="text"
             className="w-full max-w-[260px] bg-white pl-2 text-xl font-semibold outline-0 "
-            placeholder='...'
+            placeholder={placeholder}
             value={value}
             onChange={(e) => onChange(e.target.value)}
           />
           <input
             type="button"
-            value="Search"
+            value={searchLabel}
             className="bg-gray-600 px-2 rounded-tr-lg rounded-br-lg text-[15px] text-white font-semibold hover:bg-gray-400 transition-colors"
           />
         </div>

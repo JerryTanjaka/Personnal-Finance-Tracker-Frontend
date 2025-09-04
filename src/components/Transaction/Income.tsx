@@ -1,6 +1,7 @@
 import { AnimatePresence, motion } from 'framer-motion';
 import { useEffect, useRef, useState } from 'react';
 import { FaList, FaPlus, FaSearch, FaThLarge } from 'react-icons/fa';
+import { useTranslation } from 'react-i18next';
 import TransactionCard from './TransactionCard';
 import type { Transaction } from './Types';
 
@@ -10,6 +11,7 @@ type ActionsModel = {
 };
 
 export default function Income() {
+    const { t } = useTranslation();
     const [view, setView] = useState<'grid' | 'list'>(
         () =>
             (localStorage.getItem('transactionView') as 'grid' | 'list') ||
@@ -122,7 +124,7 @@ export default function Income() {
         const source = formData.get('source') as string;
 
         try {
-            fetch('http://localhost:8080/api/income/' + incomeId, {
+            fetch(`${import.meta.env.VITE_API_URL}/api/income/` + incomeId, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
@@ -153,7 +155,7 @@ export default function Income() {
         e.preventDefault();
         incomeId = cardIdRef.current;
         try {
-            fetch('http://localhost:8080/api/income/' + incomeId, {
+            fetch(`${import.meta.env.VITE_API_URL}/api/income/` + incomeId, {
                 method: 'DELETE',
                 headers: {
                     'Content-Type': 'application/json',
@@ -175,48 +177,48 @@ export default function Income() {
             <div className="flex min-h-full w-full max-w-7xl flex-col rounded-2xl p-6">
                 {/* Header */}
                 <div className="flex flex-col border-b border-gray-300 pb-2 text-3xl font-bold md:flex-row md:items-center md:justify-between">
-                    <h1 className="text-3xl font-bold">Expense Tracker</h1>
+                    <h1 className="text-3xl font-bold">{t('incomes','Incomes')}</h1>
 
-                    <div className="flex flex-col items-start space-y-2 md:flex-row md:items-center md:space-y-0 md:space-x-4">
-                        {/* Search */}
+                    <div className="flex flex-col md:flex-row md:items-center md:space-x-2 space-y-2 md:space-y-0">
+                        {/* Add Button */}
                         <button
                             onClick={openModal}
-                            className="flex h-11 items-center space-x-2 rounded bg-emerald-600 px-3 py-1 text-xl text-white shadow-md transition hover:bg-emerald-500 active:scale-95"
+                            className="flex items-center cursor-pointer gap-2 rounded-lg bg-gray-200 px-4 py-2 text-gray-800 text-lg font-medium shadow-sm transition-all duration-200 hover:bg-gray-300 hover:shadow-md active:scale-95"
                         >
-                            <FaPlus className="pointer-events-none left-3 text-xl" />
-                            <p className="text-lg">Add </p>
+                                <FaPlus className="text-gray-600 text-lg" />
+                                <span>{t('add', 'Add')}</span>
                         </button>
-                        <div className="relative flex items-center">
-                            <FaSearch className="pointer-events-none absolute left-3 text-xl text-gray-800" />
+
+                        {/* Search Input */}
+                        <div className="relative flex items-center w-full md:w-64">
+                            <FaSearch className="pointer-events-none absolute left-3 text-gray-600 text-lg" />
                             <input
                                 type="text"
-                                className="h-11 w-60 rounded-lg border-none bg-gray-200 pl-10 text-xl text-gray-800 placeholder-gray-800/70 outline-none"
-                                placeholder="Search"
+                                className="h-12 w-full rounded-lg bg-gray-200 pl-10 pr-4 text-lg text-gray-800 placeholder-gray-500 focus:bg-white focus:ring-2 focus:ring-emerald-500 focus:outline-none transition"
+                                placeholder={t('search', 'Search')}
                                 onChange={(e) => setSearchTerm(e.target.value)}
                             />
                         </div>
 
-                        {/* Actions */}
-                        <div className="flex space-x-2">
-                            <button
-                                onClick={toggleView}
-                                className="flex h-11 w-11 items-center justify-center rounded border border-gray-300 bg-gray-200 text-gray-800 transition hover:bg-gray-300 active:scale-95"
-                            >
-                                {view === 'grid' ? <FaList /> : <FaThLarge />}
-                            </button>
-                        </div>
+                        {/* View Toggle Button */}
+                        <button
+                            onClick={toggleView}
+                            className="flex h-12 w-12 items-center justify-center rounded-lg border border-gray-300 bg-gray-200 text-gray-800 transition hover:bg-gray-300 active:scale-95"
+                        >
+                            {view === 'grid' ? <FaList /> : <FaThLarge />}
+                        </button>
                     </div>
+
                 </div>
 
                 {/* Liste des revenus */}
                 <AnimatePresence>
                     <motion.div
                         layout
-                        className={`mt-6 w-full overflow-y-auto pt-3 pl-2 ${
-                            view === 'grid'
-                                ? 'grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3'
-                                : 'flex flex-col space-y-4'
-                        }`}
+                        className={`mt-6 w-full overflow-y-auto pt-3 pb-10 pl-2 ${view === 'grid'
+                            ? 'grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3'
+                            : 'flex flex-col space-y-4'
+                            }`}
                         style={{ maxHeight: 'calc(100vh - 220px)' }}
                     >
                         <AnimatePresence>
@@ -261,28 +263,24 @@ export default function Income() {
             {/* Modal */}
             {isModalOpen && (
                 <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
-                    <div className="w-full max-w-md rounded-xl bg-white p-6 shadow-lg">
-                        <h2 className="mb-3 text-2xl font-bold">
+                    <div className="w-full max-w-md rounded-xl bg-white p-6 shadow-xl">
+                        {/* Modal Header */}
+                        <h2 className="mb-4 text-2xl font-bold text-gray-800">
                             {isModifying.current.status
                                 ? isModifying.current.isDeleting
-                                    ? 'Delete'
-                                    : 'Update'
-                                : 'Add New'}{' '}
-                            Income
+                                    ? t('delete', 'Delete')
+                                    : t('update', 'Update')
+                                : t('add_new', 'Add New')}{' '}{t('income', 'Income')}
                         </h2>
+
+                        {/* Form */}
                         <form
                             className="flex flex-col space-y-4"
                             onSubmit={(e) =>
                                 isModifying.current.status
                                     ? isModifying.current.isDeleting
-                                        ? handleDeleteTransaction(
-                                              e,
-                                              cardIdRef.current,
-                                          )
-                                        : handleUpdateTransaction(
-                                              e,
-                                              cardIdRef.current,
-                                          )
+                                        ? handleDeleteTransaction(e, cardIdRef.current)
+                                        : handleUpdateTransaction(e, cardIdRef.current)
                                     : handleAddTransaction(e)
                             }
                         >
@@ -291,61 +289,61 @@ export default function Income() {
                                     <input
                                         name="name"
                                         type="text"
-                                        placeholder="Name"
-                                        className="rounded border p-2"
+                                        placeholder={t('name', 'Name')}
+                                        className="rounded-lg border border-gray-500 p-3 focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 outline-none transition"
                                         required
                                     />
                                     <input
                                         name="amount"
                                         type="number"
-                                        placeholder="Amount"
-                                        className="rounded border p-2"
+                                        placeholder={t('amount', 'Amount')}
+                                        className="rounded-lg border border-gray-500 p-3 focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 outline-none transition"
                                         required
                                     />
                                     <input
                                         name="date"
                                         type="date"
-                                        className="rounded border p-2"
+                                        className="rounded-lg border border-gray-500 p-3 focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 outline-none transition"
                                         required
                                     />
                                     <input
                                         name="source"
                                         type="text"
-                                        placeholder="Source"
-                                        className="rounded border p-2"
+                                        placeholder={t('source', 'Source')}
+                                        className="rounded-lg border border-gray-500 p-3 focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 outline-none transition"
                                         required
                                     />
                                 </>
                             )}
-                            <div className="flex justify-end space-x-2">
-                                <button
-                                    type="button"
-                                    onClick={closeModal}
-                                    className="rounded bg-gray-300 px-4 py-2"
-                                >
-                                    Cancel
-                                </button>
+
+                            {/* Buttons */}
+                            <div className="flex justify-end space-x-3 mt-2">
+                                    <button
+                                        type="button"
+                                        onClick={closeModal}
+                                        className="rounded-lg bg-gray-200 px-5 py-2 text-gray-800 font-medium hover:bg-gray-300 transition"
+                                    >
+                                        {t('cancel', 'Cancel')}
+                                    </button>
                                 <button
                                     type="submit"
-                                    className={
-                                        'rounded ' +
-                                        (isModifying.current.isDeleting
-                                            ? 'bg-neutral-950/90'
-                                            : 'bg-emerald-600') +
-                                        ' px-4 py-2 text-white'
-                                    }
+                                    className={`rounded-lg px-5 py-2 font-medium text-white transition ${isModifying.current.isDeleting
+                                        ? 'bg-red-700 hover:bg-red-800'
+                                        : 'bg-emerald-600 hover:bg-emerald-700'
+                                        }`}
                                 >
                                     {isModifying.current.status
                                         ? isModifying.current.isDeleting
-                                            ? 'Delete'
-                                            : 'Update'
-                                        : 'Add'}
+                                            ? t('delete', 'Delete')
+                                            : t('update', 'Update')
+                                        : t('add', 'Add')}
                                 </button>
                             </div>
                         </form>
                     </div>
                 </div>
             )}
+
         </div>
     );
 }

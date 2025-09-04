@@ -3,7 +3,9 @@ import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import ErrorMessage from '../components/UI/ErrorMessage.tsx';
 import LoadingSpinner from '../components/UI/LoadingSpinner.tsx';
+import { useTranslation } from 'react-i18next';
 export default function SignUp() {
+    const { t } = useTranslation();
     const navigate = useNavigate();
     const [username, setUsername] = useState<string>('');
     const [email, setEmail] = useState<string>('');
@@ -22,7 +24,7 @@ export default function SignUp() {
         }, 5000);
 
         try {
-            const res = await fetch('http://localhost:8080/api/auth/signup', {
+            const res = await fetch(`${import.meta.env.VITE_API_URL}/api/auth/signup`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -55,15 +57,15 @@ export default function SignUp() {
             )}
             <div className="sm:mx-auto sm:w-full sm:max-w-md">
                 <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
-                    Create your account
+                    {t('signup_title', 'Create your account')}
                 </h2>
                 <p className="mt-2 text-center text-sm text-gray-600">
-                    Or{' '}
+                    {t('or_text', 'Or')} {' '}
                     <Link
                         to="/login"
                         className="font-medium text-indigo-600 hover:text-indigo-500"
                     >
-                        sign in to your existing account
+                        {t('sign_in_existing', 'sign in to your existing account')}
                     </Link>
                 </p>
             </div>
@@ -75,7 +77,7 @@ export default function SignUp() {
                                 htmlFor="name"
                                 className="block text-sm font-medium text-gray-700"
                             >
-                                Username
+                                {t('username_label', 'Username')}
                             </label>
                             <div className="mt-1">
                                 <input
@@ -89,7 +91,7 @@ export default function SignUp() {
                                         setUsername(e.target.value)
                                     }
                                     className="block w-full rounded-md border border-gray-300 px-3 py-2 placeholder-gray-400 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                                    placeholder="John Doe"
+                                    placeholder={t('username_placeholder', 'John Doe')}
                                 />
                             </div>
                         </div>
@@ -98,7 +100,7 @@ export default function SignUp() {
                                 htmlFor="email"
                                 className="block text-sm font-medium text-gray-700"
                             >
-                                Email address
+                                {t('email_address', 'Email address')}
                             </label>
                             <div className="mt-1">
                                 <input
@@ -110,7 +112,7 @@ export default function SignUp() {
                                     onChange={(e) => setEmail(e.target.value)}
                                     required
                                     className="block w-full rounded-md border border-gray-300 px-3 py-2 placeholder-gray-400 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                                    placeholder="you@example.com"
+                                    placeholder={t('email_placeholder', 'you@example.com')}
                                 />
                             </div>
                         </div>
@@ -119,7 +121,7 @@ export default function SignUp() {
                                 htmlFor="password"
                                 className="block text-sm font-medium text-gray-700"
                             >
-                                Password
+                                {t('password_label', 'Password')}
                             </label>
                             <div className="mt-1">
                                 <input
@@ -133,7 +135,7 @@ export default function SignUp() {
                                     }
                                     required
                                     className="block w-full rounded-md border border-gray-300 px-3 py-2 placeholder-gray-400 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                                    placeholder="••••••••"
+                                    placeholder={t('password_placeholder', '••••••••')}
                                 />
                             </div>
                         </div>
@@ -142,7 +144,7 @@ export default function SignUp() {
                                 htmlFor="confirm-password"
                                 className="block text-sm font-medium text-gray-700"
                             >
-                                Confirm Password
+                                {t('confirm_password', 'Confirm Password')}
                             </label>
                             <div className="mt-1">
                                 <input
@@ -152,7 +154,7 @@ export default function SignUp() {
                                     autoComplete="new-password"
                                     required
                                     className="block w-full rounded-md border border-gray-300 px-3 py-2 placeholder-gray-400 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                                    placeholder="••••••••"
+                                    placeholder={t('password_placeholder', '••••••••')}
                                 />
                             </div>
                         </div>
@@ -161,7 +163,7 @@ export default function SignUp() {
                                 type="submit"
                                 className="flex w-full cursor-pointer justify-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:outline-none"
                             >
-                                {loading ? <LoadingSpinner /> : 'Sign in'}
+                                {loading ? <LoadingSpinner /> : t('sign_up_button', 'Sign up')}
                             </button>
                         </div>
                     </form>
