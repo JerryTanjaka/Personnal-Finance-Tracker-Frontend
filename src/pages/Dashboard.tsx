@@ -23,7 +23,7 @@ export default function Dashboard() {
 
     function getMonthlySummary(month: string) {
         try {
-            fetch("http://localhost:8080/api/summary/monthly?month=" + month,
+            fetch(`${import.meta.env.VITE_API_URL}/api/summary/monthly?month=` + month,
                 { headers: { Authorization: "Bearer " + token } }
             )
                 .then(res => res.json())

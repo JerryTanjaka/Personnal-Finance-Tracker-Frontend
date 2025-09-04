@@ -25,6 +25,7 @@ export default function Categories() {
     const [notificationMessage, setNotificationMessage] =
         useState<Message | null>(null);
     const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+    const [categoryNameLength, setCategoryNameLength] = useState<number>(0);
 
     const [searchFilter, setSearchFilter] = useState<string>("");
     const searchFilterRef = useRef<string>("");
@@ -62,6 +63,12 @@ export default function Categories() {
     }
 
     function handleCreate(categoryName: string) {
+        if (categoryName.length > 15) {
+            setNotificationMessage({
+                error: "Category name cannot be longer than 15 characters.",
+            });
+            return;
+        }
         fetch(`${import.meta.env.VITE_API_URL}/api/categories/`, {
             method: "POST",
             headers: {
@@ -77,6 +84,12 @@ export default function Categories() {
     }
 
     function handleUpdate(categoryId: string, categoryName: string) {
+        if (categoryName.length > 15) {
+            setNotificationMessage({
+                error: "Category name cannot be longer than 15 characters.",
+            });
+            return;
+        }
         fetch(`http://localhost:8080/api/categories/${categoryId}`, {
             method: "PUT",
             headers: {
@@ -107,6 +120,7 @@ export default function Categories() {
         closeModal();
         setIsUpdating(false);
         setIsCreating(false);
+        setCategoryNameLength(0);
         categoryNameRef.current = "";
         categoryIdRef.current = "";
     }
@@ -213,6 +227,11 @@ export default function Categories() {
                                                     whileHover={{ scale: 1.05 }}
                                                     whileTap={{ scale: 0.95 }}
                                                     onClick={() => {
+                                                        const categoryToUpdate = categoryList?.find(c => c.id === category.id);
+                                                        if (categoryToUpdate) {
+                                                            categoryNameRef.current = categoryToUpdate.name;
+                                                            setCategoryNameLength(categoryToUpdate.name.length);
+                                                        }
                                                         categoryIdRef.current = category["id"];
                                                         setIsUpdating(true);
                                                         openModal();
@@ -354,13 +373,19 @@ export default function Categories() {
                                                 type="text"
                                                 name="categoryNewName"
                                                 id="categoryNewName"
-                                                onChange={(e) =>
-                                                    (categoryNameRef.current = e.target.value)
-                                                }
+                                                maxLength={15}
+                                                defaultValue={categoryNameRef.current}
+                                                onChange={(e) => {
+                                                    categoryNameRef.current = e.target.value;
+                                                    setCategoryNameLength(e.target.value.length);
+                                                }}
                                                 className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
                                                 placeholder="Enter a name"
                                                 required
                                             />
+                                            <span className="text-xs text-gray-500">
+                                                {categoryNameLength}/15
+                                            </span>
                                         </div>
                                     ) : (
                                         <>
