@@ -21,17 +21,15 @@ type TransactionCardProps = {
   };
 };
 
-
 const categoryIcons: Record<string, React.ReactNode> = {
   Food: <FaUtensils className="text-white" />,
   Entertainment: <FaFilm className="text-white" />,
   Transport: <FaTaxi className="text-white" />,
   Utilities: <FaBolt className="text-white" />,
   Coffee: <FaCoffee className="text-white" />,
-  Doctor: <FaPlus className="text-white" />, 
+  Doctor: <FaPlus className="text-white" />,
   Other: <FaTrash className="text-white" />,
 };
-
 
 const categoryColors: Record<string, string> = {
   Food: "bg-red-700",
@@ -53,7 +51,6 @@ export default function TransactionCard({
     year: "numeric",
   });
 
-  
   const icon: React.ReactNode =
     transaction.type === "income"
       ? <FaMoneyBillWave className="text-white" />
@@ -68,60 +65,61 @@ export default function TransactionCard({
 
   return (
     <div
-      className={`group relative scale-99 rounded-xl border border-gray-300 bg-gray-50 p-4 transition-transform duration-200 hover:scale-100 hover:shadow-sm ${
-        view === "list" ? "h-20" : "h-auto"
+      className={`group relative scale-99 rounded-xl cursor-pointer border border-gray-300 bg-gray-100 p-4 shadow-sm transition-transform duration-200 hover:scale-100 hover:shadow-md ${
+        view === "list" ? "h-24" : "h-auto"
       }`}
     >
-      {/* Badge icône */}
+      {/* Badge icon */}
       <div
-        className={`absolute -top-3 left-3 flex h-10 w-10 items-center justify-center rounded-full ${bgColor}`}
+        className={`absolute -top-3 left-3 flex h-10 w-10 items-center justify-center rounded-full ${bgColor} shadow`}
       >
         {icon}
       </div>
 
-      {/* Contenu */}
-      <div className="ml-12 flex justify-between">
-        <div className={view === "list" ? "flex items-center space-x-10" : ""}>
-          <h2 className="text-2xl font-semibold text-gray-800">{transaction.name}</h2>
-          <p className="mt-1 text-sm text-gray-500">
-            {transaction.type === "expense"
-              ? transaction.category || "Uncategorized"
-              : transaction.source || "Unknown"}
-          </p>
-          <p
-            className={`mt-2 text-2xl font-bold ${
-              transaction.type === "expense" ? "text-red-700" : "text-green-700"
-            }`}
-          >
-            {transaction.type === "expense" ? "-" : "+"}${transaction.amount.toFixed(2)}
-          </p>
-          <p className="mt-1 text-sm text-gray-400">{formattedDate}</p>
+      {/* Main content */}
+      <div className="flex justify-between items-start">
+        <div className={view === "list" ? "flex flex-col justify-between ml-12" : ""}>
+          {/* Name & Amount */}
+          <div className="flex items-center justify-between mt-5 space-x-4">
+            <h2 className="text-lg font-semibold text-gray-800">{transaction.name}</h2>
+            <p
+              className={`text-lg font-bold ${
+                transaction.type === "expense" ? "text-red-600" : "text-green-600"
+              }`}
+            >
+              {transaction.type === "expense" ? "-" : "+"}${transaction.amount.toFixed(2)}
+            </p>
+          </div>
+
+          {/* Category / Source & Date */}
+          <div className="mt-1 flex flex-wrap items-center gap-3 text-sm text-gray-500">
+            <span>
+              {transaction.type === "expense"
+                ? transaction.category || "Uncategorized"
+                : transaction.source || "Unknown"}
+            </span>
+            <span className="text-gray-400">{formattedDate}</span>
+          </div>
         </div>
 
-        {/* Boutons */}
+        {/* Action buttons */}
         <div
-          className={`flex justify-around ${
-            view === "grid" ? "flex-col space-y-2" : "flex-row space-x-5"
-          }`}
+          className={`flex ${
+            view === "grid" ? "flex-col space-y-2" : "flex-row space-x-3"
+          } items-center`}
         >
           <button
-            className={`flex transform items-center gap-2 rounded bg-gray-300 text-black transition duration-100 ease-in-out hover:bg-gray-400 active:scale-95 ${
-              view === "grid" ? "px-2 py-2 text-sm" : "px-3 py-3 text-base"
-            }`}
+            className={`flex items-center justify-center gap-2 rounded bg-gray-300 text-gray-800 p-2 transition hover:bg-gray-400 active:scale-95`}
             onClick={actions?.onChange}
           >
             <FaExchangeAlt />
-            Change
           </button>
 
           <button
-            className={`flex transform items-center gap-2 rounded bg-neutral-950/90 text-white transition duration-100 ease-in-out hover:bg-neutral-700 active:scale-95 ${
-              view === "grid" ? "px-2 py-2 text-sm" : "px-3 py-3 text-base"
-            }`}
+            className={`flex items-center justify-center gap-2 rounded bg-red-600 text-white p-2 transition hover:bg-red-700 active:scale-95`}
             onClick={actions?.onDelete}
           >
             <FaTrash />
-            Delete
           </button>
         </div>
       </div>
