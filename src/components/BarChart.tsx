@@ -67,18 +67,18 @@ export default function BarChart() {
                         if (!totalPerMonth[date.toLocaleDateString('en-US', { year: "numeric", month: "short" })]) {
                             totalPerMonth[date.toLocaleDateString('en-US', { year: "numeric", month: "short" })] = [0, 0]
                         }
-                        totalPerMonth[date.toLocaleDateString('en-US', { year: "numeric", month: "short" })][0] += parseFloat(expense.amount);
+                        totalPerMonth[date.toLocaleDateString('en-US', { year: "numeric", month: "short" })][0] += Number(expense.amount);
                     }
                 )
 
                 console.log(fetchedIncome)
                 fetchedIncome?.reverse().forEach(
                     (income: Transaction) => {
-                        const date = new Date(income?.income_date);
+                        const date = new Date(income?.date);
                         if (!totalPerMonth[date.toLocaleDateString('en-US', { year: "numeric", month: "short" })]) {
                             totalPerMonth[date.toLocaleDateString('en-US', { year: "numeric", month: "short" })] = [0, 0]
                         }
-                        totalPerMonth[date.toLocaleDateString('en-US', { year: "numeric", month: "short" })][1] += parseFloat(income.amount);
+                        totalPerMonth[date.toLocaleDateString('en-US', { year: "numeric", month: "short" })][1] += Number(income.amount);
                     }
                 )
 

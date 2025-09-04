@@ -2,7 +2,6 @@ import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import useLocalStorage from '../hooks/useLocalStorage';
 import { useTranslation } from 'react-i18next';
-import Categories from '../pages/Categories';
 
 export default function NavBar() {
     const [isExpanded, setIsExpanded] = useState(false);

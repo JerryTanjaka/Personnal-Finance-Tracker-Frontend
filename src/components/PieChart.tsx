@@ -2,11 +2,12 @@ import { useEffect, useState } from "react";
 import { Pie } from "react-chartjs-2";
 import { Chart as ChartJS, Tooltip, Legend, ArcElement } from "chart.js";
 import { getExpenses } from "../data/DataFetch.ts";
-import { t } from "i18next";
+import { useTranslation } from 'react-i18next';
 
 ChartJS.register(Tooltip, Legend, ArcElement);
 
 export const PieChart = () => {
+    const { t } = useTranslation();
     const [chartData, setChartData] = useState<any>(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
@@ -18,7 +19,7 @@ export const PieChart = () => {
                 position: "right" as const,
                 labels: {
                     color: "#374151",
-                    font: { size: 14, weight: "500" },
+                    font: { size: 14, weight: 500 },
                 },
             },
             tooltip: {

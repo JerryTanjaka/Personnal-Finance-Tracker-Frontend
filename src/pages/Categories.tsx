@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import ErrorMessage from "../components/UI/ErrorMessage";
 import { AnimatePresence, motion } from "framer-motion";
+import { useTranslation } from 'react-i18next';
 
 type Category = {
     id: string;
@@ -15,6 +16,7 @@ type Message = {
 
 export default function Categories() {
     const token = localStorage.getItem("accessToken");
+    const { t } = useTranslation();
 
     const [categoryReload, setCategoryReload] = useState<boolean>(false);
     const [categoryList, setCategoryList] = useState<Array<Category> | null>(
@@ -149,15 +151,15 @@ export default function Categories() {
 
             <div className="h-[94vh] w-full p-5 bg-gray-100 rounded-lg">
                 <div className="flex justify-between items-center mb-6 border-b border-gray-300">
-                    <h3 className="text-3xl font-bold text-gray-800 p-2 mb-3">Categories</h3>
+                    <h3 className="text-3xl font-bold text-gray-800 p-2 mb-3">{t('categories_title','Categories')}</h3>
                 </div>
 
                 <div className="w-full flex flex-col-reverse gap-6 xl:flex-row-reverse">
                     <div className="relative w-full xl:w-7/10 flex flex-col gap-4 rounded-2xl overflow-y-scroll max-h-[calc(100vh-200px)]">
                         <div className="sticky top-0 bg-white font-semibold w-full px-6 py-3 rounded-lg shadow-sm grid grid-cols-3 gap-x-5 items-center text-gray-500 text-sm">
-                            <div>Name</div>
-                            <div className="text-center">Created</div>
-                            <div className="text-center">Actions</div>
+                            <div>{t('table_name','Name')}</div>
+                            <div className="text-center">{t('table_created','Created')}</div>
+                            <div className="text-center">{t('table_actions','Actions')}</div>
                         </div>
 
                         <motion.div
@@ -220,7 +222,7 @@ export default function Categories() {
                                                     className="px-3 py-1.5 bg-blue-50 text-blue-600 rounded-lg text-sm font-medium"
                                                     type="button"
                                                 >
-                                                    Rename
+                                                    {t('rename','Rename')}
                                                 </motion.button>
                                                 <motion.button
                                                     whileHover={{ scale: 1.05 }}
@@ -233,18 +235,18 @@ export default function Categories() {
                                                     className="px-3 py-1.5 bg-red-50 text-red-600 rounded-lg text-sm font-medium"
                                                     type="button"
                                                 >
-                                                    Delete
+                                                    {t('delete','Delete')}
                                                 </motion.button>
                                             </div>
                                         </motion.div>
                                     );
                                 })}
                         </AnimatePresence>
-                    </div>
+                     </div>
 
                     <div className="relative max-w-[350px] min-w-[250px] bg-white rounded-xl shadow-md p-6 flex-1 h-fit">
                         <h4 className="text-lg font-semibold text-gray-800 mb-4">
-                            Search Categories
+                            {t('search_categories','Search Categories')}
                         </h4>
                         <form
                             onSubmit={(e) => {
@@ -261,7 +263,7 @@ export default function Categories() {
                                     id="searchFilter"
                                     onChange={(e) => (searchFilterRef.current = e.target.value)}
                                     className="bg-gray-50 w-full h-10 pl-10 pr-4 rounded-lg text-gray-800 border border-gray-200 focus:ring-2 focus:ring-blue-500 outline-none"
-                                    placeholder="Search by name..."
+                                    placeholder={t('search_placeholder','Search by name...')}
                                 />
                             </div>
                             <div className="flex justify-end gap-3">
@@ -278,7 +280,7 @@ export default function Categories() {
                                     }}
                                     className="text-gray-700 font-medium bg-white border border-gray-300 py-1.5 px-4 rounded-lg hover:bg-gray-100"
                                 >
-                                    Clear
+                                    {t('clear','Clear')}
                                 </motion.button>
                                 <motion.button
                                     type="submit"
@@ -286,13 +288,13 @@ export default function Categories() {
                                     whileTap={{ scale: 0.95 }}
                                     className="text-white font-medium bg-blue-600 py-1.5 px-4 rounded-lg hover:bg-blue-700"
                                 >
-                                    Search
+                                    {t('search','Search')}
                                 </motion.button>
                             </div>
                         </form>
                     </div>
-                </div>
-            </div>
+                 </div>
+             </div>
 
             <AnimatePresence>
                 {isModalOpen && (
@@ -313,6 +315,7 @@ export default function Categories() {
                             <div className="flex items-center justify-between p-5 border-b rounded-t-2xl bg-gray-50">
                                 <h3 className="text-xl font-semibold text-gray-800 flex items-center gap-3">
                                     <i className={modalDetails.icon}></i>
+                                    {/* modalDetails.title may be a translation key; render via t if needed */}
                                     {modalDetails.title}
                                 </h3>
                                 <button
@@ -348,7 +351,7 @@ export default function Categories() {
                                                 htmlFor="categoryNewName"
                                                 className="block mb-2 text-sm font-medium text-gray-900"
                                             >
-                                                Category Name
+                                                {t('category_name_label','Category Name')}
                                             </label>
                                             <input
                                                 type="text"
@@ -358,51 +361,50 @@ export default function Categories() {
                                                     (categoryNameRef.current = e.target.value)
                                                 }
                                                 className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-                                                placeholder="Enter a name"
-                                                required
-                                            />
-                                        </div>
-                                    ) : (
-                                        <>
+                                                placeholder={t('enter_category_placeholder','Enter a name')}
+                                                 required
+                                             />
+                                         </div>
+                                     ) : (
+                                         <>
                                             <p className="text-sm text-gray-600">
-                                                Are you sure you want to delete this category? This
-                                                action cannot be undone.
+                                                {t('delete_confirm_text','Are you sure you want to delete this category? This action cannot be undone.')}
                                             </p>
-                                            <div className="flex items-center gap-3 p-3 bg-red-50 border border-red-200 rounded-lg">
-                                                <input
-                                                    id="forceCategoryDelete"
-                                                    type="checkbox"
-                                                    className="w-4 h-4 text-red-600 bg-gray-100 border-gray-300 rounded focus:ring-red-500 accent-red-500"
-                                                />
-                                                <label
-                                                    htmlFor="forceCategoryDelete"
-                                                    className="text-sm font-medium text-red-800"
-                                                >
-                                                    Force delete even if it's in use
-                                                </label>
-                                            </div>
-                                        </>
-                                    )}
-                                </div>
-                                <div className="flex items-center justify-end p-5 space-x-3 border-t border-gray-200 rounded-b-2xl bg-gray-50">
-                                    <motion.button
-                                        type="button"
-                                        whileHover={{ scale: 1.05 }}
-                                        whileTap={{ scale: 0.95 }}
-                                        onClick={clearModal}
-                                        className="font-medium rounded-lg text-sm px-5 py-2.5 text-center bg-white text-gray-600 border border-gray-300 hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-gray-200"
-                                    >
-                                        Cancel
-                                    </motion.button>
-                                    <motion.button
-                                        type="submit"
-                                        whileHover={{ scale: 1.05 }}
-                                        whileTap={{ scale: 0.95 }}
-                                        className={`text-white font-medium rounded-lg text-sm px-5 py-2.5 text-center focus:ring-4 focus:outline-none ${modalDetails.confirmColor}`}
-                                    >
+                                             <div className="flex items-center gap-3 p-3 bg-red-50 border border-red-200 rounded-lg">
+                                                 <input
+                                                     id="forceCategoryDelete"
+                                                     type="checkbox"
+                                                     className="w-4 h-4 text-red-600 bg-gray-100 border-gray-300 rounded focus:ring-red-500 accent-red-500"
+                                                 />
+                                                 <label
+                                                     htmlFor="forceCategoryDelete"
+                                                     className="text-sm font-medium text-red-800"
+                                                 >
+                                                    {t('force_delete_label','Force delete even if it\'s in use')}
+                                                 </label>
+                                             </div>
+                                         </>
+                                     )}
+                                 </div>
+                                 <div className="flex items-center justify-end p-5 space-x-3 border-t border-gray-200 rounded-b-2xl bg-gray-50">
+                                     <motion.button
+                                         type="button"
+                                         whileHover={{ scale: 1.05 }}
+                                         whileTap={{ scale: 0.95 }}
+                                         onClick={clearModal}
+                                         className="font-medium rounded-lg text-sm px-5 py-2.5 text-center bg-white text-gray-600 border border-gray-300 hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-gray-200"
+                                     >
+                                        {t('cancel','Cancel')}
+                                     </motion.button>
+                                     <motion.button
+                                         type="submit"
+                                         whileHover={{ scale: 1.05 }}
+                                         whileTap={{ scale: 0.95 }}
+                                         className={`text-white font-medium rounded-lg text-sm px-5 py-2.5 text-center focus:ring-4 focus:outline-none ${modalDetails.confirmColor}`}
+                                     >
                                         {modalDetails.confirmText}
-                                    </motion.button>
-                                </div>
+                                     </motion.button>
+                                 </div>
                             </form>
                         </motion.div>
                     </motion.div>
