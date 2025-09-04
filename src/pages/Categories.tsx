@@ -62,7 +62,7 @@ export default function Categories() {
     }
 
     function handleCreate(categoryName: string) {
-        fetch(`http://localhost:8080/api/categories/`, {
+        fetch(`${import.meta.env.VITE_API_URL}/api/categories/`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",

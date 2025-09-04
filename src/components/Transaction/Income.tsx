@@ -122,7 +122,7 @@ export default function Income() {
         const source = formData.get('source') as string;
 
         try {
-            fetch('http://localhost:8080/api/income/' + incomeId, {
+            fetch(`${import.meta.env.VITE_API_URL}/api/income/` + incomeId, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
@@ -153,7 +153,7 @@ export default function Income() {
         e.preventDefault();
         incomeId = cardIdRef.current;
         try {
-            fetch('http://localhost:8080/api/income/' + incomeId, {
+            fetch(`${import.meta.env.VITE_API_URL}/api/income/` + incomeId, {
                 method: 'DELETE',
                 headers: {
                     'Content-Type': 'application/json',
