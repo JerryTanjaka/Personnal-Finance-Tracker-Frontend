@@ -1,6 +1,7 @@
 import { AnimatePresence, motion } from 'framer-motion';
 import { useEffect, useState } from 'react';
-import { FaFilter, FaList, FaPlus, FaSearch, FaThLarge } from 'react-icons/fa';
+import { FaFilter, FaList, FaPlus, FaThLarge } from 'react-icons/fa';
+import { useTranslation } from 'react-i18next';
 import Card from './CardFilter.tsx';
 import TransactionCard from './TransactionCard';
 import type { Transaction } from './Types';
@@ -9,6 +10,7 @@ import Input from './../UI/searchButton.tsx';
 type Category = { id: string; name :string};
 
 export default function Expense() {
+    const { t } = useTranslation();
     const [view, setView] = useState<'grid' | 'list'>(
         () =>
             (localStorage.getItem('transactionView') as 'grid' | 'list') ||
@@ -190,7 +192,7 @@ export default function Expense() {
             <div className="flex min-h-full w-full max-w-7xl flex-col rounded-2xl p-6">
                 {/* Header */}
                 <div className="flex flex-col border-b border-gray-300 pb-2 text-3xl font-bold md:flex-row md:items-center md:justify-between">
-                    <h1 className="text-3xl font-bold">Expense</h1>
+                    <h1 className="text-3xl font-bold">{t('expenses','Expenses')}</h1>
 
                     <div className="flex flex-col items-start space-y-2 md:flex-row md:items-center md:space-y-0 md:space-x-4">
                         {/* Add button */}
@@ -199,12 +201,12 @@ export default function Expense() {
                             className="flex h-11 items-center space-x-2 rounded bg-red-800/90 px-3 py-1 text-xl text-white shadow-md transition hover:bg-red-700 active:scale-95"
                         >
                             <FaPlus className="pointer-events-none left-3 text-xl" />
-                            <p className="text-lg">Add</p>
+                            <p className="text-lg">{t('add','Add')}</p>
                         </button>
 
                         {/* Search */}
                         <div className="relative flex items-center">
-                            <Input value={searchTerm} onChange={setSearchTerm} />
+                            <Input value={searchTerm} onChange={setSearchTerm} placeholder={t('search','Search')} />
 
                         </div>
 
@@ -269,7 +271,7 @@ export default function Expense() {
                 <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
                     <div className="w-full max-w-md rounded-xl bg-white p-6 shadow-lg">
                         <h2 className="text-2xl font-bold">
-                            {editingId ? 'Update Expense' : 'Add New Expense'}
+                            {editingId ? `${t('update','Update')} ${t('expense','Expense')}` : `${t('add_new','Add New')} ${t('expense','Expense')}`}
                         </h2>
                         <form
                             className="flex flex-col space-y-4"
@@ -283,14 +285,14 @@ export default function Expense() {
                             <input
                                 name="description"
                                 type="text"
-                                placeholder="Description"
+                                placeholder={t('description','Description')}
                                 className="rounded border p-2"
                                 required
                             />
                             <input
                                 name="amount"
                                 type="number"
-                                placeholder="Amount"
+                                placeholder={t('amount','Amount')}
                                 className="rounded border p-2"
                                 required
                             />
@@ -307,7 +309,7 @@ export default function Expense() {
                                 className="rounded border p-2"
                                 required
                             >
-                                <option value="">Select Category</option>
+                                <option value="">{t('select_category','Select Category')}</option>
                                 {Array.isArray(categories) &&
                                     categories.map((cat) => (
                                         <option key={cat.id} value={cat.id}>
@@ -328,7 +330,7 @@ export default function Expense() {
                                         value="one-time"
                                         defaultChecked
                                     />
-                                    <span>One-time</span>
+                                    <span>{t('one_time','One-time')}</span>
                                 </label>
                                 <label className="flex items-center space-x-2">
                                     <input
@@ -336,7 +338,7 @@ export default function Expense() {
                                         name="type"
                                         value="recurring"
                                     />
-                                    <span>Recurring</span>
+                                    <span>{t('recurring','Recurring')}</span>
                                 </label>
                             </div>
                             <div className="flex justify-end space-x-2">
@@ -345,13 +347,13 @@ export default function Expense() {
                                     onClick={() => setIsModalOpen(false)}
                                     className="rounded bg-gray-300 px-4 py-2"
                                 >
-                                    Cancel
+                                    {t('cancel','Cancel')}
                                 </button>
                                 <button
                                     type="submit"
                                     className="rounded bg-emerald-600 px-4 py-2 text-white"
                                 >
-                                    {editingId ? 'Update' : 'Add'}
+                                    {editingId ? t('update','Update') : t('add','Add')}
                                 </button>
                             </div>
                         </form>
@@ -364,7 +366,7 @@ export default function Expense() {
                 <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
                     <div className="w-[350px] rounded-xl bg-white p-6 shadow-lg">
                         <h2 className="mb-4 text-xl font-bold">
-                            Filter by Category
+                            {t('filter_by_category','Filter by Category')}
                         </h2>
                         <Card
                             categories={categories}
@@ -379,7 +381,7 @@ export default function Expense() {
                                 onClick={() => setIsFilterOpen(false)}
                                 className="rounded bg-gray-300 px-4 py-2"
                             >
-                                Close
+                                {t('close','Close')}
                             </button>
                         </div>
                     </div>

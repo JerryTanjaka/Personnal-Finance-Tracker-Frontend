@@ -1,6 +1,7 @@
 import { AnimatePresence, motion } from 'framer-motion';
 import { useEffect, useRef, useState } from 'react';
 import { FaList, FaPlus, FaSearch, FaThLarge } from 'react-icons/fa';
+import { useTranslation } from 'react-i18next';
 import TransactionCard from './TransactionCard';
 import type { Transaction } from './Types';
 
@@ -10,6 +11,7 @@ type ActionsModel = {
 };
 
 export default function Income() {
+    const { t } = useTranslation();
     const [view, setView] = useState<'grid' | 'list'>(
         () =>
             (localStorage.getItem('transactionView') as 'grid' | 'list') ||
@@ -175,7 +177,7 @@ export default function Income() {
             <div className="flex min-h-full w-full max-w-7xl flex-col rounded-2xl p-6">
                 {/* Header */}
                 <div className="flex flex-col border-b border-gray-300 pb-2 text-3xl font-bold md:flex-row md:items-center md:justify-between">
-                    <h1 className="text-3xl font-bold">Incomes</h1>
+                    <h1 className="text-3xl font-bold">{t('incomes','Incomes')}</h1>
 
                     <div className="flex flex-col md:flex-row md:items-center md:space-x-2 space-y-2 md:space-y-0">
                         {/* Add Button */}
@@ -183,8 +185,8 @@ export default function Income() {
                             onClick={openModal}
                             className="flex items-center cursor-pointer gap-2 rounded-lg bg-gray-200 px-4 py-2 text-gray-800 text-lg font-medium shadow-sm transition-all duration-200 hover:bg-gray-300 hover:shadow-md active:scale-95"
                         >
-                            <FaPlus className="text-gray-600 text-lg" />
-                            <span>Add</span>
+                                <FaPlus className="text-gray-600 text-lg" />
+                                <span>{t('add', 'Add')}</span>
                         </button>
 
                         {/* Search Input */}
@@ -193,7 +195,7 @@ export default function Income() {
                             <input
                                 type="text"
                                 className="h-12 w-full rounded-lg bg-gray-200 pl-10 pr-4 text-lg text-gray-800 placeholder-gray-500 focus:bg-white focus:ring-2 focus:ring-emerald-500 focus:outline-none transition"
-                                placeholder="Search"
+                                placeholder={t('search', 'Search')}
                                 onChange={(e) => setSearchTerm(e.target.value)}
                             />
                         </div>
@@ -266,10 +268,9 @@ export default function Income() {
                         <h2 className="mb-4 text-2xl font-bold text-gray-800">
                             {isModifying.current.status
                                 ? isModifying.current.isDeleting
-                                    ? 'Delete'
-                                    : 'Update'
-                                : 'Add New'}{' '}
-                            Income
+                                    ? t('delete', 'Delete')
+                                    : t('update', 'Update')
+                                : t('add_new', 'Add New')}{' '}{t('income', 'Income')}
                         </h2>
 
                         {/* Form */}
@@ -288,14 +289,14 @@ export default function Income() {
                                     <input
                                         name="name"
                                         type="text"
-                                        placeholder="Name"
+                                        placeholder={t('name', 'Name')}
                                         className="rounded-lg border border-gray-500 p-3 focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 outline-none transition"
                                         required
                                     />
                                     <input
                                         name="amount"
                                         type="number"
-                                        placeholder="Amount"
+                                        placeholder={t('amount', 'Amount')}
                                         className="rounded-lg border border-gray-500 p-3 focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 outline-none transition"
                                         required
                                     />
@@ -308,7 +309,7 @@ export default function Income() {
                                     <input
                                         name="source"
                                         type="text"
-                                        placeholder="Source"
+                                        placeholder={t('source', 'Source')}
                                         className="rounded-lg border border-gray-500 p-3 focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 outline-none transition"
                                         required
                                     />
@@ -317,13 +318,13 @@ export default function Income() {
 
                             {/* Buttons */}
                             <div className="flex justify-end space-x-3 mt-2">
-                                <button
-                                    type="button"
-                                    onClick={closeModal}
-                                    className="rounded-lg bg-gray-200 px-5 py-2 text-gray-800 font-medium hover:bg-gray-300 transition"
-                                >
-                                    Cancel
-                                </button>
+                                    <button
+                                        type="button"
+                                        onClick={closeModal}
+                                        className="rounded-lg bg-gray-200 px-5 py-2 text-gray-800 font-medium hover:bg-gray-300 transition"
+                                    >
+                                        {t('cancel', 'Cancel')}
+                                    </button>
                                 <button
                                     type="submit"
                                     className={`rounded-lg px-5 py-2 font-medium text-white transition ${isModifying.current.isDeleting
@@ -333,9 +334,9 @@ export default function Income() {
                                 >
                                     {isModifying.current.status
                                         ? isModifying.current.isDeleting
-                                            ? 'Delete'
-                                            : 'Update'
-                                        : 'Add'}
+                                            ? t('delete', 'Delete')
+                                            : t('update', 'Update')
+                                        : t('add', 'Add')}
                                 </button>
                             </div>
                         </form>

@@ -88,14 +88,14 @@ export default function Dashboard() {
                     />
                 </div>
                 <div className={`flex flex-col m-5`}>
-                    <h1 className={`text-2xl font-semibold`}>Expenses Categoires</h1>
+                    <h1 className={`text-2xl font-semibold`}>{t('expenses_categories','Expenses Categories')}</h1>
                     <div className='flex justify-center space-x-9 items-center'>
                         <PieChart />
                         <BarChart />
                     </div>
                 </div>
                 <div className={`flex flex-col mt-5`}>
-                    <h1 className={`text-2xl font-semibold border-b-1 border-gray-300 mx-6 pb-3`}>Recent Expenses</h1>
+                    <h1 className={`text-2xl font-semibold border-b-1 border-gray-300 mx-6 pb-3`}>{t('recent_expenses','Recent Expenses')}</h1>
                     <div className={`flex flex-col`}>
                         <ExpenseList />
                     </div>
