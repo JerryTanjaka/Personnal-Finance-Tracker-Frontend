@@ -118,7 +118,7 @@ export default function Categories() {
             }
         )
             .then(async (res) => await handleNotification(res))
-            .catch(() => setCategoryReload(true))
+            .then(() => setCategoryReload(true))
             .finally(() => clearModal());
     }
 

@@ -5,7 +5,7 @@ import type { Transaction } from "./Transaction/Types";
 
 ChartJS.register(BarController, BarElement, CategoryScale, LinearScale)
 
-export default function BarChart() {
+export default function BarChart({ chartValueOptions }: any) {
     const [chartData, setChartData] = useState<{ labels: any[], datasets: any[] }>({ labels: [], datasets: [] })
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
@@ -57,8 +57,8 @@ export default function BarChart() {
     useEffect(() => {
         const fetchStructuredData = async () => {
             try {
-                const fetchedExpense = await getExpensesOverTime(new Date(new Date().setFullYear(new Date().getFullYear(), 0, 1)), new Date(new Date().setFullYear(new Date().getFullYear() + 1, 0, 1)), undefined, 'one-time')
-                const fetchedIncome = await getIncomesOverTime(new Date(new Date().setFullYear(new Date().getFullYear(), 0, 1)), new Date(new Date().setFullYear(new Date().getFullYear() + 1, 0, 1)))
+                const fetchedExpense = await getExpensesOverTime(chartValueOptions?.start, chartValueOptions?.end, chartValueOptions?.category, chartValueOptions?.type)
+                const fetchedIncome = await getIncomesOverTime(chartValueOptions?.start, chartValueOptions?.end)
 
                 const totalPerMonth: any = {}
                 fetchedExpense?.reverse().forEach(
@@ -71,7 +71,6 @@ export default function BarChart() {
                     }
                 )
 
-                console.log(fetchedIncome)
                 fetchedIncome?.reverse().forEach(
                     (income: Transaction) => {
                         const date = new Date(income?.date);
@@ -117,7 +116,7 @@ export default function BarChart() {
         }
 
         fetchStructuredData()
-    }, [])
+    }, [chartValueOptions])
 
     if (loading) {
         return (
