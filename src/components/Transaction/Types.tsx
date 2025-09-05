@@ -4,7 +4,14 @@ export type Transaction = {
   amount: number;
   date: string;
   income_date: string;
-  type: "income" | "expense"; 
-  category?: string;          
-  source?: string;            
+  type: "income" | "expense";
+  start_date?: string,
+  end_date?: string,
+  is_recurrent?: boolean
+  category?: string;
+  source?: string;
+};
+export type Category = {
+  id: string;
+  name: string;
 };
