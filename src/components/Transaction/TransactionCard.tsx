@@ -14,6 +14,7 @@ import type { Transaction } from "./Types";
 
 import { CurrencyContext } from "../../context/CurrencyContext";
 import { formatCurrency } from "../../utils/currency";
+import { useTranslation } from "react-i18next";
 
 type TransactionCardProps = {
   transaction: Transaction;
