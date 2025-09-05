@@ -10,3 +10,7 @@ export type Transaction = {
   category?: string;
   source?: string;
 };
+export type Category = {
+  id: string;
+  name: string;
+};
