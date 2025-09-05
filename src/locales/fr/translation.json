@@ -92,4 +92,7 @@
     "expense_type": "Type de dépense",
     "month": "Mois",
     "all": "Tout"
+    "display_settings_title": "Affichage",
+    "display_settings_description": "Changez les paramètres d'affichage de l'application.",
+    "currency_settings_title": "Devise"
 }

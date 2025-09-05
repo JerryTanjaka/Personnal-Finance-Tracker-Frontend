@@ -1,8 +1,10 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { t } from "i18next";
 import { getExpenses } from "../data/DataFetch.ts";
 import LoadingSpinner from "./UI/LoadingSpinner.tsx";
 import ErrorMessage from "./UI/ErrorMessage.tsx";
+import { CurrencyContext } from "../context/CurrencyContext.tsx";
+import { formatCurrency } from "../utils/currency.ts";
 
 interface Expense {
     id: number;
@@ -19,6 +21,7 @@ export default function ExpenseList() {
     const [expenses, setExpenses] = useState<Expense[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
+    const { currency } = useContext(CurrencyContext);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -69,7 +72,7 @@ export default function ExpenseList() {
                             <tr key={expense.id} className="hover:bg-gray-100">
                                 <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{expense.description || t('no description')}</td>
                                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{expense.category_fk?.name || t("uncategorized")}</td>
-                                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${expense.amount.toFixed(2)}</td>
+                                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{formatCurrency(expense.amount, currency)}</td>
                             </tr>
                         ))}
                     </tbody>

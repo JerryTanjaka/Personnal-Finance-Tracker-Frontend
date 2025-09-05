@@ -18,6 +18,7 @@ import Settings from './pages/Settings.tsx';
 import SignUp from './pages/SignUp';
 import Support from './pages/Support.tsx';
 import Income from './components/Transaction/Income.tsx';
+import { CurrencyProvider } from './context/CurrencyContext.tsx';
 
 const router = createBrowserRouter([
     {
@@ -38,6 +39,8 @@ const router = createBrowserRouter([
 
 createRoot(document.getElementById('root')!).render(
     <StrictMode>
-        <RouterProvider router={router} />
+        <CurrencyProvider>
+            <RouterProvider router={router} />
+        </CurrencyProvider>
     </StrictMode>,
 );
