@@ -98,12 +98,12 @@ export default function BarChart({ chartValueOptions }: any) {
                         {
                             label: 'Total expense',
                             data: expenseData,
-                            backgroundColor: 'rgba(226, 45, 45, 1)'
+                            backgroundColor: '#F44336'
                         },
                         {
                             label: 'Total income',
                             data: incomeData,
-                            backgroundColor: 'rgba(52, 124, 206, 1)'
+                            backgroundColor: '#4CAF50'
                         }
                     ]
                 })

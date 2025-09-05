@@ -246,7 +246,7 @@ export default function Expense() {
                     <motion.div
                         layout
                         className={`mt-6 w-full overflow-y-auto pt-3 pl-2 ${view === 'grid'
-                            ? 'grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3'
+                            ? 'grid grid-cols-1 gap-4 sm:grid-cols-2 pb-4 lg:grid-cols-3'
                             : 'flex flex-col space-y-4'
                             }`}
                         style={{ maxHeight: 'calc(100vh - 220px)' }}
