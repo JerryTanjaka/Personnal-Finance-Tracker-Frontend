@@ -28,6 +28,7 @@ export default function Expense() {
     const [editingId, setEditingId] = useState<string | null>(null);
     const [searchTerm, setSearchTerm] = useState('');
     const [selectedCategory, setSelectedCategory] = useState<string>('All');
+    const [isRecurrentCheck, setIsRecurrentCheck] = useState<boolean>(false)
 
     const [transactions, setTransactions] = useState<Transaction[]>([]);
     const [categories, setCategories] = useState<Category[]>([]);
@@ -47,7 +48,7 @@ export default function Expense() {
     const fetchCategories = async (): Promise<Category[]> => {
         if (!token) return [];
         try {
-            const res = await fetch('http://localhost:8080/api/categories', {
+            const res = await fetch(`${import.meta.env.VITE_API_URL}/api/categories`, {
                 headers: { Authorization: `Bearer ${token}` },
             });
             const data = await res.json();
@@ -64,7 +65,7 @@ export default function Expense() {
     const fetchExpenses = async (_cats: Category[]) => {
         if (!token) return;
         try {
-            const res = await fetch('http://localhost:8080/api/expenses', {
+            const res = await fetch(`${import.meta.env.VITE_API_URL}/api/expenses`, {
                 headers: { Authorization: `Bearer ${token}` },
             });
             const data = await res.json();
@@ -106,6 +107,8 @@ export default function Expense() {
             description: { value: string };
             amount: { value: string };
             date: { value: string };
+            startDate?: { value: string };
+            endDate?: { value: string };
             type: { value: string };
             categoryId: { value: string };
             receipt?: { files: FileList };
@@ -120,6 +123,12 @@ export default function Expense() {
         formData.append('type', target.type.value);
         formData.append('categoryId', target.categoryId.value);
 
+        if (isRecurrentCheck) {
+            if (!Boolean(new Date(target.startDate!.value)) || new Date(target.startDate!.value) >= new Date(target.endDate!.value)) return;
+            formData.append('startDate', target.startDate!.value)
+            formData.append('endDate', target.endDate!.value)
+        }
+
         if (target.receipt?.files?.[0]
             && target.receipt?.files?.length < 2
             && ["application/pdf", "image/jpeg", "image/jpg", "image/png"].includes(target.receipt?.files?.[0].type)
@@ -128,13 +137,14 @@ export default function Expense() {
         }
 
         try {
-            await fetch('http://localhost:8080/api/expenses', {
+            await fetch(`${import.meta.env.VITE_API_URL}/api/expenses`, {
                 method: 'POST',
                 headers: { Authorization: `Bearer ${token}` },
                 body: formData,
             });
             await fetchExpenses(categories);
             setIsModalOpen(false);
+            setIsRecurrentCheck(false)
         } catch (err) {
             console.error(err);
         }
@@ -150,6 +160,8 @@ export default function Expense() {
             description: { value: string };
             amount: { value: string };
             date: { value: string };
+            startDate?: { value: string };
+            endDate?: { value: string };
             type: { value: string };
             categoryId: { value: string };
             receipt?: { files: FileList };
@@ -162,6 +174,12 @@ export default function Expense() {
         formData.append('type', target.type.value);
         formData.append('categoryId', target.categoryId.value);
 
+        if (isRecurrentCheck) {
+            if (!Boolean(new Date(target.startDate!.value)) || new Date(target.startDate!.value) >= new Date(target.endDate!.value)) return;
+            formData.append('startDate', target.startDate!.value)
+            formData.append('endDate', target.endDate!.value)
+        }
+
         if (target.receipt?.files?.[0]
             && target.receipt?.files?.length < 2
             && ["application/pdf", "image/jpeg", "image/jpg", "image/png"].includes(target.receipt?.files?.[0].type)
@@ -170,13 +188,14 @@ export default function Expense() {
         }
 
         try {
-            await fetch(`http://localhost:8080/api/expenses/${editingId}`, {
+            await fetch(`${import.meta.env.VITE_API_URL}/api/expenses/${editingId}`, {
                 method: 'PUT',
                 headers: { Authorization: `Bearer ${token}` },
                 body: formData,
             });
             await fetchExpenses(categories);
             setIsModalOpen(false);
+            setIsRecurrentCheck(false)
             setEditingId(null);
         } catch (err) {
             console.error(err);
@@ -215,7 +234,7 @@ export default function Expense() {
                             className="flex h-11 items-center space-x-2 rounded bg-gray-200 px-3 py-1 text-xl text-white border-2 border-gray-300 transition hover:bg-gray-300 active:scale-95"
                         >
                             <FaPlus className="pointer-events-none left-3 text-xl text-gray-600" />
-                            <p className="text-lg text-gray-600">{t('add','Add')}</p>
+                            <p className="text-lg text-gray-600">{t('add', 'Add')}</p>
                         </button>
 
                         {/* Search */}
@@ -280,99 +299,123 @@ export default function Expense() {
             </div>
 
             {/* Modal Add/Edit Transaction */}
-            {isModalOpen && (
-                <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
-                    <div className="w-full max-w-md rounded-xl bg-white p-6 shadow-lg">
-                        <h2 className="text-2xl font-bold">
-                            {editingId ? `${t('update', 'Update')} ${t('expense', 'Expense')}` : `${t('add_new', 'Add New')} ${t('expense', 'Expense')}`}
-                        </h2>
-                        <form
-                            className="flex flex-col space-y-4"
-                            onSubmit={
-                                editingId
-                                    ? handleUpdateTransaction
-                                    : handleAddTransaction
-                            }
-                            encType="multipart/form-data"
-                        >
-                            <input
-                                name="description"
-                                type="text"
-                                placeholder={t('description', 'Description')}
-                                className="rounded border p-2"
-                                required
-                            />
-                            <input
-                                name="amount"
-                                type="number"
-                                placeholder={t('amount', 'Amount')}
-                                className="rounded border p-2"
-                                required
-                            />
-                            <input
-                                name="date"
-                                type="datetime-local"
-                                className="rounded border p-2"
-                                defaultValue={new Date()
-                                    .toISOString()
-                                    .slice(0, 16)}
-                            />
-                            <select
-                                name="categoryId"
-                                className="rounded border p-2"
-                                required
+            <AnimatePresence>
+                {isModalOpen && (
+                    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
+                        <motion.div
+                            initial={{ scale: 0, opacity: 0 }}
+                            exit={{ scale: 0, opacity: 0 }}
+                            animate={{ scale: 1, opacity: 1 }}
+                            transition={{ duration: .15 }}
+                            className="w-full max-w-md rounded-xl bg-white p-6 shadow-lg">
+                            <h2 className="text-2xl font-bold mb-3">
+                                {editingId ? `${t('update', 'Update')} ${t('expense', 'Expense')}` : `${t('add_new', 'Add New')} ${t('expense', 'Expense')}`}
+                            </h2>
+                            <form
+                                className="flex flex-col space-y-4"
+                                onSubmit={
+                                    editingId
+                                        ? handleUpdateTransaction
+                                        : handleAddTransaction
+                                }
+                                encType="multipart/form-data"
                             >
-                                <option value="">{t('select_category', 'Select Category')}</option>
-                                {Array.isArray(categories) &&
-                                    categories.map((cat) => (
-                                        <option key={cat.id} value={cat.id}>
-                                            {cat.name}
-                                        </option>
-                                    ))}
-                            </select>
-                            <input
-                                name="receipt"
-                                type="file"
-                                className="rounded border p-2"
-                            />
-                            <div className="flex space-x-4">
-                                <label className="flex items-center space-x-2">
-                                    <input
-                                        type="radio"
-                                        name="type"
-                                        value="one-time"
-                                        defaultChecked
-                                    />
-                                    <span>{t('one_time', 'One-time')}</span>
-                                </label>
-                                <label className="flex items-center space-x-2">
-                                    <input
-                                        type="radio"
-                                        name="type"
-                                        value="recurring"
-                                    />
-                                    <span>{t('recurring', 'Recurring')}</span>
-                                </label>
-                            </div>
-                            <div className="flex justify-end space-x-2">
-                                <button
-                                    type="button"
-                                    onClick={() => setIsModalOpen(false)}
-                                    className="rounded bg-gray-300 px-4 py-2"
+                                <input
+                                    name="description"
+                                    type="text"
+                                    placeholder={t('description', 'Description')}
+                                    className="rounded border border-gray-300 p-2"
+                                    required
+                                />
+                                <input
+                                    name="amount"
+                                    type="number"
+                                    placeholder={t('amount', 'Amount')}
+                                    className="rounded border border-gray-300 p-2"
+                                    required
+                                />
+                                <input
+                                    name="date"
+                                    type="datetime-local"
+                                    className="rounded border border-gray-300 p-2"
+                                    defaultValue={new Date()
+                                        .toISOString()
+                                        .slice(0, 16)}
+                                />
+                                <select
+                                    name="categoryId"
+                                    className="rounded border border-gray-300 p-2"
+                                    required
                                 >
-                                    {t('cancel', 'Cancel')}
-                                </button>
-                                <button
-                                    type="submit"
-                                    className="rounded bg-emerald-600 px-4 py-2 text-white"
-                                >
-                                    {editingId ? t('update', 'Update') : t('add', 'Add')}
-                                </button>
-                            </div>
-                        </form>
+                                    <option value="">{t('select_category', 'Select Category')}</option>
+                                    {Array.isArray(categories) &&
+                                        categories.map((cat) => (
+                                            <option key={cat.id} value={cat.id}>
+                                                {cat.name}
+                                            </option>
+                                        ))}
+                                </select>
+                                <input
+                                    name="receipt"
+                                    type="file"
+                                    className="rounded border border-gray-300 p-2"
+                                />
+                                <div className="flex space-x-4">
+                                    <label className="flex items-center space-x-2">
+                                        <input
+                                            type="radio"
+                                            name="type"
+                                            value="one-time"
+                                            onClick={() => setIsRecurrentCheck(false)}
+                                            defaultChecked
+                                        />
+                                        <span>{t('one_time', 'One-time')}</span>
+                                    </label>
+                                    <label className="flex items-center space-x-2">
+                                        <input
+                                            type="radio"
+                                            name="type"
+                                            value="recurring"
+                                            onClick={() => setIsRecurrentCheck(true)}
+                                        />
+                                        <span>{t('recurring', 'Recurring')}</span>
+                                    </label>
+                                </div>
+                                {isRecurrentCheck && (<div className='grid grid-cols-2 gap-4'><input
+                                    name="startDate"
+                                    type="date"
+                                    className="rounded border border-gray-300 p-2"
+                                    required
+                                    defaultValue={new Date()
+                                        .toISOString()
+                                        .split('T')[0]}
+                                />
+                                    <input
+                                        name="endDate"
+                                        type="date"
+                                        className="rounded border border-gray-300 p-2"
+                                    />
+                                </div>)}
+                                <div className="flex justify-end space-x-2">
+                                    <button
+                                        type="button"
+                                        onClick={() => { setIsModalOpen(false); setIsRecurrentCheck(false) }}
+                                        className="rounded bg-gray-300 px-4 py-2"
+                                    >
+                                        {t('cancel', 'Cancel')}
+                                    </button>
+                                    <button
+                                        type="submit"
+                                        className="rounded bg-emerald-600 px-4 py-2 text-white"
+                                    >
+                                        {editingId ? t('update', 'Update') : t('add', 'Add')}
+                                    </button>
+                                </div>
+                            </form>
+                        </motion.div>
                     </div>
-                </div>
-            )}
+                )}
+            </AnimatePresence>
 
             {/* Modal Filter Categories */}
             {isFilterOpen && (
