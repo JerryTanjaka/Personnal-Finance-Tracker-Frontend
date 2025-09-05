@@ -7,6 +7,7 @@ import ThemeToggle from '../components/UI/ThemeToggle';
 
 import CurrencySettings from '../components/Settings/CurrencySettings';
 import DeleteData from "../components/Settings/DeleteData.tsx";
+import DeleteAccount from '../components/Settings/DeleteAccount.tsx';
 
 export default function Settings() {
     const [isChangePasswordOpen, setIsChangePasswordOpen] =
@@ -131,6 +132,7 @@ export default function Settings() {
                 )}
             </p>
             <DeleteData />
+            <DeleteAccount />
         </div>
     );
 }
