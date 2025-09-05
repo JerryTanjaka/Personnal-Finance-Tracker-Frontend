@@ -1,13 +1,20 @@
 import { AnimatePresence, motion } from 'framer-motion';
 import { useEffect, useState } from 'react';
-import { FaFilter, FaList, FaPlus, FaThLarge } from 'react-icons/fa';
 import { useTranslation } from 'react-i18next';
-import Card from './CardFilter.tsx';
+import { FaList, FaPlus, FaThLarge } from 'react-icons/fa';
+import ExpenseFilter from '../UI/ExpenseFilter.tsx';
+import Input from './../UI/searchButton.tsx';
 import TransactionCard from './TransactionCard';
 import type { Transaction } from './Types';
-import Input from './../UI/searchButton.tsx';
 
 type Category = { id: string; name: string };
+
+type ChartOptions = {
+    start: Date;
+    end: Date;
+    category?: string;
+    type?: string;
+};
 
 export default function Expense() {
     const { t } = useTranslation();
@@ -24,24 +31,39 @@ export default function Expense() {
     };
 
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const [isFilterOpen, setIsFilterOpen] = useState(false);
     const [editingId, setEditingId] = useState<string | null>(null);
     const [searchTerm, setSearchTerm] = useState('');
-    const [selectedCategory, setSelectedCategory] = useState<string>('All');
 
+    const [chartOptions, setChartOptions] = useState<ChartOptions>({
+        start: new Date(new Date().setFullYear(new Date().getFullYear(), 0, 1)),
+        end: new Date(new Date().setFullYear(new Date().getFullYear() + 1, 0, 1)),
+        category: undefined,
+        type: undefined,
+    });
+
+    const [categoryList, setCategoryList] = useState<any[]>([]);
     const [transactions, setTransactions] = useState<Transaction[]>([]);
     const [categories, setCategories] = useState<Category[]>([]);
     const token = localStorage.getItem('accessToken');
 
+    // ✅ Filtre complet
     const filteredTransactions = transactions.filter((t) => {
         const matchesSearch =
             t.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
             t.category?.toLowerCase().includes(searchTerm.toLowerCase());
 
         const matchesCategory =
-            selectedCategory === 'All' || t.category === selectedCategory;
+            !chartOptions.category || t.category === chartOptions.category;
 
-        return matchesSearch && matchesCategory;
+        const matchesType =
+            !chartOptions.type || t.type === chartOptions.type;
+
+        const transactionDate = new Date(t.date);
+        const matchesDate =
+            (!chartOptions.start || transactionDate >= chartOptions.start) &&
+            (!chartOptions.end || transactionDate <= chartOptions.end);
+
+        return matchesSearch && matchesCategory && matchesType && matchesDate;
     });
 
     const fetchCategories = async (): Promise<Category[]> => {
@@ -53,10 +75,15 @@ export default function Expense() {
             const data = await res.json();
             const cats: Category[] = Array.isArray(data) ? data : [];
             setCategories(cats);
+
+            // 🔑 alimente ExpenseFilter
+            setCategoryList(cats.map((c) => ({ name: c.name })));
+
             return cats;
         } catch (err) {
             console.error('Error fetching categories:', err);
             setCategories([]);
+            setCategoryList([]);
             return [];
         }
     };
@@ -70,17 +97,19 @@ export default function Expense() {
             const data = await res.json();
             const formatted: Transaction[] = Array.isArray(data)
                 ? data.map((item: any) => ({
-                    id: item.id,
-                    name: item.description || item.name,
-                    amount: parseFloat(item.amount),
-                    date: item.date,
-                    start_date: item.start_date,
-                    end_date: item.end_date,
-                    is_recurrent: item.is_recurrent,
-                    type: 'expense',
-                    category: item.category_fk?.name || t('uncategorized', "Uncategorized"),
-                    source: item.source || '',
-                }))
+                      id: item.id,
+                      name: item.description || item.name,
+                      amount: parseFloat(item.amount),
+                      date: item.date,
+                      start_date: item.start_date,
+                      end_date: item.end_date,
+                      is_recurrent: item.is_recurrent,
+                      type: item.is_recurrent ? 'recurring' : 'one-time',
+                      category:
+                          item.category_fk?.name ||
+                          t('uncategorized', 'Uncategorized'),
+                      source: item.source || '',
+                  }))
                 : [];
             setTransactions(formatted);
         } catch (err) {
@@ -120,10 +149,17 @@ export default function Expense() {
         formData.append('type', target.type.value);
         formData.append('categoryId', target.categoryId.value);
 
-        if (target.receipt?.files?.[0]
-            && target.receipt?.files?.length < 2
-            && ["application/pdf", "image/jpeg", "image/jpg", "image/png"].includes(target.receipt?.files?.[0].type)
-            && target.receipt?.files?.[0].size <= 2097152) {
+        if (
+            target.receipt?.files?.[0] &&
+            target.receipt?.files?.length < 2 &&
+            [
+                'application/pdf',
+                'image/jpeg',
+                'image/jpg',
+                'image/png',
+            ].includes(target.receipt?.files?.[0].type) &&
+            target.receipt?.files?.[0].size <= 2097152
+        ) {
             formData.append('receipt', target.receipt.files[0]);
         }
 
@@ -162,10 +198,17 @@ export default function Expense() {
         formData.append('type', target.type.value);
         formData.append('categoryId', target.categoryId.value);
 
-        if (target.receipt?.files?.[0]
-            && target.receipt?.files?.length < 2
-            && ["application/pdf", "image/jpeg", "image/jpg", "image/png"].includes(target.receipt?.files?.[0].type)
-            && target.receipt?.files?.[0].size <= 2097152) {
+        if (
+            target.receipt?.files?.[0] &&
+            target.receipt?.files?.length < 2 &&
+            [
+                'application/pdf',
+                'image/jpeg',
+                'image/jpg',
+                'image/png',
+            ].includes(target.receipt?.files?.[0].type) &&
+            target.receipt?.files?.[0].size <= 2097152
+        ) {
             formData.append('receipt', target.receipt.files[0]);
         }
 
@@ -206,52 +249,57 @@ export default function Expense() {
             <div className="flex min-h-full w-full max-w-7xl flex-col rounded-2xl p-6">
                 {/* Header */}
                 <div className="flex flex-col border-b border-gray-300 pb-2 text-3xl font-bold md:flex-row md:items-center md:justify-between">
-                    <h1 className="text-3xl font-bold">{t('expenses', 'Expenses')}</h1>
+                    <h1 className="text-3xl font-bold">
+                        {t('expenses', 'Expenses')}
+                    </h1>
 
-                    <div className="flex flex-col items-start space-y-2 md:flex-row md:items-center md:space-y-0 md:space-x-4">
+                    <div className="flex flex-col space-y-2 md:flex-row md:items-center md:space-y-0 md:space-x-2">
                         {/* Add button */}
                         <button
                             onClick={() => setIsModalOpen(true)}
-                            className="flex h-11 items-center space-x-2 rounded bg-gray-200 px-3 py-1 text-xl text-white border-2 border-gray-300 transition hover:bg-gray-300 active:scale-95"
+                            className="flex cursor-pointer items-center gap-2 rounded-lg bg-gray-200 px-4 py-2 text-lg font-medium text-gray-800 shadow-sm transition-all duration-200 hover:bg-gray-300 hover:shadow-md active:scale-95"
                         >
-                            <FaPlus className="pointer-events-none left-3 text-xl text-gray-600" />
-                            <p className="text-lg text-gray-600">{t('add','Add')}</p>
+                            <FaPlus className="text-lg text-gray-600" />
+                            <span>{t('add', 'Add')}</span>
                         </button>
 
                         {/* Search */}
                         <div className="relative flex items-center">
-                            <Input value={searchTerm} onChange={setSearchTerm} placeholder={t('search', 'Search')} />
-
+                            <Input
+                                value={searchTerm}
+                                onChange={setSearchTerm}
+                                placeholder={t('search', 'Search')}
+                            />
                         </div>
 
-                        {/* View + Filter */}
+                        {/* View toggle */}
                         <div className="flex space-x-2">
                             <button
                                 onClick={toggleView}
-                                className="flex h-11 w-11 items-center justify-center rounded border border-gray-300 bg-gray-200 text-gray-800 transition hover:bg-gray-300 active:scale-95"
+                                className="flex h-12 w-12 items-center justify-center rounded-lg border border-gray-300 bg-gray-200 text-gray-800 transition hover:bg-gray-300 active:scale-95"
                             >
                                 {view === 'grid' ? <FaList /> : <FaThLarge />}
-                            </button>
-
-                            {/* Nouveau bouton Filter */}
-                            <button
-                                onClick={() => setIsFilterOpen(true)}
-                                className="flex h-11 w-11 items-center justify-center rounded border border-gray-300 bg-gray-200 text-gray-800 transition hover:bg-gray-300 active:scale-95"
-                            >
-                                <FaFilter />
                             </button>
                         </div>
                     </div>
                 </div>
 
+                {/* 🔥 ExpenseFilter (tous filtres actifs) */}
+                <ExpenseFilter
+                    chartOptions={chartOptions}
+                    setChartOptions={setChartOptions}
+                    categoryList={categoryList}
+                />
+
                 {/* Transactions */}
                 <AnimatePresence>
                     <motion.div
                         layout
-                        className={`mt-6 w-full overflow-y-auto pt-3 pl-2 ${view === 'grid'
-                            ? 'grid grid-cols-1 gap-4 sm:grid-cols-2 pb-4 lg:grid-cols-3'
-                            : 'flex flex-col space-y-4'
-                            }`}
+                        className={`mt-6 w-full overflow-y-auto pt-3 pl-2 ${
+                            view === 'grid'
+                                ? 'grid grid-cols-1 gap-4 pb-4 sm:grid-cols-2 lg:grid-cols-3'
+                                : 'flex flex-col space-y-4'
+                        }`}
                         style={{ maxHeight: 'calc(100vh - 220px)' }}
                     >
                         {filteredTransactions.map((t) => (
@@ -284,7 +332,9 @@ export default function Expense() {
                 <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
                     <div className="w-full max-w-md rounded-xl bg-white p-6 shadow-lg">
                         <h2 className="text-2xl font-bold">
-                            {editingId ? `${t('update', 'Update')} ${t('expense', 'Expense')}` : `${t('add_new', 'Add New')} ${t('expense', 'Expense')}`}
+                            {editingId
+                                ? `${t('update', 'Update')} ${t('expense', 'Expense')}`
+                                : `${t('add_new', 'Add New')} ${t('expense', 'Expense')}`}
                         </h2>
                         <form
                             className="flex flex-col space-y-4"
@@ -322,7 +372,9 @@ export default function Expense() {
                                 className="rounded border p-2"
                                 required
                             >
-                                <option value="">{t('select_category', 'Select Category')}</option>
+                                <option value="">
+                                    {t('select_category', 'Select Category')}
+                                </option>
                                 {Array.isArray(categories) &&
                                     categories.map((cat) => (
                                         <option key={cat.id} value={cat.id}>
@@ -366,37 +418,12 @@ export default function Expense() {
                                     type="submit"
                                     className="rounded bg-emerald-600 px-4 py-2 text-white"
                                 >
-                                    {editingId ? t('update', 'Update') : t('add', 'Add')}
+                                    {editingId
+                                        ? t('update', 'Update')
+                                        : t('add', 'Add')}
                                 </button>
                             </div>
                         </form>
-                    </div>
-                </div>
-            )}
-
-            {/* Modal Filter Categories */}
-            {isFilterOpen && (
-                <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
-                    <div className="w-[350px] rounded-xl bg-white p-6 shadow-lg">
-                        <h2 className="mb-4 text-xl font-bold">
-                            {t('filter_by_category', 'Filter by Category')}
-                        </h2>
-                        <Card
-                            categories={categories}
-                            selectedCategory={selectedCategory}
-                            onChange={(val) => {
-                                setSelectedCategory(val);
-                                setIsFilterOpen(false); //
-                            }}
-                        />
-                        <div className="mt-4 flex justify-end">
-                            <button
-                                onClick={() => setIsFilterOpen(false)}
-                                className="rounded bg-gray-300 px-4 py-2"
-                            >
-                                {t('close', 'Close')}
-                            </button>
-                        </div>
                     </div>
                 </div>
             )}

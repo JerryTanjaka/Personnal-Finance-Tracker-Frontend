@@ -4,10 +4,8 @@ import ChangePasswordForm from '../components/Settings/ChangePasswordForm';
 import ChangeUsernameForm from '../components/Settings/ChangeUsernameForm';
 import LanguageToggle from '../components/UI/LanguageToggle';
 import ThemeToggle from '../components/UI/ThemeToggle';
-<<<<<<< HEAD
-=======
+
 import CurrencySettings from '../components/Settings/CurrencySettings';
->>>>>>> 972306e44f6777180d13d7c154c3cccdf6ab2101
 
 export default function Settings() {
     const [isChangePasswordOpen, setIsChangePasswordOpen] =
@@ -125,10 +123,8 @@ export default function Settings() {
             </div>
             <LanguageToggle />
             <ThemeToggle />
-<<<<<<< HEAD
-=======
+
             <CurrencySettings />
->>>>>>> 972306e44f6777180d13d7c154c3cccdf6ab2101
         </div>
     );
 }

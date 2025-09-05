@@ -85,10 +85,6 @@
     "close": "Fermer",
     "search": "Rechercher",
     "expense": "Dépense",
-<<<<<<< HEAD
-    "change_theme": "Changer le thème"
-
-=======
     "change_theme": "Changer le thème",
     "start_date": "Date de début",
     "end_date": "Date de fin",
@@ -99,5 +95,4 @@
     "display_settings_title": "Affichage",
     "display_settings_description": "Changez les paramètres d'affichage de l'application.",
     "currency_settings_title": "Devise"
->>>>>>> 972306e44f6777180d13d7c154c3cccdf6ab2101
 }
