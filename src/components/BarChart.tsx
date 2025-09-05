@@ -65,7 +65,7 @@ export default function BarChart({ chartValueOptions }: any) {
 
     async function getIncomesOverTime(start: Date, end: Date) {
         try {
-            return await fetch(`http://localhost:8080/api/income?start=${start.toISOString().split('T')[0]}&end=${end.toISOString().split('T')[0]}`, {
+            return await fetch(`${import.meta.env.VITE_API_URL}/api/incomes?start=${start.toISOString().split('T')[0]}&end=${end.toISOString().split('T')[0]}`, {
                 headers: { Authorization: "Bearer " + localStorage.getItem('accessToken') }
             })
                 .then(async res => await res.json())

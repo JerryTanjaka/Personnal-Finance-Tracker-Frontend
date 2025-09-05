@@ -41,13 +41,13 @@ export default function NavBar() {
                         <span className={textAnimation()}>{t("dashboard")}</span>
                     </div>
                 </Link>
-                <Link to={'/Income'}>
+                <Link to={'/incomes'}>
                     <div className="flex cursor-pointer items-center space-x-2 hover:text-green-600">
                         <i className="bxr bx-wallet-note text-2xl"></i>
                         <span className={textAnimation()}>{t("incomes")}</span>
                     </div>
                 </Link>
-                <Link to={'/expense'}>
+                <Link to={'/expenses'}>
                     <div className="flex cursor-pointer items-center space-x-2 hover:text-indigo-600">
                         <i className="bxr bx-dollar-circle text-2xl"></i>
                         <span className={textAnimation()}>{t("expenses")}</span>
