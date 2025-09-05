@@ -83,7 +83,7 @@ export default function ExpenseFilter({
                         })
                     }
                 >
-                    <option value="">{t("any", "Any")}</option>
+                    <option value="">{t("all", "All")}</option>
                     {Array.isArray(categoryList) &&
                         categoryList.map((cat) => (
                             <option key={cat.name} value={cat.name}>
@@ -108,7 +108,7 @@ export default function ExpenseFilter({
                         })
                     }
                 >
-                    <option value="">{t("any", "Any")}</option>
+                    <option value="">{t("all", "All")}</option>
                     <option value="one-time">{t("one_time", "One-time")}</option>
                     <option value="recurring">{t("recurring", "Recurring")}</option>
                 </select>
