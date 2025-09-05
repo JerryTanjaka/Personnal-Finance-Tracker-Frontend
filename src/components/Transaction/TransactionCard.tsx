@@ -48,16 +48,16 @@ export default function TransactionCard({
   view,
   actions,
 }: TransactionCardProps) {
+  const { t } = useTranslation()
   const { currency } = useContext(CurrencyContext);
-  const formattedDate = new Date(transaction.date).toLocaleDateString("en-US", {
+  const formattedDate = new Date(transaction.date).toLocaleDateString(t("local_date_format","en-US"), {
     day: "2-digit",
     month: "short",
     year: "numeric",
   });
-  const { t } = useTranslation()
 
   const formattedEndDate = transaction.end_date ?
-    new Date(transaction.end_date).toLocaleDateString("en-US",
+    new Date(transaction.end_date).toLocaleDateString(t("local_date_format","en-US"),
       {
         day: "2-digit"
         , month: "short",

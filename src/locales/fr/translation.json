@@ -104,5 +104,8 @@
     "ok": "OK",
     "account_delete_success": "Compte supprimé. Vous serez déconnecter.",
     "account_delete_confirm_message": "Êtes-vous sûr de vouloir supprimer votre compte ? Les données seront irrecuperables",
-    "account_confirm_delete": "Supprimer votre compte"
+    "account_confirm_delete": "Supprimer votre compte",
+    "general_account_informations": "Informations génerales du compte",
+    "join_date": "Date de création",
+    "local_date_format": "fr-FR"
 }
