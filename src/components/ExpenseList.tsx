@@ -55,15 +55,15 @@ export default function ExpenseList() {
                         <tr>
                             <th scope="col"
                                 className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                Name
+                                    {t("name", "Name")}
                             </th>
                             <th scope="col"
                                 className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                Category
+                                {t("category", "Category")}
                             </th>
                             <th scope="col"
                                 className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                Amount
+                                {t("amount", "Amount")}
                             </th>
                         </tr>
                     </thead>

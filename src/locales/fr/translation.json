@@ -23,7 +23,8 @@
     "total_income": "Revenus Totaux",
     "total_expenses": "Dépenses Totales",
     "remaining_balance": "Solde Restant",
-    "uncategorized": "Non catégoriser",
+    "uncategorized": "Non catégorisé",
+    "unset": "Non défini",
     "no description": "Aucune description",
     "dashboard": "Tableau de bord",
     "incomes": "Revenus",
@@ -31,8 +32,7 @@
     "categories": "Categories",
     "settings": "Paramètres",
     "support": "Support",
-    "logout": "Se Déconnecter"
-    ,
+    "logout": "Se Déconnecter",
     "app_title": "Personal Finance Tracker",
     "login_welcome": "Bon retour ! Veuillez vous connecter pour continuer.",
     "email_address": "Adresse e-mail",
@@ -67,11 +67,9 @@
     "enter_category_placeholder": "Entrez un nom",
     "delete_confirm_text": "Êtes-vous sûr de vouloir supprimer cette catégorie ? Cette action est irréversible.",
     "force_delete_label": "Forcer la suppression même si elle est utilisée",
-    "cancel": "Annuler"
-    ,
+    "cancel": "Annuler",
     "expenses_categories": "Catégories de dépenses",
-    "recent_expenses": "Dépenses récentes"
-    ,
+    "recent_expenses": "Dépenses récentes",
     "add": "Ajouter",
     "add_new": "Ajouter",
     "income": "Revenu",
@@ -81,15 +79,20 @@
     "update": "Mettre à jour",
     "description": "Description",
     "select_category": "Sélectionner une catégorie",
-    "one_time": "Ponctuel",
+    "one_time": "Unique",
     "recurring": "Récurrent",
     "filter_by_category": "Filtrer par catégorie",
     "close": "Fermer",
     "search": "Rechercher",
     "expense": "Dépense",
     "change_theme": "Changer le thème",
+    "start_date": "Date de début",
+    "end_date": "Date de fin",
+    "category": "Catégorie",
+    "expense_type": "Type de dépense",
+    "month": "Mois",
+    "all": "Tout"
     "display_settings_title": "Affichage",
     "display_settings_description": "Changez les paramètres d'affichage de l'application.",
     "currency_settings_title": "Devise"
-
 }

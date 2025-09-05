@@ -1,6 +1,7 @@
 import { Chart as ChartJS, BarController, BarElement, CategoryScale, LinearScale, Tooltip } from "chart.js";
 import { useContext, useEffect, useState } from "react";
 import { Bar } from "react-chartjs-2";
+import { useTranslation } from "react-i18next"
 import type { Transaction } from "./Transaction/Types";
 import { CurrencyContext } from "../context/CurrencyContext";
 import { formatCurrency } from "../utils/currency";
@@ -8,6 +9,7 @@ import { formatCurrency } from "../utils/currency";
 ChartJS.register(BarController, BarElement, CategoryScale, LinearScale, Tooltip)
 
 export default function BarChart({ chartValueOptions }: any) {
+    const { t } = useTranslation()
     const [chartData, setChartData] = useState<{ labels: any[], datasets: any[] }>({ labels: [], datasets: [] })
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
@@ -21,13 +23,13 @@ export default function BarChart({ chartValueOptions }: any) {
                 beginAtZero: true,
                 title: {
                     display: true,
-                    text: 'Amount',
+                    text: t("amount", 'Amount'),
                 },
             },
             x: {
                 title: {
                     display: true,
-                    text: 'Month',
+                    text: t("month", 'Month'),
                 },
             },
         },
@@ -81,18 +83,28 @@ export default function BarChart({ chartValueOptions }: any) {
 
                 const totalPerMonth: any = {}
                 fetchedExpense?.reverse().forEach(
-                    (expense: Transaction) => {
-                        const date = new Date(expense?.date);
-                        if (!totalPerMonth[date.toLocaleDateString('en-US', { year: "numeric", month: "short" })]) {
-                            totalPerMonth[date.toLocaleDateString('en-US', { year: "numeric", month: "short" })] = [0, 0]
+                    (expense: Transaction & { is_recurrent: boolean, start_date: string, end_date: string }) => {
+                        let date;
+                        if (expense.is_recurrent === false) {
+                            date = new Date(expense?.date)
+                        } else if (new Date() > new Date(expense.start_date)) {
+                            (new Date() < new Date(expense.end_date || "30000")) ? date = new Date() : expense.end_date ? date = new Date(expense.end_date) : null
+                        } else {
+                            date = new Date(expense.start_date)
                         }
-                        totalPerMonth[date.toLocaleDateString('en-US', { year: "numeric", month: "short" })][0] += Number(expense.amount);
+                        if (date) {
+                            if (!totalPerMonth[date.toLocaleDateString('en-US', { year: "numeric", month: "short" })]) {
+                                totalPerMonth[date.toLocaleDateString('en-US', { year: "numeric", month: "short" })] = [0, 0]
+                            }
+                            totalPerMonth[date.toLocaleDateString('en-US', { year: "numeric", month: "short" })][0] += Number(expense.amount)
+                        };
                     }
                 )
 
                 fetchedIncome?.reverse().forEach(
-            (income: Transaction) => {
-                const date = new Date(income?.date);
+                    (income: Transaction & { income_date: string }) => {
+                        // Do not change income_date to date (breaks the date on the Bar chart)
+                        const date = new Date(income?.income_date);
                         if (!totalPerMonth[date.toLocaleDateString('en-US', { year: "numeric", month: "short" })]) {
                             totalPerMonth[date.toLocaleDateString('en-US', { year: "numeric", month: "short" })] = [0, 0]
                         }
@@ -115,12 +127,12 @@ export default function BarChart({ chartValueOptions }: any) {
                     labels,
                     datasets: [
                         {
-                            label: 'Total expense',
+                            label: t("expenses", "Expenses"),
                             data: expenseData,
                             backgroundColor: '#F44336'
                         },
                         {
-                            label: 'Total income',
+                            label: t("incomes", 'Incomes'),
                             data: incomeData,
                             backgroundColor: '#4CAF50'
                         }

@@ -11,6 +11,7 @@ import {
   FaUtensils,
 } from "react-icons/fa";
 import type { Transaction } from "./Types";
+
 import { CurrencyContext } from "../../context/CurrencyContext";
 import { formatCurrency } from "../../utils/currency";
 
@@ -53,13 +54,22 @@ export default function TransactionCard({
     month: "short",
     year: "numeric",
   });
+  const { t } = useTranslation()
+
+  const formattedEndDate = transaction.end_date ?
+    new Date(transaction.end_date).toLocaleDateString("en-US",
+      {
+        day: "2-digit"
+        , month: "short",
+        year: "numeric"
+      }) : t('unset', 'Unset')
 
   const icon: React.ReactNode =
     transaction.type === "income"
       ? <FaMoneyBillWave className="text-white" />
       : categoryIcons[transaction.category || ""] || (
-          <FaUtensils className="text-white" />
-        );
+        <FaUtensils className="text-white" />
+      );
 
   const bgColor =
     transaction.type === "income"
@@ -70,7 +80,7 @@ export default function TransactionCard({
     <div
       className={`group relative scale-99 rounded-xl cursor-pointer border border-gray-300 bg-gray-100 p-4 shadow-sm transition-transform duration-200 hover:scale-100 hover:shadow-md ${
         view === "list" ? "h-24" : "h-auto"
-      }`}
+        }`}
     >
       {/* Badge icon */}
       <div
@@ -83,15 +93,16 @@ export default function TransactionCard({
       <div className="flex justify-between items-start">
         <div className={view === "list" ? "flex flex-col justify-between ml-12" : ""}>
           {/* Name & Amount */}
-          <div className="flex items-center justify-between mt-5 space-x-4">
+          <div className="flex items-center justify-between mt-5 space-x-4 w-fit">
             <h2 className="text-lg font-semibold text-gray-800">{transaction.name}</h2>
             <p
               className={`text-lg font-bold ${
                 transaction.type === "expense" ? "text-red-600" : "text-green-600"
-              }`}
+                }`}
             >
               {transaction.type === "expense" ? "-" : "+"}{formatCurrency(transaction.amount, currency)}
             </p>
+            {(transaction.is_recurrent == true) && (<i className='bxr bx-rotate-square-ccw text-xl text-gray-500' />)}
           </div>
 
           {/* Category / Source & Date */}
@@ -102,6 +113,10 @@ export default function TransactionCard({
                 : transaction.source || "Unknown"}
             </span>
             <span className="text-gray-400">{formattedDate}</span>
+            {transaction.start_date && (<>
+              <span>-</span>
+              <span className="text-gray-400">{formattedEndDate}</span>
+            </>)}
           </div>
         </div>
 
@@ -109,7 +124,7 @@ export default function TransactionCard({
         <div
           className={`flex ${
             view === "grid" ? "flex-col space-y-2" : "flex-row space-x-3"
-          } items-center`}
+            } items-center`}
         >
           <button
             className={`flex items-center justify-center gap-2 rounded bg-gray-300 text-gray-800 p-2 transition hover:bg-gray-400 active:scale-95`}

@@ -74,8 +74,11 @@ export default function Expense() {
                     name: item.description || item.name,
                     amount: parseFloat(item.amount),
                     date: item.date,
+                    start_date: item.start_date,
+                    end_date: item.end_date,
+                    is_recurrent: item.is_recurrent,
                     type: 'expense',
-                    category: item.category_fk?.name || 'Uncategorized',
+                    category: item.category_fk?.name || t('uncategorized', "Uncategorized"),
                     source: item.source || '',
                 }))
                 : [];
