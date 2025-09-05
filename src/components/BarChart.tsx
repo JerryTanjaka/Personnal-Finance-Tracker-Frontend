@@ -36,7 +36,7 @@ export default function BarChart({ chartValueOptions }: any) {
         plugins: {
             tooltip: {
                 callbacks: {
-                    label: function(context: any) {
+                    label: function (context: any) {
                         let label = context.dataset.label || '';
                         if (label) {
                             label += ': ';
@@ -93,10 +93,10 @@ export default function BarChart({ chartValueOptions }: any) {
                             date = new Date(expense.start_date)
                         }
                         if (date) {
-                            if (!totalPerMonth[date.toLocaleDateString('en-US', { year: "numeric", month: "short" })]) {
-                                totalPerMonth[date.toLocaleDateString('en-US', { year: "numeric", month: "short" })] = [0, 0]
+                            if (!totalPerMonth[date.toLocaleDateString(t('local_date_format', 'en-US'), { year: "numeric", month: "short" })]) {
+                                totalPerMonth[date.toLocaleDateString(t('local_date_format', 'en-US'), { year: "numeric", month: "short" })] = [0, 0]
                             }
-                            totalPerMonth[date.toLocaleDateString('en-US', { year: "numeric", month: "short" })][0] += Number(expense.amount)
+                            totalPerMonth[date.toLocaleDateString(t('local_date_format', 'en-US'), { year: "numeric", month: "short" })][0] += Number(expense.amount)
                         };
                     }
                 )
