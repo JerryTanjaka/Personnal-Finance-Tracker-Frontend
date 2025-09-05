@@ -41,7 +41,7 @@ export default function Categories() {
     const closeModal = () => setIsModalOpen(false);
 
     useEffect(() => {
-        fetch("http://localhost:8080/api/categories/", {
+        fetch(`${import.meta.env.VITE_API_URL}/api/categories/`, {
             headers: { Authorization: "Bearer " + token },
         })
             .then(async (res) => {
@@ -98,7 +98,7 @@ export default function Categories() {
 
             return;
         }
-        fetch(`http://localhost:8080/api/categories/${categoryId}`, {
+        fetch(`${import.meta.env.VITE_API_URL}/api/categories/${categoryId}`, {
             method: "PUT",
             headers: {
                 "Content-Type": "application/json",
@@ -113,7 +113,7 @@ export default function Categories() {
 
     function handleDelete(categoryId: string, force?: boolean) {
         fetch(
-            `http://localhost:8080/api/categories/${categoryId}?force=${force}`,
+            `${import.meta.env.VITE_API_URL}/api/categories/${categoryId}?force=${force}`,
             {
                 method: "DELETE",
                 headers: { Authorization: "Bearer " + token },
@@ -128,8 +128,8 @@ export default function Categories() {
         closeModal();
         setIsUpdating(false);
         setIsCreating(false);
-    setModalCategoryName("");
-    setModalCategoryId("");
+        setModalCategoryName("");
+        setModalCategoryId("");
     }
 
     // modalDetails handled inside CategoryModal component
@@ -154,34 +154,34 @@ export default function Categories() {
                     <h3 className="text-3xl font-bold text-gray-800 p-2 mb-3">{t('categories_title', 'Categories')}</h3>
                 </div>
 
-                    <div className="w-full flex flex-col-reverse gap-6 xl:flex-row-reverse h-full max-h-[calc(100vh-200px)]">
-                        <CategoryList
-                            categories={categoryList}
-                            searchFilter={searchFilter}
-                            onCreate={() => {
-                                setIsCreating(true);
-                                setModalCategoryName("");
-                                setModalCategoryId("");
-                                openModal();
-                            }}
-                            onRename={(category: Category) => {
-                                setModalCategoryName(category.name);
-                                setModalCategoryId(category.id);
-                                setIsUpdating(true);
-                                openModal();
-                            }}
-                            onDelete={(id: string) => {
-                                setModalCategoryId(id);
-                                setIsUpdating(false);
-                                openModal();
-                            }}
-                        />
+                <div className="w-full flex flex-col-reverse gap-6 xl:flex-row-reverse h-full max-h-[calc(100vh-200px)]">
+                    <CategoryList
+                        categories={categoryList}
+                        searchFilter={searchFilter}
+                        onCreate={() => {
+                            setIsCreating(true);
+                            setModalCategoryName("");
+                            setModalCategoryId("");
+                            openModal();
+                        }}
+                        onRename={(category: Category) => {
+                            setModalCategoryName(category.name);
+                            setModalCategoryId(category.id);
+                            setIsUpdating(true);
+                            openModal();
+                        }}
+                        onDelete={(id: string) => {
+                            setModalCategoryId(id);
+                            setIsUpdating(false);
+                            openModal();
+                        }}
+                    />
 
-                        <SearchPanel
-                            onSearch={(value: string) => setSearchFilter(value)}
-                            onClear={() => setSearchFilter("")}
-                        />
-                    </div>
+                    <SearchPanel
+                        onSearch={(value: string) => setSearchFilter(value)}
+                        onClear={() => setSearchFilter("")}
+                    />
+                </div>
             </div>
 
             <CategoryModal
