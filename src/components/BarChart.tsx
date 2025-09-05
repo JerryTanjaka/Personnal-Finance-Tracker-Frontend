@@ -1,14 +1,17 @@
-import { Chart as ChartJS, BarController, BarElement, CategoryScale, LinearScale } from "chart.js";
-import { useEffect, useState } from "react";
+import { Chart as ChartJS, BarController, BarElement, CategoryScale, LinearScale, Tooltip } from "chart.js";
+import { useContext, useEffect, useState } from "react";
 import { Bar } from "react-chartjs-2";
 import type { Transaction } from "./Transaction/Types";
+import { CurrencyContext } from "../context/CurrencyContext";
+import { formatCurrency } from "../utils/currency";
 
-ChartJS.register(BarController, BarElement, CategoryScale, LinearScale)
+ChartJS.register(BarController, BarElement, CategoryScale, LinearScale, Tooltip)
 
 export default function BarChart({ chartValueOptions }: any) {
     const [chartData, setChartData] = useState<{ labels: any[], datasets: any[] }>({ labels: [], datasets: [] })
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
+    const { currency } = useContext(CurrencyContext);
 
     const chartOptions = {
         base: 0,
@@ -27,6 +30,22 @@ export default function BarChart({ chartValueOptions }: any) {
                     text: 'Month',
                 },
             },
+        },
+        plugins: {
+            tooltip: {
+                callbacks: {
+                    label: function(context: any) {
+                        let label = context.dataset.label || '';
+                        if (label) {
+                            label += ': ';
+                        }
+                        if (context.parsed.y !== null) {
+                            label += formatCurrency(context.parsed.y, currency);
+                        }
+                        return label;
+                    }
+                }
+            }
         }
     }
 

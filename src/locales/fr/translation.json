@@ -87,6 +87,9 @@
     "close": "Fermer",
     "search": "Rechercher",
     "expense": "Dépense",
-    "change_theme": "Changer le thème"
+    "change_theme": "Changer le thème",
+    "display_settings_title": "Affichage",
+    "display_settings_description": "Changez les paramètres d'affichage de l'application.",
+    "currency_settings_title": "Devise"
 
 }

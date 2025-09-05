@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import {
   FaBolt,
   FaCoffee,
@@ -11,6 +11,8 @@ import {
   FaUtensils,
 } from "react-icons/fa";
 import type { Transaction } from "./Types";
+import { CurrencyContext } from "../../context/CurrencyContext";
+import { formatCurrency } from "../../utils/currency";
 
 type TransactionCardProps = {
   transaction: Transaction;
@@ -45,6 +47,7 @@ export default function TransactionCard({
   view,
   actions,
 }: TransactionCardProps) {
+  const { currency } = useContext(CurrencyContext);
   const formattedDate = new Date(transaction.date).toLocaleDateString("en-US", {
     day: "2-digit",
     month: "short",
@@ -87,7 +90,7 @@ export default function TransactionCard({
                 transaction.type === "expense" ? "text-red-600" : "text-green-600"
               }`}
             >
-              {transaction.type === "expense" ? "-" : "+"}${transaction.amount.toFixed(2)}
+              {transaction.type === "expense" ? "-" : "+"}{formatCurrency(transaction.amount, currency)}
             </p>
           </div>
 
