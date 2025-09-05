@@ -18,7 +18,9 @@ type ChartOptions = {
 export default function Expense() {
   const { t } = useTranslation();
   const [view, setView] = useState<'grid' | 'list'>(
-    () => (localStorage.getItem('transactionView') as 'grid' | 'list') || 'grid'
+    () =>
+      (localStorage.getItem('transactionView') as 'grid' | 'list') ||
+      'grid',
   );
 
   const toggleView = () => {
@@ -30,10 +32,13 @@ export default function Expense() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
   const [searchTerm, setSearchTerm] = useState('');
+  const [typeValue, setTypeValue] = useState<'one-time' | 'recurring'>('one-time');
 
   const [chartOptions, setChartOptions] = useState<ChartOptions>({
     start: new Date(new Date().setFullYear(new Date().getFullYear(), 0, 1)),
-    end: new Date(new Date().setFullYear(new Date().getFullYear() + 1, 0, 1)),
+    end: new Date(
+      new Date().setFullYear(new Date().getFullYear() + 1, 0, 1),
+    ),
     category: undefined,
     type: undefined,
   });
@@ -43,24 +48,26 @@ export default function Expense() {
   const [categories, setCategories] = useState<Category[]>([]);
   const token = localStorage.getItem('accessToken');
 
-  const filteredTransactions = transactions.filter((t) => {
-    const matchesSearch =
-      t.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      t.category?.toLowerCase().includes(searchTerm.toLowerCase());
+const filteredTransactions = transactions.filter((t) => {
+  const matchesSearch =
+    t.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    t.category?.toLowerCase().includes(searchTerm.toLowerCase());
 
-    const matchesCategory =
-      !chartOptions.category || t.category === chartOptions.category;
+  const matchesCategory =
+    !chartOptions.category || t.category === chartOptions.category;
 
-    const matchesType = !chartOptions.type || t.type === chartOptions.type;
+  const matchesRecurring =
+    !chartOptions.type || 
+    (chartOptions.type === 'recurring' && t.is_recurrent) ||
+    (chartOptions.type === 'one-time' && !t.is_recurrent);
 
-    const transactionDate = new Date(t.date);
-    const matchesDate =
-      (!chartOptions.start || transactionDate >= chartOptions.start) &&
-      (!chartOptions.end || transactionDate <= chartOptions.end);
+  const transactionDate = new Date(t.date);
+  const matchesDate =
+    (!chartOptions.start || transactionDate >= chartOptions.start) &&
+    (!chartOptions.end || transactionDate <= chartOptions.end);
 
-    return matchesSearch && matchesCategory && matchesType && matchesDate;
-  });
-
+  return matchesSearch && matchesCategory && matchesRecurring && matchesDate;
+});
 
   useEffect(() => {
     const fetchData = async () => {
@@ -79,6 +86,8 @@ export default function Expense() {
       date: { value: string };
       type: { value: string };
       categoryId: { value: string };
+      startDate?: { value: string };
+      endDate?: { value: string };
       receipt?: { files: FileList };
     };
 
@@ -88,20 +97,30 @@ export default function Expense() {
     formData.append('description', target.description.value);
     formData.append('amount', target.amount.value);
     formData.append('date', target.date.value);
-    formData.append('type', target.type.value);
+    formData.append('type', typeValue);
     formData.append('categoryId', target.categoryId.value);
+
+    if (typeValue === 'recurring') {
+      if (target.startDate?.value) formData.append('startDate', target.startDate.value);
+      if (target.endDate?.value) formData.append('endDate', target.endDate.value);
+    }
 
     if (
       target.receipt?.files?.[0] &&
-      target.receipt?.files?.length < 2 &&
-      ['application/pdf', 'image/jpeg', 'image/jpg', 'image/png'].includes(target.receipt.files[0].type) &&
+      target.receipt.files.length < 2 &&
+      [
+        'application/pdf',
+        'image/jpeg',
+        'image/jpg',
+        'image/png',
+      ].includes(target.receipt.files[0].type) &&
       target.receipt.files[0].size <= 2097152
     ) {
       formData.append('receipt', target.receipt.files[0]);
     }
 
     try {
-      await fetch('http://localhost:8080/api/expenses', {
+      await fetch(`${import.meta.env.VITE_API_URL}/api/expenses`, {
         method: 'POST',
         headers: { Authorization: `Bearer ${token}` },
         body: formData,
@@ -136,7 +155,12 @@ export default function Expense() {
     if (
       target.receipt?.files?.[0] &&
       target.receipt?.files?.length < 2 &&
-      ['application/pdf', 'image/jpeg', 'image/jpg', 'image/png'].includes(target.receipt.files[0].type) &&
+      [
+        'application/pdf',
+        'image/jpeg',
+        'image/jpg',
+        'image/png',
+      ].includes(target.receipt.files[0].type) &&
       target.receipt.files[0].size <= 2097152
     ) {
       formData.append('receipt', target.receipt.files[0]);
@@ -257,29 +281,99 @@ export default function Expense() {
               onSubmit={editingId ? handleUpdateTransaction : handleAddTransaction}
               encType="multipart/form-data"
             >
-              <input name="description" type="text" placeholder={t('description', 'Description')} className="rounded border p-2" required />
-              <input name="amount" type="number" placeholder={t('amount', 'Amount')} className="rounded border p-2" required />
-              <input name="date" type="datetime-local" className="rounded border p-2" defaultValue={new Date().toISOString().slice(0, 16)} />
-              <select name="categoryId" className="rounded border p-2" required>
+              <input
+                name="description"
+                type="text"
+                placeholder={t('description', 'Description')}
+                className="rounded-lg border border-gray-300 p-3 transition outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500"
+                required
+              />
+              <input
+                name="amount"
+                type="number"
+                placeholder={t('amount', 'Amount')}
+                className="rounded-lg border border-gray-300 p-3 transition outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500"
+                required
+              />
+              <input
+                name="date"
+                type="datetime-local"
+                className="rounded-lg border border-gray-300 p-3 transition outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500"
+                defaultValue={new Date().toISOString().slice(0, 16)}
+              />
+              <select
+                name="categoryId"
+                className="rounded-lg border border-gray-300 p-3 transition outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500"
+                required
+              >
                 <option value="">{t('select_category', 'Select Category')}</option>
-                {Array.isArray(categories) && categories.map((cat) => <option key={cat.id} value={cat.id}>{cat.name}</option>)}
+                {Array.isArray(categories) &&
+                  categories.map((cat) => (
+                    <option key={cat.id} value={cat.id}>
+                      {cat.name}
+                    </option>
+                  ))}
               </select>
-              <input name="receipt" type="file" className="rounded border p-2" />
+              <input
+                name="receipt"
+                type="file"
+                className="rounded-lg border border-gray-300 p-3 transition outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500"
+              />
+
+              {/* Type selection */}
               <div className="flex space-x-4">
                 <label className="flex items-center space-x-2">
-                  <input type="radio" name="type" value="one-time" defaultChecked />
+                  <input
+                    type="radio"
+                    name="type"
+                    value="one-time"
+                    checked={typeValue === 'one-time'}
+                    onChange={() => setTypeValue('one-time')}
+                  />
                   <span>{t('one_time', 'One-time')}</span>
                 </label>
                 <label className="flex items-center space-x-2">
-                  <input type="radio" name="type" value="recurring" />
+                  <input
+                    type="radio"
+                    name="type"
+                    value="recurring"
+                    checked={typeValue === 'recurring'}
+                    onChange={() => setTypeValue('recurring')}
+                  />
                   <span>{t('recurring', 'Recurring')}</span>
                 </label>
               </div>
-              <div className="flex justify-end space-x-2">
-                <button type="button" onClick={() => setIsModalOpen(false)} className="rounded bg-gray-300 px-4 py-2">
+
+              {/* Conditional recurring dates */}
+              {typeValue === 'recurring' && (
+                <div className="flex flex-col space-y-2">
+                  <input
+                    name="startDate"
+                    type="date"
+                    className="rounded-lg border border-gray-300 p-3 transition outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500"
+                    required
+                  />
+                  <input
+                    name="endDate"
+                    type="date"
+                    className="rounded-lg border border-gray-300 p-3 transition outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500"
+                    required
+                  />
+                </div>
+              )}
+
+              <div className="mt-2 flex justify-end space-x-3">
+                <button
+                  type="button"
+                  onClick={() => setIsModalOpen(false)}
+                  className="rounded-lg bg-gray-200 px-5 py-2 font-medium text-gray-800 transition hover:bg-gray-300"
+                >
                   {t('cancel', 'Cancel')}
                 </button>
-                <button type="submit" className="rounded bg-emerald-600 px-4 py-2 text-white">
+                <button
+                  type="submit"
+                  className="rounded-lg px-5 py-2 font-medium text-white bg-emerald-600 hover:bg-emerald-700 transition"
+                >
                   {editingId ? t('update', 'Update') : t('add', 'Add')}
                 </button>
               </div>
