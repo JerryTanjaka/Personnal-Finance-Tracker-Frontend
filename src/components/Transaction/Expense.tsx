@@ -198,10 +198,10 @@ export default function Expense() {
                         {/* Add button */}
                         <button
                             onClick={() => setIsModalOpen(true)}
-                            className="flex h-11 items-center space-x-2 rounded bg-red-800/90 px-3 py-1 text-xl text-white shadow-md transition hover:bg-red-700 active:scale-95"
+                            className="flex h-11 items-center space-x-2 rounded bg-gray-200 px-3 py-1 text-xl text-white border-2 border-gray-300 transition hover:bg-gray-400 active:scale-95"
                         >
-                            <FaPlus className="pointer-events-none left-3 text-xl" />
-                            <p className="text-lg">{t('add','Add')}</p>
+                            <FaPlus className="pointer-events-none left-3 text-xl text-gray-600" />
+                            <p className="text-lg text-gray-600">{t('add','Add')}</p>
                         </button>
 
                         {/* Search */}
