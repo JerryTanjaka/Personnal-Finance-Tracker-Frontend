@@ -91,7 +91,7 @@
     "category": "Category",
     "expense_type": "Expense type",
     "month": "Month",
-    "all": "All"
+    "all": "All",
     "display_settings_title": "Display",
     "display_settings_description": "Change the display settings of the application.",
     "currency_settings_title": "Currency"
