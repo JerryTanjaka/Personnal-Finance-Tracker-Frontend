@@ -290,27 +290,27 @@ export default function Income() {
                                         name="name"
                                         type="text"
                                         placeholder={t('name', 'Name')}
-                                        className="rounded-lg border border-gray-500 p-3 focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 outline-none transition"
+                                        className="rounded-lg border border-gray-300 p-3 focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 outline-none transition"
                                         required
                                     />
                                     <input
                                         name="amount"
                                         type="number"
                                         placeholder={t('amount', 'Amount')}
-                                        className="rounded-lg border border-gray-500 p-3 focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 outline-none transition"
+                                        className="rounded-lg border border-gray-300 p-3 focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 outline-none transition"
                                         required
                                     />
                                     <input
                                         name="date"
                                         type="date"
-                                        className="rounded-lg border border-gray-500 p-3 focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 outline-none transition"
+                                        className="rounded-lg border border-gray-300 p-3 focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 outline-none transition"
                                         required
                                     />
                                     <input
                                         name="source"
                                         type="text"
                                         placeholder={t('source', 'Source')}
-                                        className="rounded-lg border border-gray-500 p-3 focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 outline-none transition"
+                                        className="rounded-lg border border-gray-300 p-3 focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 outline-none transition"
                                         required
                                     />
                                 </>
