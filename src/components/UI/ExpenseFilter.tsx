@@ -21,7 +21,7 @@ export default function ExpenseFilter({
     const { t } = useTranslation();
 
     return (
-        <div className="flex flex-wrap items-end gap-6 bg-white border border-gray-200 shadow-sm rounded-2xl px-6 py-4 m-4">
+        <div className="flex flex-wrap items-end gap-6 border border-gray-300 rounded-2xl px-6 py-4 m-4 mx-0">
             {/* Start Date */}
             <div className="flex flex-col">
                 <label htmlFor="startExpenseDate" className="text-sm font-medium text-gray-600 mb-1">
@@ -75,7 +75,7 @@ export default function ExpenseFilter({
                 </label>
                 <select
                     id="categoryId"
-                    className="border border-gray-300 rounded-lg px-3 py-2 text-sm bg-white focus:ring-2 focus:ring-blue-300 focus:border-blue-400 outline-none transition"
+                    className="border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-300 focus:border-blue-400 outline-none transition"
                     onChange={(e) =>
                         setChartOptions({
                             ...chartOptions,
@@ -100,7 +100,7 @@ export default function ExpenseFilter({
                 </label>
                 <select
                     id="expenseType"
-                    className="border border-gray-300 rounded-lg px-3 py-2 text-sm bg-white focus:ring-2 focus:ring-blue-300 focus:border-blue-400 outline-none transition"
+                    className="border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-300 focus:border-blue-400 outline-none transition"
                     onChange={(e) =>
                         setChartOptions({
                             ...chartOptions,
