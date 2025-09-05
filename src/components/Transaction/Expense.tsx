@@ -104,7 +104,9 @@ export default function Expense() {
 
     if (typeValue === 'recurring') {
       if (target.startDate?.value) formData.append('startDate', target.startDate.value);
-      if (target.endDate?.value) formData.append('endDate', target.endDate.value);
+      else return;
+      if (target.endDate?.value && new Date(target.startDate?.value) <= new Date(target.endDate?.value)) formData.append('endDate', target.endDate.value);
+      else return;
     }
 
     if (
