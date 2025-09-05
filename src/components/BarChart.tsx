@@ -1,11 +1,13 @@
 import { Chart as ChartJS, BarController, BarElement, CategoryScale, LinearScale } from "chart.js";
 import { useEffect, useState } from "react";
 import { Bar } from "react-chartjs-2";
+import { useTranslation } from "react-i18next"
 import type { Transaction } from "./Transaction/Types";
 
 ChartJS.register(BarController, BarElement, CategoryScale, LinearScale)
 
 export default function BarChart({ chartValueOptions }: any) {
+    const { t } = useTranslation()
     const [chartData, setChartData] = useState<{ labels: any[], datasets: any[] }>({ labels: [], datasets: [] })
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
@@ -18,13 +20,13 @@ export default function BarChart({ chartValueOptions }: any) {
                 beginAtZero: true,
                 title: {
                     display: true,
-                    text: 'Amount',
+                    text: t("amount", 'Amount'),
                 },
             },
             x: {
                 title: {
                     display: true,
-                    text: 'Month',
+                    text: t("month", 'Month'),
                 },
             },
         }
@@ -106,12 +108,12 @@ export default function BarChart({ chartValueOptions }: any) {
                     labels,
                     datasets: [
                         {
-                            label: 'Total expense',
+                            label: t("expenses", "Expenses"),
                             data: expenseData,
                             backgroundColor: '#F44336'
                         },
                         {
-                            label: 'Total income',
+                            label: t("incomes", 'Incomes'),
                             data: incomeData,
                             backgroundColor: '#4CAF50'
                         }

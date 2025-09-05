@@ -78,7 +78,7 @@ export default function Expense() {
                     end_date: item.end_date,
                     is_recurrent: item.is_recurrent,
                     type: 'expense',
-                    category: item.category_fk?.name || 'Uncategorized',
+                    category: item.category_fk?.name || t('uncategorized', "Uncategorized"),
                     source: item.source || '',
                 }))
                 : [];

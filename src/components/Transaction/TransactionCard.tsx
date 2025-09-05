@@ -11,6 +11,7 @@ import {
   FaUtensils,
 } from "react-icons/fa";
 import type { Transaction } from "./Types";
+import { useTranslation } from 'react-i18next'
 
 type TransactionCardProps = {
   transaction: Transaction;
@@ -50,6 +51,7 @@ export default function TransactionCard({
     month: "short",
     year: "numeric",
   });
+  const { t } = useTranslation()
 
   const formattedEndDate = transaction.end_date ?
     new Date(transaction.end_date).toLocaleDateString("en-US",
@@ -57,7 +59,7 @@ export default function TransactionCard({
         day: "2-digit"
         , month: "short",
         year: "numeric"
-      }) : 'Unset'
+      }) : t('unset', 'Unset')
 
   const icon: React.ReactNode =
     transaction.type === "income"
