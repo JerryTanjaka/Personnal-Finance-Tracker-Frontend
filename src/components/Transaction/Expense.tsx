@@ -184,7 +184,7 @@ export default function Expense() {
     ) {
       formData.append('receipt', target.receipt.files[0]);
     }
-
+    
     try {
       console.log('Updating expense', editingId, 'token present?', !!token);
       for (const entry of formData.entries()) {
