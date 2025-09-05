@@ -11,6 +11,7 @@ import {
   FaUtensils,
 } from "react-icons/fa";
 import type { Transaction } from "./Types";
+import { useTranslation } from "react-i18next";
 import { CurrencyContext } from "../../context/CurrencyContext";
 import { formatCurrency } from "../../utils/currency";
 
