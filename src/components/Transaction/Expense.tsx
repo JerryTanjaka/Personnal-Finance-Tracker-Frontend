@@ -36,7 +36,9 @@ export default function Expense() {
 
     const [chartOptions, setChartOptions] = useState<ChartOptions>({
         start: new Date(new Date().setFullYear(new Date().getFullYear(), 0, 1)),
-        end: new Date(new Date().setFullYear(new Date().getFullYear() + 1, 0, 1)),
+        end: new Date(
+            new Date().setFullYear(new Date().getFullYear() + 1, 0, 1),
+        ),
         category: undefined,
         type: undefined,
     });
@@ -55,8 +57,7 @@ export default function Expense() {
         const matchesCategory =
             !chartOptions.category || t.category === chartOptions.category;
 
-        const matchesType =
-            !chartOptions.type || t.type === chartOptions.type;
+        const matchesType = !chartOptions.type || t.type === chartOptions.type;
 
         const transactionDate = new Date(t.date);
         const matchesDate =
@@ -104,13 +105,14 @@ export default function Expense() {
                       start_date: item.start_date,
                       end_date: item.end_date,
                       is_recurrent: item.is_recurrent,
-                      type: item.is_recurrent ? 'recurring' : 'one-time',
+                      type: item.is_income ? 'income' : 'expense', 
                       category:
                           item.category_fk?.name ||
                           t('uncategorized', 'Uncategorized'),
                       source: item.source || '',
                   }))
                 : [];
+
             setTransactions(formatted);
         } catch (err) {
             console.error('Error fetching expenses:', err);
@@ -284,7 +286,6 @@ export default function Expense() {
                     </div>
                 </div>
 
-                {/* 🔥 ExpenseFilter (tous filtres actifs) */}
                 <ExpenseFilter
                     chartOptions={chartOptions}
                     setChartOptions={setChartOptions}
