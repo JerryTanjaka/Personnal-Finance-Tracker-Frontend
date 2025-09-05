@@ -123,15 +123,6 @@ export default function Expense() {
       formData.append('receipt', target.receipt.files[0]);
     }
 
-    if (
-      target.receipt?.files?.[0] &&
-      target.receipt?.files?.length < 2 &&
-      ['application/pdf', 'image/jpeg', 'image/jpg', 'image/png'].includes(target.receipt.files[0].type) &&
-      target.receipt.files[0].size <= 2097152
-    ) {
-      formData.append('receipt', target.receipt.files[0]);
-    }
-
     try {
       await fetch(`${import.meta.env.VITE_API_URL}/api/expenses`, {
         method: 'POST',
@@ -180,16 +171,7 @@ export default function Expense() {
     ) {
       formData.append('receipt', target.receipt.files[0]);
     }
-
-    if (
-      target.receipt?.files?.[0] &&
-      target.receipt?.files?.length < 2 &&
-      ['application/pdf', 'image/jpeg', 'image/jpg', 'image/png'].includes(target.receipt.files[0].type) &&
-      target.receipt.files[0].size <= 2097152
-    ) {
-      formData.append('receipt', target.receipt.files[0]);
-    }
-
+    
     try {
       await fetch(`${import.meta.env.VITE_API_URL}/api/expenses/${editingId}`, {
         method: 'PUT',
