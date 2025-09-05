@@ -72,8 +72,8 @@ export default function BarChart({ chartValueOptions }: any) {
                 )
 
                 fetchedIncome?.reverse().forEach(
-                    (income: Transaction) => {
-                        const date = new Date(income?.income_date);
+            (income: Transaction) => {
+                const date = new Date(income?.date);
                         if (!totalPerMonth[date.toLocaleDateString('en-US', { year: "numeric", month: "short" })]) {
                             totalPerMonth[date.toLocaleDateString('en-US', { year: "numeric", month: "short" })] = [0, 0]
                         }

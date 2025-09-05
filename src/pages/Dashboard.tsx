@@ -5,6 +5,7 @@ import { useTranslation } from 'react-i18next';
 import { useEffect, useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import BarChart from '../components/BarChart.tsx';
+import ExpenseFilter from '../components/UI/ExpenseFilter.tsx';
 
 type MonthlySummaryType = {
     year: number
@@ -114,82 +115,14 @@ export default function Dashboard() {
                 </div>
                 <div className={`flex flex-col m-5`}>
                     <h1 className={`text-2xl font-semibold`}>{t('expenses_categories', 'Expenses Categories')}</h1>
-                    <div className='flex justify-center space-x-9 gap-y-3 items-center flex-wrap-reverse'>
+                    <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 items-start mt-5">
                         <PieChart chartValueOptions={chartOptions} />
                         <BarChart chartValueOptions={chartOptions} />
-                        <div className="flex flex-row text-lg w-fit gap-10 bg-white rounded-[20px] px-7 py-5 justify-center items-center m-3 shadow">
-                            <div className='flex flex-col gap-2 w-1/2'>
-                                <div className='w-full flex flex-col gap-1'>
-                                    <p className='font-medium text-[16px]'>Start date:</p>
-                                    <input
-                                        className="border border-gray-300 text-sm p-2 rounded-[5px] bg-white"
-                                        type="date"
-                                        name="startExpenseDate"
-                                        id="startExpenseDate"
-                                        defaultValue={new Date(new Date().setFullYear(new Date().getFullYear(), 0, 1)).toISOString().split('T')[0]}
-                                        onChange={e => setChartOptions({
-                                            start: new Date(e.target.value),
-                                            end: chartOptions.end,
-                                            category: chartOptions.category,
-                                            type: chartOptions.type
-                                        })} />
-                                </div>
-                                <div className='w-full flex flex-col gap-1'>
-                                    <p className='font-medium text-[16px]'>End date:</p>
-                                    <input
-                                        className="border border-gray-300 text-sm p-2 rounded-[5px] bg-white"
-                                        type="date" name="endExpenseDate"
-                                        id="endExpenseDate"
-                                        defaultValue={new Date(new Date().setFullYear(new Date().getFullYear() + 1, 0, 1)).toISOString().split('T')[0]}
-                                        onChange={e => setChartOptions({
-                                            start: chartOptions.start,
-                                            end: new Date(e.target.value),
-                                            category: chartOptions.category,
-                                            type: chartOptions.type
-                                        })} />
-                                </div>
-                            </div>
-                            <div className='flex flex-col gap-2 w-1/2'>
-                                <div className='w-full flex flex-col gap-1'>
-                                    <p className='font-medium text-[16px]'>Category:</p>
-                                    <select
-                                        name="categoryId"
-                                        className="rounded border border-gray-300 text-sm p-2"
-                                        onChange={e => setChartOptions({
-                                            start: chartOptions.start,
-                                            end: chartOptions.end,
-                                            category: e.target.value,
-                                            type: chartOptions.type
-                                        })}
-                                    >
-                                        <option value="">Any</option>
-                                        {Array.isArray(categoryList) &&
-                                            categoryList.map((cat) => (
-                                                <option key={cat.name} value={cat.name}>
-                                                    {cat.name}
-                                                </option>
-                                            ))}
-                                    </select>
-                                </div>
-                                <div className='w-full flex flex-col gap-1'>
-                                    <p className='font-medium text-[16px]'>Expense type:</p>
-                                    <select
-                                        name="expenseType"
-                                        className="rounded border border-gray-300 text-sm p-2"
-                                        onChange={e => setChartOptions({
-                                            start: chartOptions.start,
-                                            end: chartOptions.end,
-                                            category: chartOptions.category,
-                                            type: e.target.value
-                                        })}
-                                    >
-                                        <option value="">Any</option>
-                                        <option value="one-time">One-time</option>
-                                        <option value="recurring">Recurring</option>
-                                    </select>
-                                </div>
-                            </div>
-                        </div>
+                        <ExpenseFilter
+                            chartOptions={chartOptions}
+                            setChartOptions={setChartOptions}
+                            categoryList={categoryList}
+                        />
                     </div>
                 </div>
                 <div className={`flex flex-col mt-5`}>

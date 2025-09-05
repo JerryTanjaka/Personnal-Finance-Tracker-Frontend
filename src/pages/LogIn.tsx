@@ -51,7 +51,7 @@ export default function LogIn() {
     };
 
     return (
-        <div className="relative flex min-h-screen flex-col justify-center bg-gray-100 py-12 sm:px-6 lg:px-8">
+        <div className="relative flex min-h-screen pt-0 flex-col justify-center bg-gray-100 py-12 sm:px-6 lg:px-8">
             {error && (
                 <div className="absolute bottom-4 left-1/2 w-full max-w-md -translate-x-1/2">
                     <ErrorMessage
