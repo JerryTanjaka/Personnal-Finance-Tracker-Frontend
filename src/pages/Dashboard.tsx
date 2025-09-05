@@ -5,13 +5,14 @@ import { useTranslation } from 'react-i18next';
 import { useEffect, useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import BarChart from '../components/BarChart.tsx';
+import ExpenseFilter from '../components/UI/ExpenseFilter.tsx';
 
 type MonthlySummaryType = {
     year: number
     month: number
     totalIncome: number
     totalExpense: number
-    netSavings: number  
+    netSavings: number
 }
 
 export default function Dashboard() {
@@ -20,6 +21,13 @@ export default function Dashboard() {
     const { t } = useTranslation();
     const [monthlySummary, setMonthlySummary] = useState<MonthlySummaryType | null>(null)
     const [balanceAlert, setBalaceAlert] = useState<{ alert: boolean, message: string } | null>(null)
+    const [chartOptions, setChartOptions] = useState<any>({
+        start: new Date(new Date().setFullYear(new Date().getFullYear(), 0, 1)),
+        end: new Date(new Date().setFullYear(new Date().getFullYear() + 1, 0, 1)),
+        category: undefined,
+        type: undefined
+    })
+    const [categoryList, setCategoryList] = useState<any[]>([])
 
     function getMonthlySummary(month: string) {
         try {
@@ -47,10 +55,28 @@ export default function Dashboard() {
         }
     }
 
+    const fetchCategories = async (): Promise<any[]> => {
+        if (!token) return [];
+        try {
+            const res = await fetch('http://localhost:8080/api/categories', {
+                headers: { Authorization: `Bearer ${token}` },
+            });
+            const data = await res.json();
+            const cats: any[] = Array.isArray(data) ? data : [];
+            setCategoryList(cats);
+            return cats;
+        } catch (err) {
+            console.error('Error fetching categories:', err);
+            setCategoryList([]);
+            return [];
+        }
+    };
+
     useEffect(() => {
         const now = new Date()
         getMonthlySummary(now.getFullYear() + "-" + (now.getMonth() + 1))
         checkMonthBalance()
+        fetchCategories()
     }, [])
 
     return (
@@ -66,11 +92,11 @@ export default function Dashboard() {
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         exit={{ opacity: 0 }}
-                        className='flex p-3 px-6 -mt-3 mb-2 items-center border border-amber-400 bg-yellow-300/40 rounded-[10px]'>
-                        <h3 className='font-medium text-lg text-red-500 flex items-center'>{balanceAlert.message}</h3>
+                        className='flex p-3 px-6 -mt-3 mb-2 items-center border border-amber-300 bg-yellow-100/70 rounded-[10px]'>
+                        <h3 className='font-medium text-lg text-gray-800 flex items-center gap-2'><i className="bxr bx-alert-triangle text-yellow-500 text-2xl" />{balanceAlert.message}</h3>
                     </motion.div>)}
                 </AnimatePresence>
-                <div className={'flex justify-evenly gap-6'}>
+                <div className={'xl:grid grid-cols-3 flex flex-row w-full justify-evenly gap-6 flex-wrap'}>
                     <StatCard
                         title={t('total_income', 'Total Income')}
                         amount={monthlySummary?.totalIncome}
@@ -87,15 +113,20 @@ export default function Dashboard() {
                         color={'text-blue-600'}
                     />
                 </div>
+                <ExpenseFilter
+                    chartOptions={chartOptions}
+                    setChartOptions={setChartOptions}
+                    categoryList={categoryList}
+                />
                 <div className={`flex flex-col m-5`}>
-                    <h1 className={`text-2xl font-semibold`}>{t('expenses_categories','Expenses Categories')}</h1>
-                    <div className='flex justify-center space-x-9 items-center'>
-                        <PieChart />
-                        <BarChart />
+                    <h1 className={`text-2xl font-semibold`}>{t('expenses_categories', 'Expenses Categories')}</h1>
+                    <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 items-start mt-5">
+                        <PieChart chartValueOptions={chartOptions} />
+                        <BarChart chartValueOptions={chartOptions} />
                     </div>
                 </div>
                 <div className={`flex flex-col mt-5`}>
-                    <h1 className={`text-2xl font-semibold border-b-1 border-gray-300 mx-6 pb-3`}>{t('recent_expenses','Recent Expenses')}</h1>
+                    <h1 className={`text-2xl font-semibold border-b-1 border-gray-300 mx-6 pb-3`}>{t('recent_expenses', 'Recent Expenses')}</h1>
                     <div className={`flex flex-col`}>
                         <ExpenseList />
                     </div>
