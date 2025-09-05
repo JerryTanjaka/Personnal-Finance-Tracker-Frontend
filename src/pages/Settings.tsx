@@ -4,6 +4,7 @@ import ChangePasswordForm from '../components/Settings/ChangePasswordForm';
 import ChangeUsernameForm from '../components/Settings/ChangeUsernameForm';
 import LanguageToggle from '../components/UI/LanguageToggle';
 import ThemeToggle from '../components/UI/ThemeToggle';
+
 import CurrencySettings from '../components/Settings/CurrencySettings';
 
 export default function Settings() {
@@ -122,6 +123,7 @@ export default function Settings() {
             </div>
             <LanguageToggle />
             <ThemeToggle />
+
             <CurrencySettings />
         </div>
     );
