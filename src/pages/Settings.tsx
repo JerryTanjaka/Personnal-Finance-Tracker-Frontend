@@ -124,7 +124,7 @@ export default function Settings() {
             <h2 className="font-semibold text-xl text-gray-900 mt-6 mb-2">
                 {t("delete_data_title", "Data Managing")}
             </h2>
-            <p className="text-gray-500 ml-1">
+            <p className="text-gray-600 ml-1">
                 {t(
                     "delete_data_description",
                     "Deleting your data is not reversible."
