@@ -123,25 +123,29 @@ export default function Expense() {
       formData.append('receipt', target.receipt.files[0]);
     }
 
-    if (
-      target.receipt?.files?.[0] &&
-      target.receipt?.files?.length < 2 &&
-      ['application/pdf', 'image/jpeg', 'image/jpg', 'image/png'].includes(target.receipt.files[0].type) &&
-      target.receipt.files[0].size <= 2097152
-    ) {
-      formData.append('receipt', target.receipt.files[0]);
-    }
-
     try {
-      await fetch(`${import.meta.env.VITE_API_URL}/api/expenses`, {
+      // Debug: log token and FormData entries so we can compare with Postman
+      console.log('Creating expense - token present?', !!token);
+      for (const entry of formData.entries()) {
+        console.log('formData entry:', entry[0], entry[1]);
+      }
+
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/api/expenses`, {
         method: 'POST',
         headers: { Authorization: `Bearer ${token}` },
         body: formData,
       });
-      await fetchExpenses(token, setTransactions, t);
-      setIsModalOpen(false);
+
+      if (!res.ok) {
+        // Read server error body to surface useful debugging info
+        const text = await res.text();
+        console.error('Create expense failed', res.status, text);
+      } else {
+        await fetchExpenses(token, setTransactions, t);
+        setIsModalOpen(false);
+      }
     } catch (err) {
-      console.error(err);
+      console.error('Create expense exception', err);
     }
   };
 
@@ -181,26 +185,28 @@ export default function Expense() {
       formData.append('receipt', target.receipt.files[0]);
     }
 
-    if (
-      target.receipt?.files?.[0] &&
-      target.receipt?.files?.length < 2 &&
-      ['application/pdf', 'image/jpeg', 'image/jpg', 'image/png'].includes(target.receipt.files[0].type) &&
-      target.receipt.files[0].size <= 2097152
-    ) {
-      formData.append('receipt', target.receipt.files[0]);
-    }
-
     try {
-      await fetch(`${import.meta.env.VITE_API_URL}/api/expenses/${editingId}`, {
+      console.log('Updating expense', editingId, 'token present?', !!token);
+      for (const entry of formData.entries()) {
+        console.log('formData entry:', entry[0], entry[1]);
+      }
+
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/api/expenses/${editingId}`, {
         method: 'PUT',
         headers: { Authorization: `Bearer ${token}` },
         body: formData,
       });
-      await fetchExpenses(token, setTransactions, t);
-      setIsModalOpen(false);
-      setEditingId(null);
+
+      if (!res.ok) {
+        const text = await res.text();
+        console.error('Update expense failed', res.status, text);
+      } else {
+        await fetchExpenses(token, setTransactions, t);
+        setIsModalOpen(false);
+        setEditingId(null);
+      }
     } catch (err) {
-      console.error(err);
+      console.error('Update expense exception', err);
     }
   };
 
