@@ -3,7 +3,6 @@ import {
   FaBolt,
   FaCoffee,
   FaExchangeAlt,
-  FaFileDownload,
   FaFilm,
   FaMoneyBillWave,
   FaPlus,
@@ -20,7 +19,6 @@ type TransactionCardProps = {
   transaction: Transaction;
   view: "grid" | "list";
   actions?: {
-    onDownload?: () => void;
     onChange?: () => void;
     onDelete?: () => void;
   };
@@ -50,28 +48,31 @@ export default function TransactionCard({
   view,
   actions,
 }: TransactionCardProps) {
-  const { t } = useTranslation()
   const { currency } = useContext(CurrencyContext);
-  const formattedDate = new Date(transaction.date).toLocaleDateString(t("local_date_format", "en-US"), {
+  const { t } = useTranslation();
+
+  const formattedDate = new Date(transaction.date).toLocaleDateString("en-US", {
     day: "2-digit",
     month: "short",
     year: "numeric",
   });
 
-  const formattedEndDate = transaction.end_date ?
-    new Date(transaction.end_date).toLocaleDateString(t("local_date_format", "en-US"),
-      {
-        day: "2-digit"
-        , month: "short",
-        year: "numeric"
-      }) : t('unset', 'Unset')
+  const formattedEndDate = transaction.end_date
+    ? new Date(transaction.end_date).toLocaleDateString("en-US", {
+        day: "2-digit",
+        month: "short",
+        year: "numeric",
+      })
+    : t("unset", "Unset");
 
   const icon: React.ReactNode =
-    transaction.type === "income"
-      ? <FaMoneyBillWave className="text-white" />
-      : categoryIcons[transaction.category || ""] || (
+    transaction.type === "income" ? (
+      <FaMoneyBillWave className="text-white" />
+    ) : (
+      categoryIcons[transaction.category || ""] || (
         <FaUtensils className="text-white" />
-      );
+      )
+    );
 
   const bgColor =
     transaction.type === "income"
@@ -80,8 +81,11 @@ export default function TransactionCard({
 
   return (
     <div
-      className={`group relative scale-99  rounded-xl cursor-pointer border border-gray-300 bg-gray-100 p-4 shadow-sm transition-transform duration-200 hover:scale-100 hover:shadow-md ${view === "list" ? "h-24" : "h-auto"
-        }`}
+      className={`group relative scale-99 rounded-xl cursor-pointer border 
+      border-gray-300 bg-gray-100 dark:border-gray-700 dark:bg-gray-800 
+      p-4 shadow-sm transition-transform duration-200 
+      hover:scale-100 hover:shadow-md 
+      ${view === "list" ? "h-24" : "h-auto"}`}
     >
       {/* Badge icon */}
       <div
@@ -92,62 +96,76 @@ export default function TransactionCard({
 
       {/* Main content */}
       <div className="flex justify-between items-start">
-        <div className={view === "list" ? "flex flex-col justify-between ml-12" : ""}>
+        <div
+          className={
+            view === "list" ? "flex flex-col justify-between ml-12" : ""
+          }
+        >
           {/* Name & Amount */}
           <div className="flex items-center justify-between mt-5 space-x-4 w-fit">
-            <h2 className="text-lg font-semibold text-gray-800">{transaction.name}</h2>
+            <h2 className="text-lg font-semibold text-gray-800 dark:text-gray-100">
+              {transaction.name}
+            </h2>
             <p
-              className={`text-lg font-bold ${transaction.type === "expense" ? "text-red-600" : "text-green-600"
-                }`}
+              className={`text-lg font-bold ${
+                transaction.type === "expense"
+                  ? "text-red-600"
+                  : "text-green-600"
+              }`}
             >
-              {transaction.type === "expense" ? "-" : "+"}{formatCurrency(transaction.amount, currency)}
+              {transaction.type === "expense" ? "-" : "+"}
+              {formatCurrency(transaction.amount, currency)}
             </p>
-            {(transaction.is_recurrent == true) && (<i className='bxr bx-rotate-square-ccw text-xl text-gray-500' />)}
+            {transaction.is_recurrent && (
+              <i className="bx bx-rotate-right text-xl text-gray-500 dark:text-gray-400" />
+            )}
           </div>
 
           {/* Category / Source & Date */}
-          <div className="mt-1 flex flex-wrap items-center gap-3 text-sm text-gray-500">
+          <div className="mt-1 flex flex-wrap items-center gap-3 text-sm text-gray-500 dark:text-gray-400">
             <span>
               {transaction.type === "expense"
                 ? transaction.category || "Uncategorized"
                 : transaction.source || "Unknown"}
             </span>
-            <span className="text-gray-400">{formattedDate}</span>
-            {transaction.start_date && (<>
-              <span>-</span>
-              <span className="text-gray-400">{formattedEndDate}</span>
-            </>)}
+            <span className="text-gray-400 dark:text-gray-500">
+              {formattedDate}
+            </span>
+            {transaction.start_date && (
+              <>
+                <span>-</span>
+                <span className="text-gray-400 dark:text-gray-500">
+                  {formattedEndDate}
+                </span>
+              </>
+            )}
           </div>
         </div>
 
         {/* Action buttons */}
-        <div className="flex justify-center items-start gap-2">
-          {transaction.receipt_id && (<button
-            onClick={actions?.onDownload}
-            className='flex items-center justify-center p-2 text-white bg-blue-500 rounded transition hover:bg-blue-600 active:scale-95'>
-
-            <FaFileDownload />
-          </button>)}
-          <div
-            className={`flex ${view === "grid" ? "flex-col space-y-2" : "flex-row space-x-3"
-              } items-center`}
+        <div
+          className={`flex ${
+            view === "grid" ? "flex-col space-y-2" : "flex-row space-x-3"
+          } items-center`}
+        >
+          <button
+            className={`flex items-center justify-center gap-2 rounded 
+              bg-gray-300 dark:bg-gray-600 text-gray-800 dark:text-gray-200 
+              p-2 transition hover:bg-gray-400 dark:hover:bg-gray-500 active:scale-95`}
+            onClick={actions?.onChange}
           >
-            <button
-              className={`flex items-center justify-center gap-2 rounded bg-gray-300 text-gray-800 p-2 transition hover:bg-gray-400 active:scale-95`}
-              onClick={actions?.onChange}
-            >
-              <FaExchangeAlt />
-            </button>
+            <FaExchangeAlt />
+          </button>
 
-            <button
-              className={`flex items-center justify-center gap-2 rounded bg-red-600 text-white p-2 transition hover:bg-red-700 active:scale-95`}
-              onClick={actions?.onDelete}
-            >
-              <FaTrash />
-            </button>
-          </div>
+          <button
+            className={`flex items-center justify-center gap-2 rounded 
+              bg-red-600 text-white p-2 transition hover:bg-red-700 active:scale-95`}
+            onClick={actions?.onDelete}
+          >
+            <FaTrash />
+          </button>
         </div>
       </div>
-    </div >
+    </div>
   );
 }
