@@ -1,7 +1,9 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { Pie } from "react-chartjs-2";
 import { Chart as ChartJS, Tooltip, Legend, ArcElement } from "chart.js";
 import { useTranslation } from 'react-i18next';
+import { CurrencyContext } from "../context/CurrencyContext";
+import { formatCurrency } from "../utils/currency";
 
 ChartJS.register(Tooltip, Legend, ArcElement);
 
@@ -10,6 +12,7 @@ export const PieChart = ({ chartValueOptions }: any) => {
     const [chartData, setChartData] = useState<any>(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
+    const { currency } = useContext(CurrencyContext);
 
     const options = {
         responsive: true,
@@ -25,7 +28,7 @@ export const PieChart = ({ chartValueOptions }: any) => {
                 callbacks: {
                     label: (context: any) => {
                         const value = context.raw;
-                        return ` $${value.toLocaleString()}`;
+                        return formatCurrency(value, currency);
                     },
                 },
             },
