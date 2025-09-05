@@ -1,0 +1,118 @@
+import { useTranslation } from "react-i18next";
+
+type ChartOptions = {
+    start: Date;
+    end: Date;
+    category?: string;
+    type?: string;
+};
+
+type ExpenseFilterProps = {
+    chartOptions: ChartOptions;
+    setChartOptions: React.Dispatch<React.SetStateAction<ChartOptions>>;
+    categoryList: any[];
+};
+
+export default function ExpenseFilter({
+    chartOptions,
+    setChartOptions,
+    categoryList
+}: ExpenseFilterProps) {
+    const { t } = useTranslation();
+
+    return (
+        <div className="flex flex-wrap items-end gap-6 bg-white border border-gray-200 shadow-sm rounded-2xl px-6 py-4 m-4">
+            {/* Start Date */}
+            <div className="flex flex-col">
+                <label htmlFor="startExpenseDate" className="text-sm font-medium text-gray-600 mb-1">
+                    {t("start_date", "Start date")}
+                </label>
+                <input
+                    className="border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-300 focus:border-blue-400 outline-none transition"
+                    type="date"
+                    id="startExpenseDate"
+                    defaultValue={new Date(
+                        new Date().setFullYear(new Date().getFullYear(), 0, 1)
+                    )
+                        .toISOString()
+                        .split("T")[0]}
+                    onChange={(e) =>
+                        setChartOptions({
+                            ...chartOptions,
+                            start: new Date(e.target.value),
+                        })
+                    }
+                />
+            </div>
+
+            {/* End Date */}
+            <div className="flex flex-col">
+                <label htmlFor="endExpenseDate" className="text-sm font-medium text-gray-600 mb-1">
+                    {t("end_date", "End date")}
+                </label>
+                <input
+                    className="border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-300 focus:border-blue-400 outline-none transition"
+                    type="date"
+                    id="endExpenseDate"
+                    defaultValue={new Date(
+                        new Date().setFullYear(new Date().getFullYear() + 1, 0, 1)
+                    )
+                        .toISOString()
+                        .split("T")[0]}
+                    onChange={(e) =>
+                        setChartOptions({
+                            ...chartOptions,
+                            end: new Date(e.target.value),
+                        })
+                    }
+                />
+            </div>
+
+            {/* Category */}
+            <div className="flex flex-col min-w-[160px]">
+                <label htmlFor="categoryId" className="text-sm font-medium text-gray-600 mb-1">
+                    {t("category", "Category")}
+                </label>
+                <select
+                    id="categoryId"
+                    className="border border-gray-300 rounded-lg px-3 py-2 text-sm bg-white focus:ring-2 focus:ring-blue-300 focus:border-blue-400 outline-none transition"
+                    onChange={(e) =>
+                        setChartOptions({
+                            ...chartOptions,
+                            category: e.target.value,
+                        })
+                    }
+                >
+                    <option value="">{t("any", "Any")}</option>
+                    {Array.isArray(categoryList) &&
+                        categoryList.map((cat) => (
+                            <option key={cat.name} value={cat.name}>
+                                {cat.name}
+                            </option>
+                        ))}
+                </select>
+            </div>
+
+            {/* Expense Type */}
+            <div className="flex flex-col min-w-[160px]">
+                <label htmlFor="expenseType" className="text-sm font-medium text-gray-600 mb-1">
+                    {t("expense_type", "Expense type")}
+                </label>
+                <select
+                    id="expenseType"
+                    className="border border-gray-300 rounded-lg px-3 py-2 text-sm bg-white focus:ring-2 focus:ring-blue-300 focus:border-blue-400 outline-none transition"
+                    onChange={(e) =>
+                        setChartOptions({
+                            ...chartOptions,
+                            type: e.target.value,
+                        })
+                    }
+                >
+                    <option value="">{t("any", "Any")}</option>
+                    <option value="one-time">{t("one_time", "One-time")}</option>
+                    <option value="recurring">{t("recurring", "Recurring")}</option>
+                </select>
+            </div>
+        </div>
+    );
+}
