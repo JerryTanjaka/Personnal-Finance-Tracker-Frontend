@@ -1,7 +1,12 @@
-
 import { useTranslation } from 'react-i18next';
 import { useContext } from 'react';
 import { CurrencyContext } from '../../context/CurrencyContext';
+
+const currencies = [
+    { code: 'EUR', label: 'Euro (€)' },
+    { code: 'USD', label: 'Dollar ($)' },
+    { code: 'MGA', label: 'Ariary (Ar)' },
+];
 
 export default function CurrencySettings() {
     const { t } = useTranslation();
@@ -12,46 +17,36 @@ export default function CurrencySettings() {
     };
 
     return (
-        <div className="p-4">
-            <h2 className="text-xl font-semibold">{t('currency_settings_title', 'Currency')}</h2>
-            <div className="mt-2">
-                <label className="inline-flex items-center">
-                    <input
-                        type="radio"
-                        className="form-radio"
-                        name="currency"
-                        value="EUR"
-                        checked={currency === 'EUR'}
-                        onChange={handleCurrencyChange}
-                    />
-                    <span className="ml-2">Euro (€)</span>
-                </label>
-            </div>
-            <div className="mt-2">
-                <label className="inline-flex items-center">
-                    <input
-                        type="radio"
-                        className="form-radio"
-                        name="currency"
-                        value="USD"
-                        checked={currency === 'USD'}
-                        onChange={handleCurrencyChange}
-                    />
-                    <span className="ml-2">Dollar ($)</span>
-                </label>
-            </div>
-            <div className="mt-2">
-                <label className="inline-flex items-center">
-                    <input
-                        type="radio"
-                        className="form-radio"
-                        name="currency"
-                        value="MGA"
-                        checked={currency === 'MGA'}
-                        onChange={handleCurrencyChange}
-                    />
-                    <span className="ml-2">Ariary (Ar)</span>
-                </label>
+        <div className="mt-4">
+            <h2 className="text-lg font-semibold text-gray-800 mb-3">
+                {t('currency_settings_title', 'Currency')}
+            </h2>
+
+            <div className="flex gap-6">
+                {currencies.map((c) => (
+                    <label
+                        key={c.code}
+                        className="inline-flex items-center gap-2 cursor-pointer group"
+                    >
+                        <input
+                            type="radio"
+                            name="currency"
+                            value={c.code}
+                            checked={currency === c.code}
+                            onChange={handleCurrencyChange}
+                            className="hidden"
+                        />
+                        <span
+                            className={`px-4 py-2 rounded-full border text-sm transition
+                ${currency === c.code
+                                    ? 'bg-blue-500 text-white border-blue-500'
+                                    : 'border-gray-300 text-gray-700 hover:border-blue-400 hover:text-blue-600'
+                                }`}
+                        >
+                            {c.label}
+                        </span>
+                    </label>
+                ))}
             </div>
         </div>
     );

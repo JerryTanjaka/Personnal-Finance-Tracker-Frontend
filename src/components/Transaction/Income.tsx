@@ -52,7 +52,7 @@ export default function Income() {
     const fetchTransactions = async () => {
         if (!token) return;
         try {
-            const res = await fetch('http://localhost:8080/api/income', {
+            const res = await fetch(`${import.meta.env.VITE_API_URL}/api/incomes`, {
                 headers: { Authorization: `Bearer ${token}` },
             });
             const data = await res.json();
@@ -86,7 +86,7 @@ export default function Income() {
         const source = formData.get('source') as string;
 
         try {
-            const res = await fetch('http://localhost:8080/api/income', {
+            const res = await fetch(`${import.meta.env.VITE_API_URL}/api/incomes`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -124,7 +124,7 @@ export default function Income() {
         const source = formData.get('source') as string;
 
         try {
-            fetch(`${import.meta.env.VITE_API_URL}/api/income/` + incomeId, {
+            fetch(`${import.meta.env.VITE_API_URL}/api/incomes/` + incomeId, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
@@ -155,7 +155,7 @@ export default function Income() {
         e.preventDefault();
         incomeId = cardIdRef.current;
         try {
-            fetch(`${import.meta.env.VITE_API_URL}/api/income/` + incomeId, {
+            fetch(`${import.meta.env.VITE_API_URL}/api/incomes/` + incomeId, {
                 method: 'DELETE',
                 headers: {
                     'Content-Type': 'application/json',

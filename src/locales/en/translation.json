@@ -95,5 +95,13 @@
     "all": "All",
     "display_settings_title": "Display",
     "display_settings_description": "Change the display settings of the application.",
-    "currency_settings_title": "Currency"
+    "currency_settings_title": "Currency",
+    "delete_data_title": "Data Managing",
+    "delete_data_description": "Deleting your data is not reversible.",
+    "confirm_delete": "Remove all data"
+    ,
+    "delete_confirm_message": "Are you sure you want to delete all your data?",
+    "delete_success": "All your data has been deleted.",
+    "delete_error": "Something went wrong. Please try again.",
+    "ok": "OK"
 }
