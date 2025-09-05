@@ -8,7 +8,7 @@ export const fetchCategories = async (
 ): Promise<Category[]> => {
   if (!token) return [];
   try {
-    const res = await fetch('http://localhost:8080/api/categories', {
+    const res = await fetch(`${import.meta.env.VITE_API_URL}/api/categories`, {
       headers: { Authorization: `Bearer ${token}` },
     });
     const data = await res.json();
@@ -32,7 +32,7 @@ export const fetchExpenses = async (
 ) => {
   if (!token) return;
   try {
-    const res = await fetch('http://localhost:8080/api/expenses', {
+    const res = await fetch(`${import.meta.env.VITE_API_URL}/api/expenses`, {
       headers: { Authorization: `Bearer ${token}` },
     });
     const data = await res.json();

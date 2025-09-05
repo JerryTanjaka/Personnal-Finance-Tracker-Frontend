@@ -48,26 +48,26 @@ export default function Expense() {
   const [categories, setCategories] = useState<Category[]>([]);
   const token = localStorage.getItem('accessToken');
 
-const filteredTransactions = transactions.filter((t) => {
-  const matchesSearch =
-    t.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    t.category?.toLowerCase().includes(searchTerm.toLowerCase());
+  const filteredTransactions = transactions.filter((t) => {
+    const matchesSearch =
+      t.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      t.category?.toLowerCase().includes(searchTerm.toLowerCase());
 
-  const matchesCategory =
-    !chartOptions.category || t.category === chartOptions.category;
+    const matchesCategory =
+      !chartOptions.category || t.category === chartOptions.category;
 
-  const matchesRecurring =
-    !chartOptions.type || 
-    (chartOptions.type === 'recurring' && t.is_recurrent) ||
-    (chartOptions.type === 'one-time' && !t.is_recurrent);
+    const matchesRecurring =
+      !chartOptions.type ||
+      (chartOptions.type === 'recurring' && t.is_recurrent) ||
+      (chartOptions.type === 'one-time' && !t.is_recurrent);
 
-  const transactionDate = new Date(t.date);
-  const matchesDate =
-    (!chartOptions.start || transactionDate >= chartOptions.start) &&
-    (!chartOptions.end || transactionDate <= chartOptions.end);
+    const transactionDate = new Date(t.date);
+    const matchesDate =
+      (!chartOptions.start || transactionDate >= chartOptions.start) &&
+      (!chartOptions.end || transactionDate <= chartOptions.end);
 
-  return matchesSearch && matchesCategory && matchesRecurring && matchesDate;
-});
+    return matchesSearch && matchesCategory && matchesRecurring && matchesDate;
+  });
 
   useEffect(() => {
     const fetchData = async () => {
@@ -78,16 +78,18 @@ const filteredTransactions = transactions.filter((t) => {
     fetchData();
   }, [token]);
 
-  const handleAddTransaction = async (event: React.FormEvent<HTMLFormElement>) => {
+  const handleAddTransaction = async (
+    event: React.FormEvent<HTMLFormElement>,
+  ) => {
     event.preventDefault();
     const target = event.target as typeof event.target & {
       description: { value: string };
       amount: { value: string };
       date: { value: string };
-      type: { value: string };
-      categoryId: { value: string };
       startDate?: { value: string };
       endDate?: { value: string };
+      type: { value: string };
+      categoryId: { value: string };
       receipt?: { files: FileList };
     };
 
@@ -102,7 +104,9 @@ const filteredTransactions = transactions.filter((t) => {
 
     if (typeValue === 'recurring') {
       if (target.startDate?.value) formData.append('startDate', target.startDate.value);
-      if (target.endDate?.value) formData.append('endDate', target.endDate.value);
+      else return;
+      if (target.endDate?.value && new Date(target.startDate?.value) <= new Date(target.endDate?.value)) formData.append('endDate', target.endDate.value);
+      else return;
     }
 
     if (
@@ -114,6 +118,15 @@ const filteredTransactions = transactions.filter((t) => {
         'image/jpg',
         'image/png',
       ].includes(target.receipt.files[0].type) &&
+      target.receipt.files[0].size <= 2097152
+    ) {
+      formData.append('receipt', target.receipt.files[0]);
+    }
+
+    if (
+      target.receipt?.files?.[0] &&
+      target.receipt?.files?.length < 2 &&
+      ['application/pdf', 'image/jpeg', 'image/jpg', 'image/png'].includes(target.receipt.files[0].type) &&
       target.receipt.files[0].size <= 2097152
     ) {
       formData.append('receipt', target.receipt.files[0]);
@@ -140,6 +153,8 @@ const filteredTransactions = transactions.filter((t) => {
       description: { value: string };
       amount: { value: string };
       date: { value: string };
+      startDate?: { value: string };
+      endDate?: { value: string };
       type: { value: string };
       categoryId: { value: string };
       receipt?: { files: FileList };
@@ -166,8 +181,17 @@ const filteredTransactions = transactions.filter((t) => {
       formData.append('receipt', target.receipt.files[0]);
     }
 
+    if (
+      target.receipt?.files?.[0] &&
+      target.receipt?.files?.length < 2 &&
+      ['application/pdf', 'image/jpeg', 'image/jpg', 'image/png'].includes(target.receipt.files[0].type) &&
+      target.receipt.files[0].size <= 2097152
+    ) {
+      formData.append('receipt', target.receipt.files[0]);
+    }
+
     try {
-      await fetch(`http://localhost:8080/api/expenses/${editingId}`, {
+      await fetch(`${import.meta.env.VITE_API_URL}/api/expenses/${editingId}`, {
         method: 'PUT',
         headers: { Authorization: `Bearer ${token}` },
         body: formData,
@@ -237,11 +261,10 @@ const filteredTransactions = transactions.filter((t) => {
         <AnimatePresence>
           <motion.div
             layout
-            className={`mt-6 w-full overflow-y-auto pt-3 pl-2 ${
-              view === 'grid'
-                ? 'grid grid-cols-1 gap-4 pb-4 sm:grid-cols-2 lg:grid-cols-3'
-                : 'flex flex-col space-y-4'
-            }`}
+            className={`mt-6 w-full overflow-y-auto pt-3 pl-2 ${view === 'grid'
+              ? 'grid grid-cols-1 gap-4 pb-4 sm:grid-cols-2 lg:grid-cols-3'
+              : 'flex flex-col space-y-4'
+              }`}
             style={{ maxHeight: 'calc(100vh - 220px)' }}
           >
             {filteredTransactions.map((t) => (
@@ -268,119 +291,126 @@ const filteredTransactions = transactions.filter((t) => {
       </div>
 
       {/* Modal Add/Edit Transaction */}
-      {isModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
-          <div className="w-full max-w-md rounded-xl bg-white p-6 shadow-lg">
-            <h2 className="text-2xl font-bold">
-              {editingId
-                ? `${t('update', 'Update')} ${t('expense', 'Expense')}`
-                : `${t('add_new', 'Add New')} ${t('expense', 'Expense')}`}
-            </h2>
-            <form
-              className="flex flex-col space-y-4"
-              onSubmit={editingId ? handleUpdateTransaction : handleAddTransaction}
-              encType="multipart/form-data"
-            >
-              <input
-                name="description"
-                type="text"
-                placeholder={t('description', 'Description')}
-                className="rounded-lg border border-gray-300 p-3 transition outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500"
-                required
-              />
-              <input
-                name="amount"
-                type="number"
-                placeholder={t('amount', 'Amount')}
-                className="rounded-lg border border-gray-300 p-3 transition outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500"
-                required
-              />
-              <input
-                name="date"
-                type="datetime-local"
-                className="rounded-lg border border-gray-300 p-3 transition outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500"
-                defaultValue={new Date().toISOString().slice(0, 16)}
-              />
-              <select
-                name="categoryId"
-                className="rounded-lg border border-gray-300 p-3 transition outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500"
-                required
+      <AnimatePresence>
+        {isModalOpen && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
+            <motion.div
+              initial={{ scale: 0, opacity: 0 }}
+              exit={{ scale: 0, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              transition={{ duration: .15 }}
+              className="w-full max-w-md rounded-xl bg-white p-6 shadow-lg">
+              <h2 className="text-2xl font-bold mb-3">
+                {editingId
+                  ? `${t('update', 'Update')} ${t('expense', 'Expense')}`
+                  : `${t('add_new', 'Add New')} ${t('expense', 'Expense')}`}
+              </h2>
+              <form
+                className="flex flex-col space-y-4"
+                onSubmit={editingId ? handleUpdateTransaction : handleAddTransaction}
+                encType="multipart/form-data"
               >
-                <option value="">{t('select_category', 'Select Category')}</option>
-                {Array.isArray(categories) &&
-                  categories.map((cat) => (
-                    <option key={cat.id} value={cat.id}>
-                      {cat.name}
-                    </option>
-                  ))}
-              </select>
-              <input
-                name="receipt"
-                type="file"
-                className="rounded-lg border border-gray-300 p-3 transition outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500"
-              />
+                <input
+                  name="description"
+                  type="text"
+                  placeholder={t('description', 'Description')}
+                  className="rounded-lg border border-gray-300 p-3 transition outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500"
+                  required
+                />
+                <input
+                  name="amount"
+                  type="number"
+                  placeholder={t('amount', 'Amount')}
+                  className="rounded-lg border border-gray-300 p-3 transition outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500"
+                  required
+                />
+                <input
+                  name="date"
+                  type="datetime-local"
+                  className="rounded-lg border border-gray-300 p-3 transition outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500"
+                  defaultValue={new Date().toISOString().slice(0, 16)}
+                />
+                <select
+                  name="categoryId"
+                  className="rounded-lg border border-gray-300 p-3 transition outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500"
+                >
+                  <option value="">{t('select_category', 'Select Category')}</option>
+                  {Array.isArray(categories) &&
+                    categories.map((cat) => (
+                      <option key={cat.id} value={cat.id}>
+                        {cat.name}
+                      </option>
+                    ))}
+                </select>
+                <input
+                  name="receipt"
+                  type="file"
+                  className="rounded-lg border border-gray-300 p-3 transition outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500"
+                />
 
-              {/* Type selection */}
-              <div className="flex space-x-4">
-                <label className="flex items-center space-x-2">
-                  <input
-                    type="radio"
-                    name="type"
-                    value="one-time"
-                    checked={typeValue === 'one-time'}
-                    onChange={() => setTypeValue('one-time')}
-                  />
-                  <span>{t('one_time', 'One-time')}</span>
-                </label>
-                <label className="flex items-center space-x-2">
-                  <input
-                    type="radio"
-                    name="type"
-                    value="recurring"
-                    checked={typeValue === 'recurring'}
-                    onChange={() => setTypeValue('recurring')}
-                  />
-                  <span>{t('recurring', 'Recurring')}</span>
-                </label>
-              </div>
-
-              {/* Conditional recurring dates */}
-              {typeValue === 'recurring' && (
-                <div className="flex flex-col space-y-2">
-                  <input
-                    name="startDate"
-                    type="date"
-                    className="rounded-lg border border-gray-300 p-3 transition outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500"
-                    required
-                  />
-                  <input
-                    name="endDate"
-                    type="date"
-                    className="rounded-lg border border-gray-300 p-3 transition outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500"
-                    required
-                  />
+                {/* Type selection */}
+                <div className="flex space-x-4">
+                  <label className="flex items-center space-x-2">
+                    <input
+                      type="radio"
+                      name="type"
+                      value="one-time"
+                      checked={typeValue === 'one-time'}
+                      onChange={() => setTypeValue('one-time')}
+                    />
+                    <span>{t('one_time', 'One-time')}</span>
+                  </label>
+                  <label className="flex items-center space-x-2">
+                    <input
+                      type="radio"
+                      name="type"
+                      value="recurring"
+                      checked={typeValue === 'recurring'}
+                      onChange={() => setTypeValue('recurring')}
+                    />
+                    <span>{t('recurring', 'Recurring')}</span>
+                  </label>
                 </div>
-              )}
 
-              <div className="mt-2 flex justify-end space-x-3">
-                <button
-                  type="button"
-                  onClick={() => setIsModalOpen(false)}
-                  className="rounded-lg bg-gray-200 px-5 py-2 font-medium text-gray-800 transition hover:bg-gray-300"
-                >
-                  {t('cancel', 'Cancel')}
-                </button>
-                <button
-                  type="submit"
-                  className="rounded-lg px-5 py-2 font-medium text-white bg-emerald-600 hover:bg-emerald-700 transition"
-                >
-                  {editingId ? t('update', 'Update') : t('add', 'Add')}
-                </button>
-              </div>
-            </form>
+                {/* Conditional recurring dates */}
+                {typeValue === 'recurring' && (
+                  <div className="flex flex-col space-y-2">
+                    <input
+                      name="startDate"
+                      type="date"
+                      className="rounded-lg border border-gray-300 p-3 transition outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500"
+                      required
+                    />
+                    <input
+                      name="endDate"
+                      type="date"
+                      className="rounded-lg border border-gray-300 p-3 transition outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500"
+                      required
+                    />
+                  </div>
+                )}
+
+                <div className="mt-2 flex justify-end space-x-3">
+                  <button
+                    type="button"
+                    onClick={() => setIsModalOpen(false)}
+                    className="rounded-lg bg-gray-200 px-5 py-2 font-medium text-gray-800 transition hover:bg-gray-300"
+                  >
+                    {t('cancel', 'Cancel')}
+                  </button>
+                  <button
+                    type="submit"
+                    className="rounded-lg px-5 py-2 font-medium text-white bg-emerald-600 hover:bg-emerald-700 transition"
+                  >
+                    {editingId ? t('update', 'Update') : t('add', 'Add')}
+                  </button>
+                </div>
+              </form>
+            </motion.div>
           </div>
-        </div>
-      )}
-    </div>
+        )
+        }
+      </AnimatePresence >
+    </div >
   );
 }
