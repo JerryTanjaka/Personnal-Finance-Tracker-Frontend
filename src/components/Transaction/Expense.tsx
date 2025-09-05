@@ -30,6 +30,7 @@ export default function Expense() {
   };
 
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isConfirmModalOpen, setIsConfirmModalOpen] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
   const [searchTerm, setSearchTerm] = useState('');
   const [typeValue, setTypeValue] = useState<'one-time' | 'recurring'>('one-time');
@@ -184,7 +185,7 @@ export default function Expense() {
     ) {
       formData.append('receipt', target.receipt.files[0]);
     }
-    
+
     try {
       console.log('Updating expense', editingId, 'token present?', !!token);
       for (const entry of formData.entries()) {
@@ -287,7 +288,10 @@ export default function Expense() {
                   view={view}
                   actions={{
                     onChange: () => handleChangeTransaction(t.id),
-                    onDelete: () => handleDeleteTransaction(t.id),
+                    onDelete: () => {
+                      setIsConfirmModalOpen(true)
+                      setEditingId(t.id)
+                    },
                   }}
                 />
               </motion.div>
@@ -412,6 +416,44 @@ export default function Expense() {
                   </button>
                 </div>
               </form>
+            </motion.div>
+          </div>
+        )
+        }
+      </AnimatePresence >
+      <AnimatePresence>
+        {isConfirmModalOpen && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
+            <motion.div
+              initial={{ scale: 0, opacity: 0 }}
+              exit={{ scale: 0, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              transition={{ duration: .15 }}
+              className="w-full max-w-md rounded-xl bg-white p-6 shadow-lg">
+              <h2 className="text-2xl font-bold mb-3">
+                {t("expense_confirm_delete", "Are you sure to delete this expense ?")}
+              </h2>
+              <div className='flex justify-end gap-2'>
+                <button
+                  type="button"
+                  onClick={() => setIsConfirmModalOpen(false)}
+                  className="rounded-lg bg-gray-200 px-5 py-2 text-gray-800 font-medium hover:bg-gray-300 transition"
+                >
+                  {t('cancel', 'Cancel')}
+                </button>
+                <button
+                  type="button"
+                  className={`rounded-lg px-5 py-2 font-medium text-white transition bg-red-700 hover:bg-red-800'
+                  }`}
+                  onClick={() => {
+                    setIsConfirmModalOpen(false)
+                    handleDeleteTransaction(editingId);
+                    setEditingId(null)
+                  }}
+                >
+                  {t('delete', 'Delete')}
+                </button>
+              </div>
             </motion.div>
           </div>
         )

@@ -104,5 +104,6 @@
     "ok": "OK",
     "account_delete_success": "Compte supprimé. Vous serez déconnecter.",
     "account_delete_confirm_message": "Êtes-vous sûr de vouloir supprimer votre compte ? Les données seront irrecuperables",
-    "account_confirm_delete": "Supprimer votre compte"
+    "account_confirm_delete": "Supprimer votre compte",
+    "expense_confirm_delete": "Êtes-vous sûr de supprimer cette dépense ?"
 }
