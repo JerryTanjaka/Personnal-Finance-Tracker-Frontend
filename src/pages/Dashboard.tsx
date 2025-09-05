@@ -113,16 +113,16 @@ export default function Dashboard() {
                         color={'text-blue-600'}
                     />
                 </div>
+                <ExpenseFilter
+                    chartOptions={chartOptions}
+                    setChartOptions={setChartOptions}
+                    categoryList={categoryList}
+                />
                 <div className={`flex flex-col m-5`}>
                     <h1 className={`text-2xl font-semibold`}>{t('expenses_categories', 'Expenses Categories')}</h1>
                     <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 items-start mt-5">
                         <PieChart chartValueOptions={chartOptions} />
                         <BarChart chartValueOptions={chartOptions} />
-                        <ExpenseFilter
-                            chartOptions={chartOptions}
-                            setChartOptions={setChartOptions}
-                            categoryList={categoryList}
-                        />
                     </div>
                 </div>
                 <div className={`flex flex-col mt-5`}>
