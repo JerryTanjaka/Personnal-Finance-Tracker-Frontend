@@ -9,68 +9,68 @@ import TransactionCard from './TransactionCard';
 import type { Category, Transaction } from './Types';
 
 type ChartOptions = {
-  start: Date;
-  end: Date;
-  category?: string;
-  type?: string;
+    start: Date;
+    end: Date;
+    category?: string;
+    type?: string;
 };
 
 export default function Expense() {
-  const { t } = useTranslation();
-  const [view, setView] = useState<'grid' | 'list'>(
-    () => (localStorage.getItem('transactionView') as 'grid' | 'list') || 'grid'
-  );
+    const { t } = useTranslation();
+    const [view, setView] = useState<'grid' | 'list'>(
+        () => (localStorage.getItem('transactionView') as 'grid' | 'list') || 'grid'
+    );
 
-  const toggleView = () => {
-    const newView = view === 'grid' ? 'list' : 'grid';
-    setView(newView);
-    localStorage.setItem('transactionView', newView);
-  };
+    const toggleView = () => {
+        const newView = view === 'grid' ? 'list' : 'grid';
+        setView(newView);
+        localStorage.setItem('transactionView', newView);
+    };
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
   const [searchTerm, setSearchTerm] = useState('');
   const [isRecurrentCheck, setIsRecurrentCheck] = useState<boolean>(false)
 
-  const [chartOptions, setChartOptions] = useState<ChartOptions>({
-    start: new Date(new Date().setFullYear(new Date().getFullYear(), 0, 1)),
-    end: new Date(new Date().setFullYear(new Date().getFullYear() + 1, 0, 1)),
-    category: undefined,
-    type: undefined,
-  });
+    const [chartOptions, setChartOptions] = useState<ChartOptions>({
+        start: new Date(new Date().setFullYear(new Date().getFullYear(), 0, 1)),
+        end: new Date(new Date().setFullYear(new Date().getFullYear() + 1, 0, 1)),
+        category: undefined,
+        type: undefined,
+    });
 
-  const [categoryList, setCategoryList] = useState<any[]>([]);
-  const [transactions, setTransactions] = useState<Transaction[]>([]);
-  const [categories, setCategories] = useState<Category[]>([]);
-  const token = localStorage.getItem('accessToken');
+    const [categoryList, setCategoryList] = useState<any[]>([]);
+    const [transactions, setTransactions] = useState<Transaction[]>([]);
+    const [categories, setCategories] = useState<Category[]>([]);
+    const token = localStorage.getItem('accessToken');
 
-  const filteredTransactions = transactions.filter((t) => {
-    const matchesSearch =
-      t.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      t.category?.toLowerCase().includes(searchTerm.toLowerCase());
+    const filteredTransactions = transactions.filter((t) => {
+        const matchesSearch =
+            t.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            t.category?.toLowerCase().includes(searchTerm.toLowerCase());
 
-    const matchesCategory =
-      !chartOptions.category || t.category === chartOptions.category;
+        const matchesCategory =
+            !chartOptions.category || t.category === chartOptions.category;
 
     const matchesType = !chartOptions.type || t.is_recurrent === Boolean(["one-time", "recurring"].indexOf(chartOptions.type));
 
-    const transactionDate = new Date(t.date);
-    const matchesDate =
-      (!chartOptions.start || transactionDate >= chartOptions.start) &&
-      (!chartOptions.end || transactionDate <= chartOptions.end);
+        const transactionDate = new Date(t.date);
+        const matchesDate =
+            (!chartOptions.start || transactionDate >= chartOptions.start) &&
+            (!chartOptions.end || transactionDate <= chartOptions.end);
 
-    return matchesSearch && matchesCategory && matchesType && matchesDate;
-  });
+        return matchesSearch && matchesCategory && matchesType && matchesDate;
+    });
 
 
-  useEffect(() => {
-    const fetchData = async () => {
-      if (!token) return;
-      await fetchCategories(token, setCategories, setCategoryList);
-      await fetchExpenses(token, setTransactions, t);
-    };
-    fetchData();
-  }, [token]);
+    useEffect(() => {
+        const fetchData = async () => {
+            if (!token) return;
+            await fetchCategories(token, setCategories, setCategoryList);
+            await fetchExpenses(token, setTransactions, t);
+        };
+        fetchData();
+    }, [token]);
 
   const handleAddTransaction = async (
     event: React.FormEvent<HTMLFormElement>,
@@ -87,7 +87,7 @@ export default function Expense() {
       receipt?: { files: FileList };
     };
 
-    if (!token) return;
+        if (!token) return;
 
     const formData = new FormData();
     formData.append('description', target.description.value);
@@ -102,14 +102,14 @@ export default function Expense() {
       formData.append('endDate', target.endDate!.value)
     }
 
-    if (
-      target.receipt?.files?.[0] &&
-      target.receipt?.files?.length < 2 &&
-      ['application/pdf', 'image/jpeg', 'image/jpg', 'image/png'].includes(target.receipt.files[0].type) &&
-      target.receipt.files[0].size <= 2097152
-    ) {
-      formData.append('receipt', target.receipt.files[0]);
-    }
+        if (
+            target.receipt?.files?.[0] &&
+            target.receipt?.files?.length < 2 &&
+            ['application/pdf', 'image/jpeg', 'image/jpg', 'image/png'].includes(target.receipt.files[0].type) &&
+            target.receipt.files[0].size <= 2097152
+        ) {
+            formData.append('receipt', target.receipt.files[0]);
+        }
 
     try {
       await fetch(`${import.meta.env.VITE_API_URL}/api/expenses`, {
@@ -125,9 +125,9 @@ export default function Expense() {
     }
   };
 
-  const handleUpdateTransaction = async (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    if (!editingId || !token) return;
+    const handleUpdateTransaction = async (event: React.FormEvent<HTMLFormElement>) => {
+        event.preventDefault();
+        if (!editingId || !token) return;
 
     const target = event.target as typeof event.target & {
       description: { value: string };
@@ -153,14 +153,14 @@ export default function Expense() {
       formData.append('endDate', target.endDate!.value)
     }
 
-    if (
-      target.receipt?.files?.[0] &&
-      target.receipt?.files?.length < 2 &&
-      ['application/pdf', 'image/jpeg', 'image/jpg', 'image/png'].includes(target.receipt.files[0].type) &&
-      target.receipt.files[0].size <= 2097152
-    ) {
-      formData.append('receipt', target.receipt.files[0]);
-    }
+        if (
+            target.receipt?.files?.[0] &&
+            target.receipt?.files?.length < 2 &&
+            ['application/pdf', 'image/jpeg', 'image/jpg', 'image/png'].includes(target.receipt.files[0].type) &&
+            target.receipt.files[0].size <= 2097152
+        ) {
+            formData.append('receipt', target.receipt.files[0]);
+        }
 
     try {
       await fetch(`${import.meta.env.VITE_API_URL}/api/expenses/${editingId}`, {
@@ -177,58 +177,58 @@ export default function Expense() {
     }
   };
 
-  const handleChangeTransaction = (id: string) => {
-    setEditingId(id);
-    setIsModalOpen(true);
-  };
+    const handleChangeTransaction = (id: string) => {
+        setEditingId(id);
+        setIsModalOpen(true);
+    };
 
-  const handleDeleteTransaction = async (id: string) => {
-    if (!token) return;
-    try {
-      await fetch(`${import.meta.env.VITE_API_URL}/api/expenses/${id}`, {
-        method: 'DELETE',
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      await fetchExpenses(token, setTransactions, t);
-    } catch (err) {
-      console.error(err);
-    }
-  };
+    const handleDeleteTransaction = async (id: string) => {
+        if (!token) return;
+        try {
+            await fetch(`${import.meta.env.VITE_API_URL}/api/expenses/${id}`, {
+                method: 'DELETE',
+                headers: { Authorization: `Bearer ${token}` },
+            });
+            await fetchExpenses(token, setTransactions, t);
+        } catch (err) {
+            console.error(err);
+        }
+    };
 
-  return (
-    <div className="z-50 flex h-[94vh] w-full flex-col items-center rounded-lg bg-gray-100">
-      <div className="flex min-h-full w-full max-w-7xl flex-col rounded-2xl p-6">
-        {/* Header */}
-        <div className="flex flex-col border-b border-gray-300 pb-2 text-3xl font-bold md:flex-row md:items-center md:justify-between">
-          <h1 className="text-3xl font-bold">{t('expenses', 'Expenses')}</h1>
-          <div className="flex flex-col space-y-2 md:flex-row md:items-center md:space-y-0 md:space-x-2">
-            {/* Add button */}
-            <button
-              onClick={() => setIsModalOpen(true)}
-              className="flex cursor-pointer items-center gap-2 rounded-lg bg-gray-200 px-4 py-2 text-lg font-medium text-gray-800 shadow-sm transition-all duration-200 hover:bg-gray-300 hover:shadow-md active:scale-95"
-            >
-              <FaPlus className="text-lg text-gray-600" />
-              <span>{t('add', 'Add')}</span>
-            </button>
+    return (
+        <div className="z-50 flex h-[94vh] w-full flex-col items-center rounded-lg bg-gray-100">
+            <div className="flex min-h-full w-full max-w-7xl flex-col rounded-2xl p-6">
+                {/* Header */}
+                <div className="flex flex-col border-b border-gray-300 pb-2 text-3xl font-bold md:flex-row md:items-center md:justify-between">
+                    <h1 className="text-3xl font-bold">{t('expenses', 'Expenses')}</h1>
+                    <div className="flex flex-col space-y-2 md:flex-row md:items-center md:space-y-0 md:space-x-2">
+                        {/* Add button */}
+                        <button
+                            onClick={() => setIsModalOpen(true)}
+                            className="flex cursor-pointer items-center gap-2 rounded-lg bg-gray-200 px-4 py-2 text-lg font-medium text-gray-800 shadow-sm transition-all duration-200 hover:bg-gray-300 hover:shadow-md active:scale-95"
+                        >
+                            <FaPlus className="text-lg text-gray-600" />
+                            <span>{t('add', 'Add')}</span>
+                        </button>
 
-            {/* Search */}
-            <div className="relative flex items-center">
-              <Input value={searchTerm} onChange={setSearchTerm} placeholder={t('search', 'Search')} />
-            </div>
+                        {/* Search */}
+                        <div className="relative flex items-center">
+                            <Input value={searchTerm} onChange={setSearchTerm} placeholder={t('search', 'Search')} />
+                        </div>
 
-            {/* View toggle */}
-            <div className="flex space-x-2">
-              <button
-                onClick={toggleView}
-                className="flex h-12 w-12 items-center justify-center rounded-lg border border-gray-300 bg-gray-200 text-gray-800 transition hover:bg-gray-300 active:scale-95"
-              >
-                {view === 'grid' ? <FaList /> : <FaThLarge />}
-              </button>
-            </div>
-          </div>
-        </div>
+                        {/* View toggle */}
+                        <div className="flex space-x-2">
+                            <button
+                                onClick={toggleView}
+                                className="flex h-12 w-12 items-center justify-center rounded-lg border border-gray-300 bg-gray-200 text-gray-800 transition hover:bg-gray-300 active:scale-95"
+                            >
+                                {view === 'grid' ? <FaList /> : <FaThLarge />}
+                            </button>
+                        </div>
+                    </div>
+                </div>
 
-        <ExpenseFilter chartOptions={chartOptions} setChartOptions={setChartOptions} categoryList={categoryList} />
+                <ExpenseFilter chartOptions={chartOptions} setChartOptions={setChartOptions} categoryList={categoryList} />
 
         {/* Transactions */}
         <AnimatePresence>

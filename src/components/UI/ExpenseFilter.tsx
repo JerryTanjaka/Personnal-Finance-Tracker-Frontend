@@ -39,7 +39,7 @@ export default function ExpenseFilter({
                     onChange={(e) =>
                         setChartOptions({
                             ...chartOptions,
-                            start: new Date(e.target.value),
+                            start: new Date(e.target.value || 0),
                         })
                     }
                 />
@@ -62,7 +62,7 @@ export default function ExpenseFilter({
                     onChange={(e) =>
                         setChartOptions({
                             ...chartOptions,
-                            end: new Date(e.target.value),
+                            end: new Date(e.target.value || "30000"),
                         })
                     }
                 />
