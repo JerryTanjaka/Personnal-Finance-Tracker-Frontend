@@ -1,12 +1,11 @@
 import { useEffect, useState } from "react";
 import { Pie } from "react-chartjs-2";
 import { Chart as ChartJS, Tooltip, Legend, ArcElement } from "chart.js";
-import { getExpenses } from "../data/DataFetch.ts";
 import { useTranslation } from 'react-i18next';
 
 ChartJS.register(Tooltip, Legend, ArcElement);
 
-export const PieChart = () => {
+export const PieChart = ({ chartValueOptions }: any) => {
     const { t } = useTranslation();
     const [chartData, setChartData] = useState<any>(null);
     const [loading, setLoading] = useState(true);
@@ -33,10 +32,22 @@ export const PieChart = () => {
         },
     };
 
+    async function getExpensesOverTime(start: Date, end: Date, category?: string, type?: "one-time" | "recurring") {
+        try {
+            return await fetch(`${import.meta.env.VITE_API_URL}/api/expenses?start=${start.toISOString().split('T')[0]}&end=${end.toISOString().split('T')[0]}&category=${category}&type=${type || ''}`, {
+                headers: { Authorization: "Bearer " + localStorage.getItem('accessToken') }
+            })
+                .then(async res => await res.json())
+                .catch(rej => console.log(rej.message))
+        } catch (err: any) {
+            console.log(err.message)
+        }
+    }
+
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const expenses = await getExpenses();
+                const expenses = await getExpensesOverTime(chartValueOptions?.start, chartValueOptions?.end, chartValueOptions?.category, chartValueOptions?.type);
 
                 const expensesByCategory = expenses.reduce(
                     (acc: Record<string, number>, expense: any) => {
@@ -85,7 +96,7 @@ export const PieChart = () => {
         };
 
         fetchData();
-    }, []);
+    }, [chartValueOptions]);
 
     if (loading) {
         return (

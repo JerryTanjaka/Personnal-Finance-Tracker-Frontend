@@ -118,7 +118,7 @@ export default function Categories() {
             }
         )
             .then(async (res) => await handleNotification(res))
-            .catch(() => setCategoryReload(true))
+            .then(() => setCategoryReload(true))
             .finally(() => clearModal());
     }
 
@@ -172,8 +172,8 @@ export default function Categories() {
                     <h3 className="text-3xl font-bold text-gray-800 p-2 mb-3">{t('categories_title', 'Categories')}</h3>
                 </div>
 
-                <div className="w-full flex flex-col-reverse gap-6 xl:flex-row-reverse">
-                    <div className="relative w-full xl:w-7/10 flex flex-col gap-4 rounded-2xl overflow-y-scroll max-h-[calc(100vh-200px)]">
+                <div className="w-full flex flex-col-reverse gap-6 xl:flex-row-reverse h-full max-h-[calc(100vh-200px)]">
+                    <div className="relative w-full xl:w-7/10 flex flex-col gap-4 rounded-2xl overflow-y-scroll max-h-full">
                         <div className="sticky top-0 bg-white font-semibold w-full px-6 py-3 rounded-lg shadow-sm grid grid-cols-3 gap-x-5 items-center text-gray-500 text-sm">
                             <div>{t('table_name', 'Name')}</div>
                             <div className="text-center">{t('table_created', 'Created')}</div>
