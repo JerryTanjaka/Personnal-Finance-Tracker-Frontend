@@ -6,6 +6,7 @@ import LanguageToggle from '../components/UI/LanguageToggle';
 import ThemeToggle from '../components/UI/ThemeToggle';
 
 import CurrencySettings from '../components/Settings/CurrencySettings';
+import DeleteData from "../components/Settings/DeleteData.tsx";
 
 export default function Settings() {
     const [isChangePasswordOpen, setIsChangePasswordOpen] =
@@ -53,18 +54,16 @@ export default function Settings() {
                         </p>
                     </div>
                     <i
-                        className={`bx bx-chevron-${
-                            isChangePasswordOpen ? 'up' : 'down'
-                        } text-xl text-gray-600 transition-transform`}
+                        className={`bx bx-chevron-${isChangePasswordOpen ? 'up' : 'down'
+                            } text-xl text-gray-600 transition-transform`}
                     ></i>
                 </button>
 
                 <div
-                    className={`overflow-hidden transition-all duration-300 ${
-                        isChangePasswordOpen
-                            ? 'mt-4 max-h-[500px] opacity-100'
-                            : 'max-h-0 opacity-0'
-                    }`}
+                    className={`overflow-hidden transition-all duration-300 ${isChangePasswordOpen
+                        ? 'mt-4 max-h-[500px] opacity-100'
+                        : 'max-h-0 opacity-0'
+                        }`}
                 >
                     <div className="mb-3 rounded-lg border border-gray-200 bg-gray-50 p-6 shadow-sm">
                         <ChangePasswordForm />
@@ -92,18 +91,16 @@ export default function Settings() {
                         </p>
                     </div>
                     <i
-                        className={`bx bx-chevron-${
-                            isChangeUsernameOpen ? 'up' : 'down'
-                        } text-xl text-gray-600 transition-transform`}
+                        className={`bx bx-chevron-${isChangeUsernameOpen ? 'up' : 'down'
+                            } text-xl text-gray-600 transition-transform`}
                     ></i>
                 </button>
 
                 <div
-                    className={`overflow-hidden transition-all duration-300 ${
-                        isChangeUsernameOpen
-                            ? 'mt-4 max-h-[500px] opacity-100'
-                            : 'max-h-0 opacity-0'
-                    }`}
+                    className={`overflow-hidden transition-all duration-300 ${isChangeUsernameOpen
+                        ? 'mt-4 max-h-[500px] opacity-100'
+                        : 'max-h-0 opacity-0'
+                        }`}
                 >
                     <div className="rounded-lg border border-gray-200 bg-gray-50 p-6 shadow-sm">
                         <ChangeUsernameForm />
@@ -123,8 +120,17 @@ export default function Settings() {
             </div>
             <LanguageToggle />
             <ThemeToggle />
-
             <CurrencySettings />
+            <h2 className="font-semibold text-xl text-gray-900 mt-6 mb-2">
+                {t("delete_data_title", "Data Managing")}
+            </h2>
+            <p className="text-gray-500 ml-1">
+                {t(
+                    "delete_data_description",
+                    "Deleting your data is not reversible."
+                )}
+            </p>
+            <DeleteData />
         </div>
     );
 }

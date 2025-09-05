@@ -94,5 +94,8 @@
     "all": "Tout",
     "display_settings_title": "Affichage",
     "display_settings_description": "Changez les paramètres d'affichage de l'application.",
-    "currency_settings_title": "Devise"
+    "currency_settings_title": "Devise",
+    "delete_data_title": "Gérer les données",
+    "delete_data_description": "Effacer vos données est irréversible.",
+    "confirm_delete": "Supprimer tout vos données"
 }

@@ -85,7 +85,6 @@
     "filter_by_category": "Filter by Category",
     "close": "Close",
     "expense": "Expense",
-
     "change_theme": "Change Theme",
     "start_date": "Start date",
     "end_date": "End date",
@@ -95,5 +94,8 @@
     "all": "All",
     "display_settings_title": "Display",
     "display_settings_description": "Change the display settings of the application.",
-    "currency_settings_title": "Currency"
+    "currency_settings_title": "Currency",
+    "delete_data_title": "Data Managing",
+    "delete_data_description": "Deleting your data is not reversible.",
+    "confirm_delete": "Remove all data"
 }
