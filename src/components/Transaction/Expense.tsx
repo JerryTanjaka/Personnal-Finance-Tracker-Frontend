@@ -7,7 +7,7 @@ import TransactionCard from './TransactionCard';
 import type { Transaction } from './Types';
 import Input from './../UI/searchButton.tsx';
 
-type Category = { id: string; name :string};
+type Category = { id: string; name: string };
 
 export default function Expense() {
     const { t } = useTranslation();
@@ -24,7 +24,7 @@ export default function Expense() {
     };
 
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const [isFilterOpen, setIsFilterOpen] = useState(false); 
+    const [isFilterOpen, setIsFilterOpen] = useState(false);
     const [editingId, setEditingId] = useState<string | null>(null);
     const [searchTerm, setSearchTerm] = useState('');
     const [selectedCategory, setSelectedCategory] = useState<string>('All');
@@ -105,6 +105,7 @@ export default function Expense() {
             date: { value: string };
             type: { value: string };
             categoryId: { value: string };
+            receipt?: { files: FileList };
         };
 
         if (!token) return;
@@ -115,6 +116,13 @@ export default function Expense() {
         formData.append('date', target.date.value);
         formData.append('type', target.type.value);
         formData.append('categoryId', target.categoryId.value);
+
+        if (target.receipt?.files?.[0]
+            && target.receipt?.files?.length < 2
+            && ["application/pdf", "image/jpeg", "image/jpg", "image/png"].includes(target.receipt?.files?.[0].type)
+            && target.receipt?.files?.[0].size <= 2097152) {
+            formData.append('receipt', target.receipt.files[0]);
+        }
 
         try {
             await fetch('http://localhost:8080/api/expenses', {
@@ -151,7 +159,10 @@ export default function Expense() {
         formData.append('type', target.type.value);
         formData.append('categoryId', target.categoryId.value);
 
-        if (target.receipt?.files?.[0]) {
+        if (target.receipt?.files?.[0]
+            && target.receipt?.files?.length < 2
+            && ["application/pdf", "image/jpeg", "image/jpg", "image/png"].includes(target.receipt?.files?.[0].type)
+            && target.receipt?.files?.[0].size <= 2097152) {
             formData.append('receipt', target.receipt.files[0]);
         }
 
@@ -192,7 +203,7 @@ export default function Expense() {
             <div className="flex min-h-full w-full max-w-7xl flex-col rounded-2xl p-6">
                 {/* Header */}
                 <div className="flex flex-col border-b border-gray-300 pb-2 text-3xl font-bold md:flex-row md:items-center md:justify-between">
-                    <h1 className="text-3xl font-bold">{t('expenses','Expenses')}</h1>
+                    <h1 className="text-3xl font-bold">{t('expenses', 'Expenses')}</h1>
 
                     <div className="flex flex-col items-start space-y-2 md:flex-row md:items-center md:space-y-0 md:space-x-4">
                         {/* Add button */}
@@ -201,12 +212,12 @@ export default function Expense() {
                             className="flex h-11 items-center space-x-2 rounded bg-red-800/90 px-3 py-1 text-xl text-white shadow-md transition hover:bg-red-700 active:scale-95"
                         >
                             <FaPlus className="pointer-events-none left-3 text-xl" />
-                            <p className="text-lg">{t('add','Add')}</p>
+                            <p className="text-lg">{t('add', 'Add')}</p>
                         </button>
 
                         {/* Search */}
                         <div className="relative flex items-center">
-                            <Input value={searchTerm} onChange={setSearchTerm} placeholder={t('search','Search')} />
+                            <Input value={searchTerm} onChange={setSearchTerm} placeholder={t('search', 'Search')} />
 
                         </div>
 
@@ -234,11 +245,10 @@ export default function Expense() {
                 <AnimatePresence>
                     <motion.div
                         layout
-                        className={`mt-6 w-full overflow-y-auto pt-3 pl-2 ${
-                            view === 'grid'
-                                ? 'grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3'
-                                : 'flex flex-col space-y-4'
-                        }`}
+                        className={`mt-6 w-full overflow-y-auto pt-3 pl-2 ${view === 'grid'
+                            ? 'grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3'
+                            : 'flex flex-col space-y-4'
+                            }`}
                         style={{ maxHeight: 'calc(100vh - 220px)' }}
                     >
                         {filteredTransactions.map((t) => (
@@ -271,7 +281,7 @@ export default function Expense() {
                 <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
                     <div className="w-full max-w-md rounded-xl bg-white p-6 shadow-lg">
                         <h2 className="text-2xl font-bold">
-                            {editingId ? `${t('update','Update')} ${t('expense','Expense')}` : `${t('add_new','Add New')} ${t('expense','Expense')}`}
+                            {editingId ? `${t('update', 'Update')} ${t('expense', 'Expense')}` : `${t('add_new', 'Add New')} ${t('expense', 'Expense')}`}
                         </h2>
                         <form
                             className="flex flex-col space-y-4"
@@ -285,14 +295,14 @@ export default function Expense() {
                             <input
                                 name="description"
                                 type="text"
-                                placeholder={t('description','Description')}
+                                placeholder={t('description', 'Description')}
                                 className="rounded border p-2"
                                 required
                             />
                             <input
                                 name="amount"
                                 type="number"
-                                placeholder={t('amount','Amount')}
+                                placeholder={t('amount', 'Amount')}
                                 className="rounded border p-2"
                                 required
                             />
@@ -309,7 +319,7 @@ export default function Expense() {
                                 className="rounded border p-2"
                                 required
                             >
-                                <option value="">{t('select_category','Select Category')}</option>
+                                <option value="">{t('select_category', 'Select Category')}</option>
                                 {Array.isArray(categories) &&
                                     categories.map((cat) => (
                                         <option key={cat.id} value={cat.id}>
@@ -330,7 +340,7 @@ export default function Expense() {
                                         value="one-time"
                                         defaultChecked
                                     />
-                                    <span>{t('one_time','One-time')}</span>
+                                    <span>{t('one_time', 'One-time')}</span>
                                 </label>
                                 <label className="flex items-center space-x-2">
                                     <input
@@ -338,7 +348,7 @@ export default function Expense() {
                                         name="type"
                                         value="recurring"
                                     />
-                                    <span>{t('recurring','Recurring')}</span>
+                                    <span>{t('recurring', 'Recurring')}</span>
                                 </label>
                             </div>
                             <div className="flex justify-end space-x-2">
@@ -347,13 +357,13 @@ export default function Expense() {
                                     onClick={() => setIsModalOpen(false)}
                                     className="rounded bg-gray-300 px-4 py-2"
                                 >
-                                    {t('cancel','Cancel')}
+                                    {t('cancel', 'Cancel')}
                                 </button>
                                 <button
                                     type="submit"
                                     className="rounded bg-emerald-600 px-4 py-2 text-white"
                                 >
-                                    {editingId ? t('update','Update') : t('add','Add')}
+                                    {editingId ? t('update', 'Update') : t('add', 'Add')}
                                 </button>
                             </div>
                         </form>
@@ -366,7 +376,7 @@ export default function Expense() {
                 <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
                     <div className="w-[350px] rounded-xl bg-white p-6 shadow-lg">
                         <h2 className="mb-4 text-xl font-bold">
-                            {t('filter_by_category','Filter by Category')}
+                            {t('filter_by_category', 'Filter by Category')}
                         </h2>
                         <Card
                             categories={categories}
@@ -381,7 +391,7 @@ export default function Expense() {
                                 onClick={() => setIsFilterOpen(false)}
                                 className="rounded bg-gray-300 px-4 py-2"
                             >
-                                {t('close','Close')}
+                                {t('close', 'Close')}
                             </button>
                         </div>
                     </div>
