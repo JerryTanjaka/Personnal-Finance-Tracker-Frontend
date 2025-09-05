@@ -9,68 +9,74 @@ import TransactionCard from './TransactionCard';
 import type { Category, Transaction } from './Types';
 
 type ChartOptions = {
-    start: Date;
-    end: Date;
-    category?: string;
-    type?: string;
+  start: Date;
+  end: Date;
+  category?: string;
+  type?: string;
 };
 
 export default function Expense() {
-    const { t } = useTranslation();
-    const [view, setView] = useState<'grid' | 'list'>(
-        () => (localStorage.getItem('transactionView') as 'grid' | 'list') || 'grid'
-    );
+  const { t } = useTranslation();
+  const [view, setView] = useState<'grid' | 'list'>(
+    () =>
+      (localStorage.getItem('transactionView') as 'grid' | 'list') ||
+      'grid',
+  );
 
-    const toggleView = () => {
-        const newView = view === 'grid' ? 'list' : 'grid';
-        setView(newView);
-        localStorage.setItem('transactionView', newView);
-    };
+  const toggleView = () => {
+    const newView = view === 'grid' ? 'list' : 'grid';
+    setView(newView);
+    localStorage.setItem('transactionView', newView);
+  };
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
   const [searchTerm, setSearchTerm] = useState('');
-  const [isRecurrentCheck, setIsRecurrentCheck] = useState<boolean>(false)
+  const [typeValue, setTypeValue] = useState<'one-time' | 'recurring'>('one-time');
 
-    const [chartOptions, setChartOptions] = useState<ChartOptions>({
-        start: new Date(new Date().setFullYear(new Date().getFullYear(), 0, 1)),
-        end: new Date(new Date().setFullYear(new Date().getFullYear() + 1, 0, 1)),
-        category: undefined,
-        type: undefined,
-    });
+  const [chartOptions, setChartOptions] = useState<ChartOptions>({
+    start: new Date(new Date().setFullYear(new Date().getFullYear(), 0, 1)),
+    end: new Date(
+      new Date().setFullYear(new Date().getFullYear() + 1, 0, 1),
+    ),
+    category: undefined,
+    type: undefined,
+  });
 
-    const [categoryList, setCategoryList] = useState<any[]>([]);
-    const [transactions, setTransactions] = useState<Transaction[]>([]);
-    const [categories, setCategories] = useState<Category[]>([]);
-    const token = localStorage.getItem('accessToken');
+  const [categoryList, setCategoryList] = useState<any[]>([]);
+  const [transactions, setTransactions] = useState<Transaction[]>([]);
+  const [categories, setCategories] = useState<Category[]>([]);
+  const token = localStorage.getItem('accessToken');
 
-    const filteredTransactions = transactions.filter((t) => {
-        const matchesSearch =
-            t.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-            t.category?.toLowerCase().includes(searchTerm.toLowerCase());
+  const filteredTransactions = transactions.filter((t) => {
+    const matchesSearch =
+      t.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      t.category?.toLowerCase().includes(searchTerm.toLowerCase());
 
-        const matchesCategory =
-            !chartOptions.category || t.category === chartOptions.category;
+    const matchesCategory =
+      !chartOptions.category || t.category === chartOptions.category;
 
-    const matchesType = !chartOptions.type || t.is_recurrent === Boolean(["one-time", "recurring"].indexOf(chartOptions.type));
+    const matchesRecurring =
+      !chartOptions.type ||
+      (chartOptions.type === 'recurring' && t.is_recurrent) ||
+      (chartOptions.type === 'one-time' && !t.is_recurrent);
 
-        const transactionDate = new Date(t.date);
-        const matchesDate =
-            (!chartOptions.start || transactionDate >= chartOptions.start) &&
-            (!chartOptions.end || transactionDate <= chartOptions.end);
+    const transactionDate = new Date(t.date);
+    const matchesDate =
+      (!chartOptions.start || transactionDate >= chartOptions.start) &&
+      (!chartOptions.end || transactionDate <= chartOptions.end);
 
-        return matchesSearch && matchesCategory && matchesType && matchesDate;
-    });
+    return matchesSearch && matchesCategory && matchesRecurring && matchesDate;
+  });
 
-
-    useEffect(() => {
-        const fetchData = async () => {
-            if (!token) return;
-            await fetchCategories(token, setCategories, setCategoryList);
-            await fetchExpenses(token, setTransactions, t);
-        };
-        fetchData();
-    }, [token]);
+  useEffect(() => {
+    const fetchData = async () => {
+      if (!token) return;
+      await fetchCategories(token, setCategories, setCategoryList);
+      await fetchExpenses(token, setTransactions, t);
+    };
+    fetchData();
+  }, [token]);
 
   const handleAddTransaction = async (
     event: React.FormEvent<HTMLFormElement>,
@@ -87,29 +93,42 @@ export default function Expense() {
       receipt?: { files: FileList };
     };
 
-        if (!token) return;
+    if (!token) return;
 
     const formData = new FormData();
     formData.append('description', target.description.value);
     formData.append('amount', target.amount.value);
     formData.append('date', target.date.value);
-    formData.append('type', target.type.value);
+    formData.append('type', typeValue);
     formData.append('categoryId', target.categoryId.value);
 
-    if (isRecurrentCheck) {
-      if (!Boolean(new Date(target.startDate!.value)) || new Date(target.startDate!.value) >= new Date(target.endDate!.value)) return;
-      formData.append('startDate', target.startDate!.value)
-      formData.append('endDate', target.endDate!.value)
+    if (typeValue === 'recurring') {
+      if (target.startDate?.value) formData.append('startDate', target.startDate.value);
+      if (target.endDate?.value) formData.append('endDate', target.endDate.value);
     }
 
-        if (
-            target.receipt?.files?.[0] &&
-            target.receipt?.files?.length < 2 &&
-            ['application/pdf', 'image/jpeg', 'image/jpg', 'image/png'].includes(target.receipt.files[0].type) &&
-            target.receipt.files[0].size <= 2097152
-        ) {
-            formData.append('receipt', target.receipt.files[0]);
-        }
+    if (
+      target.receipt?.files?.[0] &&
+      target.receipt.files.length < 2 &&
+      [
+        'application/pdf',
+        'image/jpeg',
+        'image/jpg',
+        'image/png',
+      ].includes(target.receipt.files[0].type) &&
+      target.receipt.files[0].size <= 2097152
+    ) {
+      formData.append('receipt', target.receipt.files[0]);
+    }
+
+    if (
+      target.receipt?.files?.[0] &&
+      target.receipt?.files?.length < 2 &&
+      ['application/pdf', 'image/jpeg', 'image/jpg', 'image/png'].includes(target.receipt.files[0].type) &&
+      target.receipt.files[0].size <= 2097152
+    ) {
+      formData.append('receipt', target.receipt.files[0]);
+    }
 
     try {
       await fetch(`${import.meta.env.VITE_API_URL}/api/expenses`, {
@@ -119,15 +138,14 @@ export default function Expense() {
       });
       await fetchExpenses(token, setTransactions, t);
       setIsModalOpen(false);
-      setIsRecurrentCheck(false)
     } catch (err) {
       console.error(err);
     }
   };
 
-    const handleUpdateTransaction = async (event: React.FormEvent<HTMLFormElement>) => {
-        event.preventDefault();
-        if (!editingId || !token) return;
+  const handleUpdateTransaction = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    if (!editingId || !token) return;
 
     const target = event.target as typeof event.target & {
       description: { value: string };
@@ -147,20 +165,28 @@ export default function Expense() {
     formData.append('type', target.type.value);
     formData.append('categoryId', target.categoryId.value);
 
-    if (isRecurrentCheck) {
-      if (!Boolean(new Date(target.startDate!.value)) || new Date(target.startDate!.value) >= new Date(target.endDate!.value)) return;
-      formData.append('startDate', target.startDate!.value)
-      formData.append('endDate', target.endDate!.value)
+    if (
+      target.receipt?.files?.[0] &&
+      target.receipt?.files?.length < 2 &&
+      [
+        'application/pdf',
+        'image/jpeg',
+        'image/jpg',
+        'image/png',
+      ].includes(target.receipt.files[0].type) &&
+      target.receipt.files[0].size <= 2097152
+    ) {
+      formData.append('receipt', target.receipt.files[0]);
     }
 
-        if (
-            target.receipt?.files?.[0] &&
-            target.receipt?.files?.length < 2 &&
-            ['application/pdf', 'image/jpeg', 'image/jpg', 'image/png'].includes(target.receipt.files[0].type) &&
-            target.receipt.files[0].size <= 2097152
-        ) {
-            formData.append('receipt', target.receipt.files[0]);
-        }
+    if (
+      target.receipt?.files?.[0] &&
+      target.receipt?.files?.length < 2 &&
+      ['application/pdf', 'image/jpeg', 'image/jpg', 'image/png'].includes(target.receipt.files[0].type) &&
+      target.receipt.files[0].size <= 2097152
+    ) {
+      formData.append('receipt', target.receipt.files[0]);
+    }
 
     try {
       await fetch(`${import.meta.env.VITE_API_URL}/api/expenses/${editingId}`, {
@@ -170,65 +196,64 @@ export default function Expense() {
       });
       await fetchExpenses(token, setTransactions, t);
       setIsModalOpen(false);
-      setIsRecurrentCheck(false)
       setEditingId(null);
     } catch (err) {
       console.error(err);
     }
   };
 
-    const handleChangeTransaction = (id: string) => {
-        setEditingId(id);
-        setIsModalOpen(true);
-    };
+  const handleChangeTransaction = (id: string) => {
+    setEditingId(id);
+    setIsModalOpen(true);
+  };
 
-    const handleDeleteTransaction = async (id: string) => {
-        if (!token) return;
-        try {
-            await fetch(`${import.meta.env.VITE_API_URL}/api/expenses/${id}`, {
-                method: 'DELETE',
-                headers: { Authorization: `Bearer ${token}` },
-            });
-            await fetchExpenses(token, setTransactions, t);
-        } catch (err) {
-            console.error(err);
-        }
-    };
+  const handleDeleteTransaction = async (id: string) => {
+    if (!token) return;
+    try {
+      await fetch(`${import.meta.env.VITE_API_URL}/api/expenses/${id}`, {
+        method: 'DELETE',
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      await fetchExpenses(token, setTransactions, t);
+    } catch (err) {
+      console.error(err);
+    }
+  };
 
-    return (
-        <div className="z-50 flex h-[94vh] w-full flex-col items-center rounded-lg bg-gray-100">
-            <div className="flex min-h-full w-full max-w-7xl flex-col rounded-2xl p-6">
-                {/* Header */}
-                <div className="flex flex-col border-b border-gray-300 pb-2 text-3xl font-bold md:flex-row md:items-center md:justify-between">
-                    <h1 className="text-3xl font-bold">{t('expenses', 'Expenses')}</h1>
-                    <div className="flex flex-col space-y-2 md:flex-row md:items-center md:space-y-0 md:space-x-2">
-                        {/* Add button */}
-                        <button
-                            onClick={() => setIsModalOpen(true)}
-                            className="flex cursor-pointer items-center gap-2 rounded-lg bg-gray-200 px-4 py-2 text-lg font-medium text-gray-800 shadow-sm transition-all duration-200 hover:bg-gray-300 hover:shadow-md active:scale-95"
-                        >
-                            <FaPlus className="text-lg text-gray-600" />
-                            <span>{t('add', 'Add')}</span>
-                        </button>
+  return (
+    <div className="z-50 flex h-[94vh] w-full flex-col items-center rounded-lg bg-gray-100">
+      <div className="flex min-h-full w-full max-w-7xl flex-col rounded-2xl p-6">
+        {/* Header */}
+        <div className="flex flex-col border-b border-gray-300 pb-2 text-3xl font-bold md:flex-row md:items-center md:justify-between">
+          <h1 className="text-3xl font-bold">{t('expenses', 'Expenses')}</h1>
+          <div className="flex flex-col space-y-2 md:flex-row md:items-center md:space-y-0 md:space-x-2">
+            {/* Add button */}
+            <button
+              onClick={() => setIsModalOpen(true)}
+              className="flex cursor-pointer items-center gap-2 rounded-lg bg-gray-200 px-4 py-2 text-lg font-medium text-gray-800 shadow-sm transition-all duration-200 hover:bg-gray-300 hover:shadow-md active:scale-95"
+            >
+              <FaPlus className="text-lg text-gray-600" />
+              <span>{t('add', 'Add')}</span>
+            </button>
 
-                        {/* Search */}
-                        <div className="relative flex items-center">
-                            <Input value={searchTerm} onChange={setSearchTerm} placeholder={t('search', 'Search')} />
-                        </div>
+            {/* Search */}
+            <div className="relative flex items-center">
+              <Input value={searchTerm} onChange={setSearchTerm} placeholder={t('search', 'Search')} />
+            </div>
 
-                        {/* View toggle */}
-                        <div className="flex space-x-2">
-                            <button
-                                onClick={toggleView}
-                                className="flex h-12 w-12 items-center justify-center rounded-lg border border-gray-300 bg-gray-200 text-gray-800 transition hover:bg-gray-300 active:scale-95"
-                            >
-                                {view === 'grid' ? <FaList /> : <FaThLarge />}
-                            </button>
-                        </div>
-                    </div>
-                </div>
+            {/* View toggle */}
+            <div className="flex space-x-2">
+              <button
+                onClick={toggleView}
+                className="flex h-12 w-12 items-center justify-center rounded-lg border border-gray-300 bg-gray-200 text-gray-800 transition hover:bg-gray-300 active:scale-95"
+              >
+                {view === 'grid' ? <FaList /> : <FaThLarge />}
+              </button>
+            </div>
+          </div>
+        </div>
 
-                <ExpenseFilter chartOptions={chartOptions} setChartOptions={setChartOptions} categoryList={categoryList} />
+        <ExpenseFilter chartOptions={chartOptions} setChartOptions={setChartOptions} categoryList={categoryList} />
 
         {/* Transactions */}
         <AnimatePresence>
@@ -274,43 +299,38 @@ export default function Expense() {
               transition={{ duration: .15 }}
               className="w-full max-w-md rounded-xl bg-white p-6 shadow-lg">
               <h2 className="text-2xl font-bold mb-3">
-                {editingId ? `${t('update', 'Update')} ${t('expense', 'Expense')}` : `${t('add_new', 'Add New')} ${t('expense', 'Expense')}`}
+                {editingId
+                  ? `${t('update', 'Update')} ${t('expense', 'Expense')}`
+                  : `${t('add_new', 'Add New')} ${t('expense', 'Expense')}`}
               </h2>
               <form
                 className="flex flex-col space-y-4"
-                onSubmit={
-                  editingId
-                    ? handleUpdateTransaction
-                    : handleAddTransaction
-                }
+                onSubmit={editingId ? handleUpdateTransaction : handleAddTransaction}
                 encType="multipart/form-data"
               >
                 <input
                   name="description"
                   type="text"
                   placeholder={t('description', 'Description')}
-                  className="rounded border border-gray-300 p-2"
+                  className="rounded-lg border border-gray-300 p-3 transition outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500"
                   required
                 />
                 <input
                   name="amount"
                   type="number"
                   placeholder={t('amount', 'Amount')}
-                  className="rounded border border-gray-300 p-2"
+                  className="rounded-lg border border-gray-300 p-3 transition outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500"
                   required
                 />
                 <input
                   name="date"
                   type="datetime-local"
-                  className="rounded border border-gray-300 p-2"
-                  defaultValue={new Date()
-                    .toISOString()
-                    .slice(0, 16)}
+                  className="rounded-lg border border-gray-300 p-3 transition outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500"
+                  defaultValue={new Date().toISOString().slice(0, 16)}
                 />
                 <select
                   name="categoryId"
-                  className="rounded border border-gray-300 p-2"
-                  required
+                  className="rounded-lg border border-gray-300 p-3 transition outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500"
                 >
                   <option value="">{t('select_category', 'Select Category')}</option>
                   {Array.isArray(categories) &&
@@ -323,16 +343,18 @@ export default function Expense() {
                 <input
                   name="receipt"
                   type="file"
-                  className="rounded border border-gray-300 p-2"
+                  className="rounded-lg border border-gray-300 p-3 transition outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500"
                 />
+
+                {/* Type selection */}
                 <div className="flex space-x-4">
                   <label className="flex items-center space-x-2">
                     <input
                       type="radio"
                       name="type"
                       value="one-time"
-                      onClick={() => setIsRecurrentCheck(false)}
-                      defaultChecked
+                      checked={typeValue === 'one-time'}
+                      onChange={() => setTypeValue('one-time')}
                     />
                     <span>{t('one_time', 'One-time')}</span>
                   </label>
@@ -341,37 +363,42 @@ export default function Expense() {
                       type="radio"
                       name="type"
                       value="recurring"
-                      onClick={() => setIsRecurrentCheck(true)}
+                      checked={typeValue === 'recurring'}
+                      onChange={() => setTypeValue('recurring')}
                     />
                     <span>{t('recurring', 'Recurring')}</span>
                   </label>
                 </div>
-                {isRecurrentCheck && (<div className='grid grid-cols-2 gap-4'><input
-                  name="startDate"
-                  type="date"
-                  className="rounded border border-gray-300 p-2"
-                  required
-                  defaultValue={new Date()
-                    .toISOString()
-                    .split('T')[0]}
-                />
-                  <input
-                    name="endDate"
-                    type="date"
-                    className="rounded border border-gray-300 p-2"
-                  />
-                </div>)}
-                <div className="flex justify-end space-x-2">
+
+                {/* Conditional recurring dates */}
+                {typeValue === 'recurring' && (
+                  <div className="flex flex-col space-y-2">
+                    <input
+                      name="startDate"
+                      type="date"
+                      className="rounded-lg border border-gray-300 p-3 transition outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500"
+                      required
+                    />
+                    <input
+                      name="endDate"
+                      type="date"
+                      className="rounded-lg border border-gray-300 p-3 transition outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500"
+                      required
+                    />
+                  </div>
+                )}
+
+                <div className="mt-2 flex justify-end space-x-3">
                   <button
                     type="button"
-                    onClick={() => { setIsModalOpen(false); setIsRecurrentCheck(false) }}
-                    className="rounded bg-gray-300 px-4 py-2"
+                    onClick={() => setIsModalOpen(false)}
+                    className="rounded-lg bg-gray-200 px-5 py-2 font-medium text-gray-800 transition hover:bg-gray-300"
                   >
                     {t('cancel', 'Cancel')}
                   </button>
                   <button
                     type="submit"
-                    className="rounded bg-emerald-600 px-4 py-2 text-white"
+                    className="rounded-lg px-5 py-2 font-medium text-white bg-emerald-600 hover:bg-emerald-700 transition"
                   >
                     {editingId ? t('update', 'Update') : t('add', 'Add')}
                   </button>
@@ -379,8 +406,9 @@ export default function Expense() {
               </form>
             </motion.div>
           </div>
-        )}
-      </AnimatePresence>
-    </div>
+        )
+        }
+      </AnimatePresence >
+    </div >
   );
 }

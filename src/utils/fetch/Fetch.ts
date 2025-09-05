@@ -52,6 +52,7 @@ export const fetchExpenses = async (
         }))
       : [];
     setTransactions(formatted);
+     console.log('Fetched and formatted expenses:', formatted);
   } catch (err) {
     console.error('Error fetching expenses:', err);
     setTransactions([]);
