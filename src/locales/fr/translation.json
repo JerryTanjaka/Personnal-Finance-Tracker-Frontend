@@ -86,5 +86,8 @@
     "filter_by_category": "Filtrer par catégorie",
     "close": "Fermer",
     "search": "Rechercher",
-    "expense": "Dépense"
+    "expense": "Dépense",
+    "delete_data_title": "Gérer les données",
+    "delete_data_description": "Effacer vos données est irréversible.",
+    "confirm_delete": "Supprimer tout vos données"
 }

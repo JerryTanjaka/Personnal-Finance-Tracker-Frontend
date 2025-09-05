@@ -3,6 +3,7 @@ import ChangePasswordForm from "../components/Settings/ChangePasswordForm";
 import { useTranslation } from "react-i18next";
 import ChangeUsernameForm from "../components/Settings/ChangeUsernameForm";
 import LanguageToggle from "../components/UI/LanguageToggle";
+import DeleteData from "../components/Settings/DeleteData.tsx";
 
 export default function Settings() {
     const [isChangePasswordOpen, setIsChangePasswordOpen] = useState<boolean>(false);
@@ -69,7 +70,7 @@ export default function Settings() {
                     className="flex w-full items-center justify-between px-4 py-3 rounded-lg bg-gray-50 hover:bg-gray-100 border border-gray-200 transition duration-200 cursor-pointer"
                 >
                     <div className="flex items-center gap-3">
-                        <i className='bxr text-gray-700 text-xl bx-user-circle'  ></i> 
+                        <i className='bxr text-gray-700 text-xl bx-user-circle'  ></i>
                         <span className="font-medium text-gray-800">
                             {t("change_username", "Change Username")}
                         </span>
@@ -98,6 +99,16 @@ export default function Settings() {
                 </div>
             </div>
             <LanguageToggle />
+            <h2 className="font-semibold text-xl text-gray-900 mt-6 mb-2">
+                {t("delete_data_title", "Data Managing")}
+            </h2>
+            <p className="text-gray-500 ml-1">
+                {t(
+                    "delete_data_description",
+                    "Deleting your data is not reversible."
+                )}
+            </p>
+            <DeleteData />
         </div>
     );
 }

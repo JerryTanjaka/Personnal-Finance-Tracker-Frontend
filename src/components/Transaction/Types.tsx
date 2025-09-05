@@ -3,6 +3,7 @@ export type Transaction = {
   name: string;
   amount: number;
   date: string;
+  income_date: string;
   type: "income" | "expense"; 
   category?: string;          
   source?: string;            

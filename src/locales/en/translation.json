@@ -85,5 +85,8 @@
     "recurring": "Recurring",
     "filter_by_category": "Filter by Category",
     "close": "Close",
-    "expense": "Expense"
+    "expense": "Expense",
+    "delete_data_title": "Data Managing",
+    "delete_data_description": "Deleting your data is not reversible.",
+    "confirm_delete": "Remove all data"
 }
