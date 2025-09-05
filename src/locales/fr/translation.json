@@ -98,4 +98,9 @@
     "delete_data_title": "Gérer les données",
     "delete_data_description": "Effacer vos données est irréversible.",
     "confirm_delete": "Supprimer tout vos données"
+    ,
+    "delete_confirm_message": "Êtes-vous sûr de vouloir supprimer toutes vos données ?",
+    "delete_success": "Toutes vos données ont été supprimées.",
+    "delete_error": "Une erreur est survenue. Veuillez réessayer.",
+    "ok": "OK"
 }
