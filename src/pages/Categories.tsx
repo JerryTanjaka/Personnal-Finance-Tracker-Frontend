@@ -149,7 +149,7 @@ export default function Categories() {
                 ) : null}
             </AnimatePresence>
 
-            <div className="h-[94vh] w-full p-5 bg-gray-100 rounded-lg">
+            <div className="h-[96vh] w-full p-5 bg-gray-100 rounded-lg">
                 <div className="flex justify-between items-center mb-6 border-b border-gray-300">
                     <h3 className="text-3xl font-bold text-gray-800 p-2 mb-3">{t('categories_title', 'Categories')}</h3>
                 </div>

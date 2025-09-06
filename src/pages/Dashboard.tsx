@@ -80,8 +80,8 @@ export default function Dashboard() {
     }, [])
 
     return (
-        <section className={'flex'}>
-            <div className="h-[94vh] w-full rounded-lg bg-gray-100 p-5 overflow-x-hidden overflow-scroll">
+        <section className={'flex '}>
+            <div className="h-[96vh] w-full rounded-lg bg-gray-100 p-5 overflow-x-hidden overflow-scroll ">
                 <div className="flex justify-between border-b border-gray-300 items-center mb-5">
                     <h1 className="text-3xl font-bold p-2 mb-3">
                         {t("dashboard_title", "Dashboard")}
@@ -96,7 +96,7 @@ export default function Dashboard() {
                         <h3 className='font-medium text-lg text-gray-800 flex items-center gap-2'><i className="bxr bx-alert-triangle text-yellow-500 text-2xl" />{balanceAlert.message}</h3>
                     </motion.div>)}
                 </AnimatePresence>
-                <div className={'xl:grid grid-cols-3 flex flex-row w-full justify-evenly gap-6 flex-wrap'}>
+                <div className={'xl:grid grid-cols-3 flex flex-row w-full justify-evenly gap-6 flex-wrap '}>
                     <StatCard
                         title={t('total_income', 'Total Income')}
                         amount={monthlySummary?.totalIncome}

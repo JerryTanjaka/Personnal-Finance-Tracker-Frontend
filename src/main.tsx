@@ -39,7 +39,7 @@ const router = createBrowserRouter([
 
 createRoot(document.getElementById('root')!).render(
     <StrictMode>
-        <CurrencyProvider>
+        <CurrencyProvider >
             <RouterProvider router={router} />
         </CurrencyProvider>
     </StrictMode>,

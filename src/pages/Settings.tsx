@@ -23,7 +23,7 @@ export default function Settings() {
     }, [])
 
     return (
-        <div className="mx-auto h-[94vh] overflow-y-scroll rounded-lg bg-gray-100 p-8 shadow-md">
+        <div className="mx-auto h-[96vh] overflow-y-scroll rounded-lg bg-gray-100 p-8 shadow-md">
             <h1 className="mb-6 border-b border-gray-300 pb-4 text-3xl font-bold text-gray-800">
                 {t('settings_title', 'Settings')}
             </h1>
