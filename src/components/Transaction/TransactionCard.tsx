@@ -3,6 +3,7 @@ import {
   FaBolt,
   FaCoffee,
   FaExchangeAlt,
+  FaFileDownload,
   FaFilm,
   FaMoneyBillWave,
   FaPlus,
@@ -19,6 +20,7 @@ type TransactionCardProps = {
   transaction: Transaction;
   view: "grid" | "list";
   actions?: {
+    onDownload?: () => void;
     onChange?: () => void;
     onDelete?: () => void;
   };
@@ -51,19 +53,19 @@ export default function TransactionCard({
   const { currency } = useContext(CurrencyContext);
   const { t } = useTranslation();
 
-  const formattedDate = new Date(transaction.date).toLocaleDateString("en-US", {
+  const formattedDate = new Date(transaction.date).toLocaleDateString(t("local_date_format", "en-US"), {
     day: "2-digit",
     month: "short",
     year: "numeric",
   });
 
-  const formattedEndDate = transaction.end_date
-    ? new Date(transaction.end_date).toLocaleDateString("en-US", {
-        day: "2-digit",
-        month: "short",
-        year: "numeric",
-      })
-    : t("unset", "Unset");
+  const formattedEndDate = transaction.end_date ?
+    new Date(transaction.end_date).toLocaleDateString(t("local_date_format", "en-US"),
+      {
+        day: "2-digit"
+        , month: "short",
+        year: "numeric"
+      }) : t('unset', 'Unset')
 
   const icon: React.ReactNode =
     transaction.type === "income" ? (
@@ -107,11 +109,10 @@ export default function TransactionCard({
               {transaction.name}
             </h2>
             <p
-              className={`text-lg font-bold ${
-                transaction.type === "expense"
-                  ? "text-red-600"
-                  : "text-green-600"
-              }`}
+              className={`text-lg font-bold ${transaction.type === "expense"
+                ? "text-red-600"
+                : "text-green-600"
+                }`}
             >
               {transaction.type === "expense" ? "-" : "+"}
               {formatCurrency(transaction.amount, currency)}
@@ -143,29 +144,36 @@ export default function TransactionCard({
         </div>
 
         {/* Action buttons */}
-        <div
-          className={`flex ${
-            view === "grid" ? "flex-col space-y-2" : "flex-row space-x-3"
-          } items-center`}
-        >
-          <button
-            className={`flex items-center justify-center gap-2 rounded 
+        <div className="flex justify-center items-start gap-2">
+          {transaction.receipt_id && (<button
+            onClick={actions?.onDownload}
+            className='flex items-center justify-center p-2 text-white bg-blue-500 rounded transition hover:bg-blue-600 active:scale-95'>
+
+            <FaFileDownload />
+          </button>)}
+          <div
+            className={`flex ${view === "grid" ? "flex-col space-y-2" : "flex-row space-x-3"
+              } items-center`}
+          >
+            <button
+              className={`flex items-center justify-center gap-2 rounded 
               bg-gray-300 dark:bg-gray-600 text-gray-800 dark:text-gray-200 
               p-2 transition hover:bg-gray-400 dark:hover:bg-gray-500 active:scale-95`}
-            onClick={actions?.onChange}
-          >
-            <FaExchangeAlt />
-          </button>
+              onClick={actions?.onChange}
+            >
+              <FaExchangeAlt />
+            </button>
 
-          <button
-            className={`flex items-center justify-center gap-2 rounded 
+            <button
+              className={`flex items-center justify-center gap-2 rounded 
               bg-red-600 text-white p-2 transition hover:bg-red-700 active:scale-95`}
-            onClick={actions?.onDelete}
-          >
-            <FaTrash />
-          </button>
+              onClick={actions?.onDelete}
+            >
+              <FaTrash />
+            </button>
+          </div>
         </div>
       </div>
-    </div>
+    </div >
   );
 }
