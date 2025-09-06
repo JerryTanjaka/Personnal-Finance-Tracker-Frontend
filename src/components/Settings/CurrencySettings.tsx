@@ -18,7 +18,7 @@ export default function CurrencySettings() {
 
     return (
         <div className="mt-4">
-            <h2 className="text-lg font-semibold text-gray-800 mb-3">
+            <h2 className="text-lg font-semibold text-gray-800 dark:text-gray-100 mb-3">
                 {t('currency_settings_title', 'Currency')}
             </h2>
 
@@ -40,7 +40,7 @@ export default function CurrencySettings() {
                             className={`px-4 py-2 rounded-full border text-sm transition
                 ${currency === c.code
                                     ? 'bg-blue-500 text-white border-blue-500'
-                                    : 'border-gray-300 text-gray-700 hover:border-blue-400 hover:text-blue-600'
+                                    : 'border-gray-300 text-gray-700 dark:text-gray-500 hover:border-blue-400 hover:text-blue-600'
                                 }`}
                         >
                             {c.label}

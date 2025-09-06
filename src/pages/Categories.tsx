@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import ErrorMessage from "../components/UI/ErrorMessage";
 import { AnimatePresence } from "framer-motion";
-import { useTranslation } from 'react-i18next';
+import { useTranslation } from "react-i18next";
 import CategoryList from "../components/Categories/CategoryList";
 import CategoryModal from "../components/Categories/CategoryModal";
 import SearchPanel from "../components/Categories/SearchPanel";
@@ -132,8 +132,6 @@ export default function Categories() {
         setModalCategoryId("");
     }
 
-    // modalDetails handled inside CategoryModal component
-
     return (
         <>
             <AnimatePresence>
@@ -142,16 +140,16 @@ export default function Categories() {
                         message={
                             notificationMessage?.error || notificationMessage?.message
                         }
-                        onClose={() => {
-                            setNotificationMessage(null);
-                        }}
+                        onClose={() => setNotificationMessage(null)}
                     />
                 ) : null}
             </AnimatePresence>
 
-            <div className="h-[96vh] w-full p-5 bg-gray-100 rounded-lg">
-                <div className="flex justify-between items-center mb-6 border-b border-gray-300">
-                    <h3 className="text-3xl font-bold text-gray-800 p-2 mb-3">{t('categories_title', 'Categories')}</h3>
+            <div className="h-[96vh] w-full p-5 bg-gray-100 dark:bg-gray-900 rounded-lg">
+                <div className="flex justify-between items-center mb-6 border-b border-gray-300 dark:border-gray-700">
+                    <h3 className="text-3xl font-bold text-gray-800 dark:text-gray-100 p-2 mb-3">
+                        {t('categories_title', 'Categories')}
+                    </h3>
                 </div>
 
                 <div className="w-full flex flex-col-reverse gap-6 xl:flex-row-reverse h-full max-h-[calc(100vh-200px)]">

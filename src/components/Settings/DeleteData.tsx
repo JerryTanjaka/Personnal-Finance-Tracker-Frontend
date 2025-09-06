@@ -42,7 +42,7 @@ export default function DeleteData() {
       {/* Delete button */}
       <button
         onClick={handleDeleteClick}
-        className="flex items-center w-fit cursor-pointer active:scale-95 transition-all rounded-lg bg-red-600 px-4 py-2 text-white shadow-lg mt-4"
+        className="flex items-center w-fit cursor-pointer active:scale-95 transition-all rounded-lg bg-orange-400 px-4 py-2 text-white shadow-lg mt-4"
       >
         <FaTrash className="mr-2 size-4" />
         <span className="text-sm">{t("confirm_delete", "Remove all data")}</span>
