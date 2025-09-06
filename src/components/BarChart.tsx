@@ -26,13 +26,13 @@ export default function BarChart({ chartValueOptions }: any) {
                 title: {
                     display: true,
                     text: t("amount", "Amount"),
-                    color: darkmode ? "#E5E7EB" : "#374151", // texte axe Y
+                    color: darkmode ? "#E5E7EB" : "#374151",
                 },
                 ticks: {
-                    color: darkmode ? "#D1D5DB" : "#374151", // valeurs axe Y
+                    color: darkmode ? "#D1D5DB" : "#374151", 
                 },
                 grid: {
-                    color: darkmode ? "rgba(255,255,255,0.1)" : "rgba(0,0,0,0.1)", // lignes horizontales
+                    color: darkmode ? "rgba(255,255,255,0.1)" : "rgba(0,0,0,0.1)", 
                     drawBorder: false,
                 },
             },
@@ -40,13 +40,13 @@ export default function BarChart({ chartValueOptions }: any) {
                 title: {
                     display: true,
                     text: t("month", "Month"),
-                    color: darkmode ? "#E5E7EB" : "#374151", // texte axe X
+                    color: darkmode ? "#E5E7EB" : "#374151", 
                 },
                 ticks: {
-                    color: darkmode ? "#D1D5DB" : "#374151", // valeurs axe X
+                    color: darkmode ? "#D1D5DB" : "#374151", 
                 },
                 grid: {
-                    color: darkmode ? "rgba(255,255,255,0.1)" : "rgba(0,0,0,0.1)", // lignes verticales
+                    color: darkmode ? "rgba(255,255,255,0.1)" : "rgba(0,0,0,0.1)", 
                     drawBorder: false,
                 },
             },
@@ -54,7 +54,7 @@ export default function BarChart({ chartValueOptions }: any) {
         plugins: {
             legend: {
                 labels: {
-                    color: darkmode ? "#E5E7EB" : "#374151", // couleur de la légende
+                    color: darkmode ? "#E5E7EB" : "#374151",
                 },
             },
             tooltip: {

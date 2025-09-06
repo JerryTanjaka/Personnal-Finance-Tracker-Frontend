@@ -125,7 +125,7 @@ export default function Dashboard() {
                         <BarChart chartValueOptions={chartOptions} />
                     </div>
                 </div>
-                <div className={`flex flex-col mt-5 bg-gray-800 rounded-lg`}>
+                <div className={`flex flex-col mt-5 pt-5 dark:bg-gray-800 rounded-lg`}>
                     <h1 className={`text-2xl font-semibold border-b-1 border-gray-300 mx-6 pb-3 `}>{t('recent_expenses', 'Recent Expenses')}</h1>
                     <div className={`flex flex-col`}>
                         <ExpenseList />
