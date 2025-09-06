@@ -1,91 +1,135 @@
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
-import useLocalStorage from '../hooks/useLocalStorage';
 import { useTranslation } from 'react-i18next';
-import Switch from './UI/DarkModeButton';
+import { NavLink } from 'react-router-dom';
+import useLocalStorage from '../hooks/useLocalStorage';
 
 export default function NavBar() {
-  const [isExpanded, setIsExpanded] = useState(false);
-  const [username] = useLocalStorage('username', 'User');
-  const { t } = useTranslation();
+    const [isExpanded, setIsExpanded] = useState(false);
+    const [username] = useLocalStorage('username', 'User');
+    const { t } = useTranslation();
+    const [hoveredItem, setHoveredItem] = useState<string | null>(null); 
 
-  const textAnimation = (extraClasses = '') =>
-    `transition-all duration-300 delay-150 transform ${
-      isExpanded ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-2'
-    } ${extraClasses}`;
+    const textAnimation = (extraClasses = '') =>
+        `transition-all duration-300 delay-150 transform ${
+            isExpanded
+                ? 'opacity-100 translate-x-0'
+                : 'opacity-0 -translate-x-2'
+        } ${extraClasses}`;
 
-  return (
-    <nav
-      className={`sticky top-0 left-0 m-4 mr-0 flex h-[96vh] flex-col justify-between 
-        rounded-lg bg-gray-100 dark:bg-gray-800 p-6 shadow-md transition-all duration-300
-        ${isExpanded ? 'w-64' : 'w-20'}`}
-      onMouseEnter={() => setIsExpanded(true)}
-      onMouseLeave={() => setIsExpanded(false)}
-    >
-      {/* Header */}
-      <div className="flex flex-col items-center gap-3">
-        <i className="bxr bx-user rounded-full border-4 border-b-blue-600 p-2 text-3xl text-gray-800 dark:text-white"></i>
-        <span className={`${textAnimation('text-xl font-medium text-gray-800 dark:text-white')}`}>
-          {username}
-        </span>
-      </div>
+    const baseItemClasses =
+        'flex cursor-pointer items-center space-x-2 pl-1 py-2 rounded-lg transition-colors duration-200';
 
-      {/* Links */}
-      <div className="flex flex-col gap-4 font-medium text-gray-700 dark:text-gray-200">
-        <Link to="/dashboard">
-          <div className="flex cursor-pointer items-center space-x-2 hover:text-blue-600">
-            <i className="bxr bx-pie-chart-alt text-2xl"></i>
-            <span className={textAnimation()}>{t("dashboard")}</span>
-          </div>
-        </Link>
+    const itemColors = {
+        dashboard: {
+            bg: 'bg-black dark:bg-white',
+            text: 'text-gray-100 dark:text-black',
+            hover: 'hover:bg-black dark:hover:bg-white hover:text-white dark:hover:text-black',
+        },
+        incomes: {
+            bg: 'bg-emerald-400 dark:bg-emerald-800',
+            text: 'text-emerald-800 dark:text-emerald-200',
+            hover: 'hover:bg-emerald-400 dark:hover:bg-emerald-900 hover:text-emerald-800 dark:hover:text-emerald-100',
+        },
+        expenses: {
+            bg: 'bg-red-400 dark:bg-red-800',
+            text: 'text-red-900 dark:text-red-200',
+            hover: 'hover:bg-red-400 dark:hover:bg-red-900 hover:text-red-900 dark:hover:text-red-100',
+        },
+        categories: {
+            bg: 'bg-indigo-300 dark:bg-indigo-800',
+            text: 'text-indigo-700 dark:text-indigo-100',
+            hover: 'hover:bg-indigo-200 dark:hover:bg-indigo-900 hover:text-indigo-600 dark:hover:text-indigo-100',
+        },
+        settings: {
+            bg: 'bg-gray-500 dark:bg-gray-950',
+            text: 'text-black dark:text-white',
+            hover: 'hover:bg-gray-500 dark:hover:bg-gray-950 hover:text-gray-950 dark:hover:text-white',
+        },
+        support: {
+            bg: 'bg-sky-300 dark:bg-sky-800',
+            text: 'text-sky-700 dark:text-sky-100',
+            hover: 'hover:bg-sky-200 dark:hover:bg-sky-900 hover:text-sky-600 dark:hover:text-sky-100',
+        },
+    };
 
-        <Link to="/incomes">
-          <div className="flex cursor-pointer items-center space-x-2 hover:text-green-600">
-            <i className="bxr bx-wallet-note text-2xl"></i>
-            <span className={textAnimation()}>{t("incomes")}</span>
-          </div>
-        </Link>
+    const getItemClasses =
+        (key: keyof typeof itemColors) =>
+        ({ isActive }: { isActive: boolean }) => {
+            if (hoveredItem && hoveredItem !== key) {
+                return `${baseItemClasses} ${itemColors[key].hover}`;
+            }
+            return isActive
+                ? `${baseItemClasses} ${itemColors[key].bg} ${itemColors[key].text}`
+                : `${baseItemClasses} ${itemColors[key].hover}`;
+        };
 
-        <Link to="/expenses">
-          <div className="flex cursor-pointer items-center space-x-2 hover:text-indigo-600">
-            <i className="bxr bx-dollar-circle text-2xl"></i>
-            <span className={textAnimation()}>{t("expenses")}</span>
-          </div>
-        </Link>
+    return (
+        <nav
+            className={`sticky top-0 left-0 m-4 mr-0 flex h-[96vh] flex-col justify-between rounded-lg bg-gray-100 p-6 shadow-md transition-all duration-300 dark:bg-gray-800 ${isExpanded ? 'w-64' : 'w-20'}`}
+            onMouseEnter={() => setIsExpanded(true)}
+            onMouseLeave={() => setIsExpanded(false)}
+        >
+            {/* Header */}
+            <div className="flex flex-col items-center gap-3">
+                <i className="bxr bx-user rounded-full border-4 border-b-blue-600 p-2 text-3xl text-gray-800 dark:text-white"></i>
+                <span
+                    className={`${textAnimation('text-xl font-medium text-gray-800 dark:text-white')}`}
+                >
+                    {username}
+                </span>
+            </div>
 
-        <Link to="/categories">
-          <div className="flex cursor-pointer items-center space-x-2 hover:text-blue-600">
-            <i className="bxr bx-folder text-2xl"></i>
-            <span className={textAnimation()}>{t("categories")}</span>
-          </div>
-        </Link>
+            {/* Links */}
+            <div className="mt-4 flex flex-col gap-2 font-medium text-gray-700 dark:text-gray-200">
+                {(
+                    [
+                        'dashboard',
+                        'incomes',
+                        'expenses',
+                        'categories',
+                        'settings',
+                        'support',
+                    ] as const
+                ).map((key) => (
+                    <NavLink
+                        key={key}
+                        to={`/${key}`}
+                        className={getItemClasses(key)}
+                        onMouseEnter={() => setHoveredItem(key)}
+                        onMouseLeave={() => setHoveredItem(null)}
+                    >
+                        <i
+                            className={`bxr bx-${
+                                key === 'dashboard'
+                                    ? 'pie-chart-alt'
+                                    : key === 'incomes'
+                                      ? 'wallet-note'
+                                      : key === 'expenses'
+                                        ? 'dollar-circle'
+                                        : key === 'categories'
+                                          ? 'folder'
+                                          : key === 'settings'
+                                            ? 'cog'
+                                            : 'message-question-mark'
+                            } text-2xl`}
+                        ></i>
+                        <span className={textAnimation()}>{t(key)}</span>
+                    </NavLink>
+                ))}
+            </div>
 
-        <div className="my-6 w-full border border-gray-300 dark:border-gray-600"></div>
-
-        <Link to="/settings">
-          <div className="flex cursor-pointer items-center space-x-2 hover:text-slate-600">
-            <i className="bxr bx-cog text-2xl"></i>
-            <span className={textAnimation()}>{t("settings")}</span>
-          </div>
-        </Link>
-
-        <Link to="/support">
-          <div className="flex cursor-pointer items-center space-x-2 hover:text-sky-600">
-            <i className="bxr bx-message-question-mark text-2xl"></i>
-            <span className={textAnimation()}>{t("support")}</span>
-          </div>
-        </Link>
-      </div>
-
-      {/* Footer / Logout */}
-      <Link to="/login">
-        <div className="flex cursor-pointer items-center space-x-2 text-gray-700 dark:text-gray-200 hover:text-red-600">
-          <i className="bxr bx-arrow-out-left-square-half text-2xl"></i>
-          <span onClick={() => localStorage.removeItem("accessToken")} className={textAnimation("text-xl font-medium")}>
-            {t("logout")}
-          </span>
-        </div>
-      </Link>
-    </nav>
-  );
+            {/* Footer / Logout */}
+            <NavLink to="/login">
+                <div
+                    className="mt-4 flex cursor-pointer items-center space-x-2 text-gray-700 hover:text-red-600 dark:text-gray-200"
+                    onClick={() => localStorage.removeItem('accessToken')}
+                >
+                    <i className="bxr bx-arrow-out-left-square-half text-2xl"></i>
+                    <span className={textAnimation('text-xl font-medium')}>
+                        {t('logout')}
+                    </span>
+                </div>
+            </NavLink>
+        </nav>
+    );
 }
