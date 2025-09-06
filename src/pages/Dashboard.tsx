@@ -80,9 +80,9 @@ export default function Dashboard() {
     }, [])
 
     return (
-        <section className={'flex'}>
-            <div className="h-[94vh] w-full rounded-lg bg-gray-100 p-5 overflow-x-hidden overflow-scroll">
-                <div className="flex justify-between border-b border-gray-300 items-center mb-5">
+        <section className={'flex '}>
+            <div className="h-[96vh] w-full rounded-lg bg-gray-100 dark:bg-gray-900 p-5 overflow-x-hidden overflow-scroll dark:text-white">
+                <div className="flex justify-between border-b border-gray-300 dark:border-gray-500 items-center mb-5">
                     <h1 className="text-3xl font-bold p-2 mb-3">
                         {t("dashboard_title", "Dashboard")}
                     </h1>
@@ -96,7 +96,7 @@ export default function Dashboard() {
                         <h3 className='font-medium text-lg text-gray-800 flex items-center gap-2'><i className="bxr bx-alert-triangle text-yellow-500 text-2xl" />{balanceAlert.message}</h3>
                     </motion.div>)}
                 </AnimatePresence>
-                <div className={'xl:grid grid-cols-3 flex flex-row w-full justify-evenly gap-6 flex-wrap'}>
+                <div className={'xl:grid grid-cols-3 flex flex-row w-full justify-evenly gap-6 flex-wrap '}>
                     <StatCard
                         title={t('total_income', 'Total Income')}
                         amount={monthlySummary?.totalIncome}
@@ -120,13 +120,13 @@ export default function Dashboard() {
                 />
                 <div className={`flex flex-col m-5`}>
                     <h1 className={`text-2xl font-semibold`}>{t('expenses_categories', 'Expenses Categories')}</h1>
-                    <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 items-start mt-5">
+                    <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 items-start mt-5 ">
                         <PieChart chartValueOptions={chartOptions} />
                         <BarChart chartValueOptions={chartOptions} />
                     </div>
                 </div>
-                <div className={`flex flex-col mt-5`}>
-                    <h1 className={`text-2xl font-semibold border-b-1 border-gray-300 mx-6 pb-3`}>{t('recent_expenses', 'Recent Expenses')}</h1>
+                <div className={`flex flex-col mt-5 pt-5 dark:bg-gray-800 rounded-lg`}>
+                    <h1 className={`text-2xl font-semibold border-b-1 border-gray-300 mx-6 pb-3 `}>{t('recent_expenses', 'Recent Expenses')}</h1>
                     <div className={`flex flex-col`}>
                         <ExpenseList />
                     </div>

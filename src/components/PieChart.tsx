@@ -4,6 +4,7 @@ import { Chart as ChartJS, Tooltip, Legend, ArcElement } from "chart.js";
 import { useTranslation } from 'react-i18next';
 import { CurrencyContext } from "../context/CurrencyContext";
 import { formatCurrency } from "../utils/currency";
+import useDarkMode from "../hooks/useDarkMode";
 
 ChartJS.register(Tooltip, Legend, ArcElement);
 
@@ -13,6 +14,7 @@ export const PieChart = ({ chartValueOptions }: any) => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
     const { currency } = useContext(CurrencyContext);
+    const [darkMode] = useDarkMode();
 
     const options = {
         responsive: true,
@@ -20,7 +22,7 @@ export const PieChart = ({ chartValueOptions }: any) => {
             legend: {
                 position: "right" as const,
                 labels: {
-                    color: "#374151",
+                    color: darkMode ? "#F3F4F6" : "#374151", 
                     font: { size: 14, weight: 500 },
                 },
             },
@@ -110,11 +112,11 @@ export const PieChart = ({ chartValueOptions }: any) => {
     }
 
     if (error) {
-        return <div className="text-red-500 text-center">{error}</div>;
+        return <div className=" text-center">{error}</div>;
     }
 
     return (
-        <div className="h-[40vh] w-[40vh] flex-1/2 max-w-fit cursor-pointer">
+        <div className="h-[40vh] w-[40vh] flex-1/2 max-w-fit cursor-pointer ">
             {chartData && <Pie options={options} data={chartData} />}
         </div>
     );
