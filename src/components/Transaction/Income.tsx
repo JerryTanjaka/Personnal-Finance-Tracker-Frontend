@@ -173,10 +173,10 @@ export default function Income() {
     };
 
     return (
-        <div className="z-50 flex h-[96vh] w-full flex-col items-center rounded-lg bg-gray-100">
+        <div className="z-50 flex h-[96vh] w-full flex-col items-center rounded-lg  bg-gray-100 dark:bg-gray-900">
             <div className="flex min-h-full w-full max-w-7xl flex-col rounded-2xl p-6">
                 {/* Header */}
-                <div className="flex flex-col border-b border-gray-300 pb-2 text-3xl font-bold md:flex-row md:items-center md:justify-between">
+                <div className="flex flex-col border-b border-gray-300 dark:text-gray-100 dark:border-gray-500 pb-2 text-3xl font-bold md:flex-row md:items-center md:justify-between">
                     <h1 className="text-3xl font-bold">{t('incomes','Incomes')}</h1>
 
                     <div className="flex flex-col md:flex-row md:items-center md:space-x-2 space-y-2 md:space-y-0">

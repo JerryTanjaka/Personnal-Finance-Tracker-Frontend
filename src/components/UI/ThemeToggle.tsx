@@ -8,10 +8,10 @@ export default function ThemeToggle() {
 
   return (
     <div>
-      <h2 className="font-semibold text-xl mt-6 text-black mb-2">
+      <h2 className="font-semibold text-xl mt-6 text-black dark:text-gray-100 mb-2">
         Change Theme
       </h2>
-      <p className="text-gray-600 dark:text-gray-600 mb-6">
+      <p className="text-gray-600 dark:text-gray-400 mb-6">
         Choose the theme you prefer between Light and Dark mode.
       </p>
 
@@ -31,7 +31,7 @@ export default function ThemeToggle() {
             className={`absolute top-[7px] left-[10px] w-[25px] h-[25px] flex items-center justify-center rounded-full transition-transform duration-300
               ${darkMode ? "" : "translate-x-[45px]"}`}
           >
-            {darkMode ? <FaMoon className="text-white text-xl" /> : <FaSun className="text-black text-xl" />}
+            {darkMode ? <FaMoon className="text-white text-xl" /> : <FaSun className="text-black dark:text-gray-100 text-xl" />}
           </span>
         </label>
       </div>

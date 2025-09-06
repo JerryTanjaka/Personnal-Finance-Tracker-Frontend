@@ -84,8 +84,8 @@ export default function TransactionCard({
   return (
     <div
       className={`group relative scale-99 rounded-xl cursor-pointer border 
-      border-gray-300 bg-gray-100 dark:border-gray-700 dark:bg-gray-800 
-      p-4 shadow-sm transition-transform duration-200 
+      border-gray-300  bg-gray-100 dark:border-gray-700 dark:bg-gray-800  dark:shadow-emerald-950 shadow-sm
+      p-4  transition-transform duration-200 
       hover:scale-100 hover:shadow-md 
       ${view === "list" ? "h-24" : "h-auto"}`}
     >

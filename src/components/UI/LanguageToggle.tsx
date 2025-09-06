@@ -14,14 +14,14 @@ export default function LanguageToggle() {
 
     return (
         <div>
-            <h2 className="font-semibold text-xl mt-6 text-gray-900 mb-2">
+            <h2 className="font-semibold text-xl mt-6 text-gray-900 dark:text-gray-100 mb-2">
                 {t("change_language", "Change Language")}
             </h2>
-            <p className="text-gray-600 mb-6">
+            <p className="text-gray-400 mb-6">
                 {t("language_preference", "Choose in which language you are more comfortable.")}
             </p>
             <div className="flex items-center gap-3">
-                <span className={`font-medium ${language === "fr" ? "text-gray-900" : "text-gray-500"}`}>FR</span>
+                <span className={`font-medium ${language === "fr" ? "text-gray-900 dark:text-gray-300" : "text-gray-500 dark:text-gray-800"}`}>FR</span>
 
                 <button
                     onClick={toggleLanguage}
@@ -36,7 +36,7 @@ export default function LanguageToggle() {
                     ></div>
                 </button>
 
-                <span className={`font-medium ${language === "en" ? "text-gray-900" : "text-gray-500"}`}>EN</span>
+                <span className={`font-medium ${language === "en" ? "text-gray-900 dark:text-gray-300" : "text-gray-500 dark:text-gray-800"}`}>EN</span>
             </div>
         </div>
     );
