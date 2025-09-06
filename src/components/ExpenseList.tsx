@@ -49,30 +49,30 @@ export default function ExpenseList() {
 
     return (
         <div className="w-full mx-auto p-4">
-            <div className="bg-white shadow-md rounded-lg overflow-hidden">
-                <table className="min-w-full">
-                    <thead className="bg-gray-50">
+            <div className="bg-white dark:bg-gray-700 shadow-md rounded-lg overflow-hidden">
+                <table className="min-w-full ">
+                    <thead className="bg-gray-50 dark:bg-gray-200">
                         <tr>
                             <th scope="col"
-                                className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-black uppercase tracking-wider">
                                     {t("name", "Name")}
                             </th>
                             <th scope="col"
-                                className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-black uppercase tracking-wider">
                                 {t("category", "Category")}
                             </th>
                             <th scope="col"
-                                className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-black uppercase tracking-wider">
                                 {t("amount", "Amount")}
                             </th>
                         </tr>
                     </thead>
-                    <tbody className="bg-white divide-y divide-gray-200">
+                    <tbody className="bg-gray-800 divide-y divide-gray-300 dark:divide-gray-600">
                         {expenses.map((expense) => (
-                            <tr key={expense.id} className="hover:bg-gray-100">
-                                <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{expense.description || t('no description')}</td>
-                                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{expense.category_fk?.name || t("uncategorized")}</td>
-                                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{formatCurrency(expense.amount, currency)}</td>
+                            <tr key={expense.id} className="hover:bg-gray-100 dark:hover:bg-gray-900">
+                                <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-gray-200">{expense.description || t('no description')}</td>
+                                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">{expense.category_fk?.name || t("uncategorized")}</td>
+                                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-100">{formatCurrency(expense.amount, currency)}</td>
                             </tr>
                         ))}
                     </tbody>
