@@ -10,6 +10,7 @@ import {
   FaTaxi,
   FaTrash,
   FaUtensils,
+  FaQuestion,
 } from "react-icons/fa";
 import type { Transaction } from "./Types";
 import { useTranslation } from "react-i18next";
@@ -54,8 +55,8 @@ export default function TransactionCard({
 }: TransactionCardProps) {
   const { currency } = useContext(CurrencyContext);
   const { t } = useTranslation();
-    const { width } = useWindowDimensions()
-    const isWideViewPort = () => width > 1024
+  const { width } = useWindowDimensions()
+  const isWideViewPort = () => width > 1024
 
   const formattedDate = new Date(transaction.date).toLocaleDateString(t("local_date_format", "en-US"), {
     day: "2-digit",
@@ -76,7 +77,7 @@ export default function TransactionCard({
       <FaMoneyBillWave className="text-white" />
     ) : (
       categoryIcons[transaction.category || ""] || (
-        <FaUtensils className="text-white" />
+        <FaQuestion className="text-white" />
       )
     );
 
@@ -129,7 +130,7 @@ export default function TransactionCard({
           {/* Category / Source & Date */}
           <div className="mt-1 flex flex-wrap items-center gap-3 text-sm text-gray-500 dark:text-gray-400">
             <span>
-              {formatName( transaction.type === "expense"
+              {formatName(transaction.type === "expense"
                 ? transaction.category || "Uncategorized"
                 : transaction.source || "Unknown")}
             </span>
