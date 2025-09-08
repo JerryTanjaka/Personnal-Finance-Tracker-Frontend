@@ -65,7 +65,7 @@ export default function BarChart({ chartValueOptions }: any) {
                             label += ": ";
                         }
                         if (context.parsed.y !== null) {
-                            label += formatCurrency(context.parsed.y, currency);
+                            label += formatCurrency(context.parsed.y, currency, true);
                         }
                         return label;
                     },

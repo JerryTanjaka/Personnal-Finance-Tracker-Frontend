@@ -27,21 +27,23 @@ export default function CategoryItem({ category, onRename, onDelete }: Props) {
     return (
         <motion.div
             key={category.id}
-            className="w-full px-6 py-4 rounded-xl shadow-sm grid grid-cols-3 gap-x-5 items-center bg-white hover:bg-gray-50 transition-colors text-gray-800"
+            className="w-full px-6 py-4 rounded-xl shadow-sm flex justify-between bg-gray-50 hover:bg-gray-100 transition-colors text-gray-800 dark:bg-gray-800 dark:hover:bg-gray-700 dark:text-gray-100"
             layout
             whileHover={{ scale: 0.995 }}
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0 }}
         >
-            <div className="text-lg font-medium">{category["name"]}</div>
-            <div className="text-center text-sm text-gray-600">{formattedDate}</div>
-            <div className="flex justify-center gap-3 flex-wrap">
+            <div className="flex-row">
+                <div className="text-lg font-medium">{category["name"]}</div>
+                <div className="text-center text-sm text-gray-600">{formattedDate}</div>
+            </div>
+                <div className="flex justify-center gap-3 flex-col">
                 <motion.button
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
                     onClick={() => onRename(category)}
-                    className="px-3 py-1.5 bg-blue-50 text-blue-600 rounded-lg text-sm font-medium"
+                    className="px-3 py-1.5 cursor-pointer bg-blue-50 text-blue-600 rounded-lg text-sm font-medium dark:bg-blue-900 dark:text-blue-300"
                     type="button"
                 >
                     {t('rename', 'Rename')}
@@ -50,7 +52,7 @@ export default function CategoryItem({ category, onRename, onDelete }: Props) {
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
                     onClick={() => onDelete(category.id)}
-                    className="px-3 py-1.5 bg-red-50 text-red-600 rounded-lg text-sm font-medium"
+                    className="px-3 py-1.5 cursor-pointer bg-red-50 text-red-600 rounded-lg text-sm font-medium dark:bg-red-900 dark:text-red-300"
                     type="button"
                 >
                     {t('delete', 'Delete')}

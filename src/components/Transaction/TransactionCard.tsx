@@ -15,6 +15,7 @@ import type { Transaction } from "./Types";
 import { useTranslation } from "react-i18next";
 import { CurrencyContext } from "../../context/CurrencyContext";
 import { formatCurrency } from "../../utils/currency";
+import formatName from "../../utils/FormatTransactionName";
 
 type TransactionCardProps = {
   transaction: Transaction;
@@ -106,7 +107,7 @@ export default function TransactionCard({
           {/* Name & Amount */}
           <div className="flex items-center justify-between mt-5 space-x-4 w-fit">
             <h2 className="text-lg font-semibold text-gray-800 dark:text-gray-100">
-              {transaction.name}
+              {formatName(transaction.name)}
             </h2>
             <p
               className={`text-lg font-bold ${transaction.type === "expense"
@@ -115,7 +116,7 @@ export default function TransactionCard({
                 }`}
             >
               {transaction.type === "expense" ? "-" : "+"}
-              {formatCurrency(transaction.amount, currency)}
+              {formatCurrency(transaction.amount, currency, true)}
             </p>
             {transaction.is_recurrent && (
               <i className="bx bx-rotate-right text-xl text-gray-500 dark:text-gray-400" />
@@ -125,9 +126,9 @@ export default function TransactionCard({
           {/* Category / Source & Date */}
           <div className="mt-1 flex flex-wrap items-center gap-3 text-sm text-gray-500 dark:text-gray-400">
             <span>
-              {transaction.type === "expense"
+              {formatName( transaction.type === "expense"
                 ? transaction.category || "Uncategorized"
-                : transaction.source || "Unknown"}
+                : transaction.source || "Unknown")}
             </span>
             <span className="text-gray-400 dark:text-gray-500">
               {formattedDate}

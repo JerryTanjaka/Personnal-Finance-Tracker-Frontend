@@ -136,7 +136,6 @@ export default function Expense() {
         }
 
         try {
-            // Debug: log token and FormData entries so we can compare with Postman
             console.log('Creating expense - token present?', !!token);
             for (const entry of formData.entries()) {
                 console.log('formData entry:', entry[0], entry[1]);
@@ -152,7 +151,6 @@ export default function Expense() {
             );
 
             if (!res.ok) {
-                // Read server error body to surface useful debugging info
                 const text = await res.text();
                 console.error('Create expense failed', res.status, text);
             } else {
@@ -276,7 +274,7 @@ export default function Expense() {
     };
 
     return (
-        <div className="z-50 flex h-[96vh] w-full flex-col items-center rounded-lg bg-gray-100 dark:bg-gray-900">
+        <div className="z-50 flex h-[96vh] w-full flex-col dark:border-2 dark:border-gray-800 items-center rounded-lg bg-gray-100 dark:bg-gray-900">
             <div className="flex min-h-full w-full max-w-7xl flex-col rounded-2xl p-6">
                 {/* Header */}
                 <div className="flex flex-col border-b border-gray-300 pb-2 text-3xl font-bold md:flex-row md:items-center md:justify-between">
@@ -324,7 +322,7 @@ export default function Expense() {
                 <AnimatePresence>
                     <motion.div
                         layout
-                        className={`mt-6 w-full overflow-y-auto pt-3 pl-2 ${
+                        className={`mt-2 w-full overflow-y-auto pt-3 pl-2 ${
                             view === 'grid'
                                 ? 'grid grid-cols-1 gap-4 pb-4 sm:grid-cols-2 lg:grid-cols-3'
                                 : 'flex flex-col space-y-4'

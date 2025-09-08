@@ -30,7 +30,7 @@ export const PieChart = ({ chartValueOptions }: any) => {
                 callbacks: {
                     label: (context: any) => {
                         const value = context.raw;
-                        return formatCurrency(value, currency);
+                        return formatCurrency(value, currency, true);
                     },
                 },
             },

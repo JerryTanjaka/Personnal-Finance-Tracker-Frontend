@@ -17,7 +17,7 @@ export default function NavBar() {
         } ${extraClasses}`;
 
     const baseItemClasses =
-        'flex cursor-pointer items-center space-x-2 pl-1 py-2 rounded-lg transition-colors duration-200';
+        'flex cursor-pointer items-center space-x-2 pl-1 py-1 rounded-lg transition-colors duration-200';
 
     const itemColors = {
         dashboard: {
@@ -42,7 +42,7 @@ export default function NavBar() {
         },
         settings: {
             bg: 'bg-gray-500 dark:bg-gray-950',
-            text: 'text-black dark:text-white',
+            text: 'text-white dark:text-white',
             hover: 'hover:bg-gray-500 dark:hover:bg-gray-950 hover:text-gray-950 dark:hover:text-white',
         },
         support: {
@@ -113,7 +113,7 @@ export default function NavBar() {
                                             : 'message-question-mark'
                             } text-2xl`}
                         ></i>
-                        <span className={textAnimation()}>{t(key)}</span>
+                        <span className={`${textAnimation("text-nowrap")}`}>{t(key)}</span>
                     </NavLink>
                 ))}
             </div>
@@ -121,7 +121,7 @@ export default function NavBar() {
             {/* Footer / Logout */}
             <NavLink to="/login">
                 <div
-                    className="mt-4 flex cursor-pointer items-center space-x-2 text-gray-700 hover:text-red-600 dark:text-gray-200"
+                    className="mt-4 flex cursor-pointer text-nowrap items-center space-x-2 text-gray-700 hover:text-red-600 dark:text-gray-200"
                     onClick={() => localStorage.removeItem('accessToken')}
                 >
                     <i className="bxr bx-arrow-out-left-square-half text-2xl"></i>

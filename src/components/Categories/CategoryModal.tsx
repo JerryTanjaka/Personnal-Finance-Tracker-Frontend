@@ -47,13 +47,13 @@ export default function CategoryModal({ isOpen, isCreating, isUpdating, category
                     onClick={onClose}
                 >
                     <motion.div
-                        className="relative w-full max-w-md m-4 bg-white rounded-2xl shadow-xl border border-gray-200/50"
+                        className="relative w-full max-w-md m-4 bg-white rounded-2xl shadow-xl border border-gray-200/50 dark:bg-gray-800 dark:border-gray-700"
                         initial={{ scale: 0.95, opacity: 0 }}
                         animate={{ scale: 1, opacity: 1, transition: { duration: 0.2, ease: "easeOut" } }}
                         exit={{ scale: 0.95, opacity: 0, transition: { duration: 0.2, ease: "easeIn" } }}
                         onClick={(e) => e.stopPropagation()}
                     >
-                        <div className="flex items-center justify-between p-5 border-b rounded-t-2xl bg-gray-50">
+                            <div className="flex items-center justify-between p-5 border-b rounded-t-2xl bg-gray-50 dark:bg-gray-700">
                             <h3 className="text-xl font-semibold text-gray-800 flex items-center gap-3">
                                 <i className={modalDetails.icon}></i>
                                 {modalDetails.title}
@@ -61,7 +61,7 @@ export default function CategoryModal({ isOpen, isCreating, isUpdating, category
                             <button
                                 onClick={onClose}
                                 type="button"
-                                className="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 inline-flex justify-center items-center"
+                                    className="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-gray-100"
                             >
                                 <i className="bx bx-x text-2xl"></i>
                             </button>
@@ -76,7 +76,7 @@ export default function CategoryModal({ isOpen, isCreating, isUpdating, category
                             <div className="p-6 space-y-4">
                                 {isUpdating || isCreating ? (
                                     <div>
-                                        <label htmlFor="categoryNewName" className="block mb-2 text-sm font-medium text-gray-900">
+                                        <label htmlFor="categoryNewName" className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-100">
                                             {t('category_name_label', 'Category Name')}
                                         </label>
                                         <input
@@ -86,18 +86,18 @@ export default function CategoryModal({ isOpen, isCreating, isUpdating, category
                                             maxLength={15}
                                             value={categoryName}
                                             onChange={(e) => onChangeName(e.target.value)}
-                                            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+                                            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-100"
                                             placeholder={t('enter_category_placeholder', 'Enter a name')}
                                             required
                                         />
-                                        <span className="text-xs text-gray-500">{categoryNameLength}/15</span>
+                                        <span className="text-xs text-gray-500 dark:text-gray-400">{categoryNameLength}/15</span>
                                     </div>
                                 ) : (
                                     <>
-                                        <p className="text-sm text-gray-600">{t('delete_confirm_text', 'Are you sure you want to delete this category? This action cannot be undone.')}</p>
-                                        <div className="flex items-center gap-3 p-3 bg-red-50 border border-red-200 rounded-lg">
+                                        <p className="text-sm text-gray-600 dark:text-gray-300">{t('delete_confirm_text', 'Are you sure you want to delete this category? This action cannot be undone.')}</p>
+                                        <div className="flex items-center gap-3 p-3 bg-red-50 border border-red-200 rounded-lg dark:bg-red-900/20 dark:border-red-800">
                                             <input id="forceCategoryDelete" type="checkbox" className="w-4 h-4 text-red-600 bg-gray-100 border-gray-300 rounded focus:ring-red-500 accent-red-500" />
-                                            <label htmlFor="forceCategoryDelete" className="text-sm font-medium text-red-800">{t('force_delete_label', 'Force delete even if it\'s in use')}</label>
+                                            <label htmlFor="forceCategoryDelete" className="text-sm font-medium text-red-800 dark:text-red-300">{t('force_delete_label', 'Force delete even if it\'s in use')}</label>
                                         </div>
                                     </>
                                 )}
