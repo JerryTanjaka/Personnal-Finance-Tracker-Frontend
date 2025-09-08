@@ -157,7 +157,7 @@ export default function TransactionCard({
             <FaFileDownload />
           </button>)}
           <div
-            className={`flex ${view === "grid" ? "flex-col space-y-2" : "flex-row space-x-3"
+            className={`flex ${(view === "grid" || !isWideViewPort()) ? "flex-col space-y-2" : "flex-row space-x-3"
               } items-center`}
           >
             <button
