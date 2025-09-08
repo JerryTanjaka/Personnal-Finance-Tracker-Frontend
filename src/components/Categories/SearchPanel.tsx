@@ -12,7 +12,7 @@ export default function SearchPanel({ onSearch, onClear }: Props) {
     const searchInputRef = useRef<HTMLInputElement>(null);
 
     return (
-        <div className="relative bg-gray-50 rounded-xl shadow-sm p-3 h-fit">
+        <div className="relative bg-gray-50 rounded-xl shadow-sm p-3 h-fit dark:bg-gray-800">
             <form
                 onSubmit={(e) => {
                     e.preventDefault();
@@ -27,7 +27,7 @@ export default function SearchPanel({ onSearch, onClear }: Props) {
                         ref={searchInputRef}
                         id="searchFilter"
                         onChange={() => {}}
-                        className="bg-white w-full h-10 pl-10 pr-4 rounded-lg text-gray-800 border border-gray-200 focus:ring-2 focus:ring-blue-500 outline-none"
+                        className="bg-white w-full h-10 pl-10 pr-4 rounded-lg text-gray-800 border border-gray-200 focus:ring-2 focus:ring-blue-500 outline-none dark:bg-gray-700 dark:border-gray-600 dark:text-gray-100"
                         placeholder={t('search_placeholder', 'Search by name...')}
                     />
                 </div>
@@ -40,7 +40,7 @@ export default function SearchPanel({ onSearch, onClear }: Props) {
                             if (searchInputRef.current) searchInputRef.current.value = "";
                             onClear();
                         }}
-                        className="text-gray-700 font-medium bg-white border border-gray-300 py-1.5 px-4 rounded-lg hover:bg-gray-100"
+                        className="text-gray-700 font-medium bg-white border border-gray-300 py-1.5 px-4 rounded-lg hover:bg-gray-100 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-100 dark:hover:bg-gray-600"
                     >
                         {t('clear', 'Clear')}
                     </motion.button>

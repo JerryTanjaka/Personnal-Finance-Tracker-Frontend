@@ -17,9 +17,9 @@ type Props = {
 
 export default function CategoryList({ categories, searchFilter, onRename, onDelete, onCreate }: Props) {
     return (
-        <div className="relative w-full grid grid-cols-3 gap-4 rounded-2xl pb-4 overflow-y-scroll max-h-full">
+    <div className="relative w-full grid grid-cols-3 gap-4 rounded-2xl pb-4 overflow-y-scroll max-h-full">
             <motion.div
-                className="w-full px-6 py-5 rounded-xl shadow-sm flex justify-center items-center bg-gray-50 hover:bg-gray-50 cursor-pointer"
+        className="w-full px-6 py-5 rounded-xl shadow-sm flex justify-center items-center bg-gray-50 hover:bg-gray-100 dark:bg-gray-800 dark:hover:bg-gray-700 cursor-pointer"
                 layout
                 onClick={onCreate}
                 whileHover={{ scale: 0.99 }}
