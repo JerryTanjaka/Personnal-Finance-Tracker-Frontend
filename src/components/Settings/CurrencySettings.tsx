@@ -18,11 +18,11 @@ export default function CurrencySettings() {
 
     return (
         <div className="mt-4">
-            <h2 className="text-lg font-semibold text-gray-800 dark:text-gray-100 mb-3">
+            <h2 className="font-semibold text-xl text-gray-900 dark:text-gray-100 mt-6 mb-2">
                 {t('currency_settings_title', 'Currency')}
             </h2>
 
-            <div className="flex gap-6">
+            <div className="flex gap-1">
                 {currencies.map((c) => (
                     <label
                         key={c.code}

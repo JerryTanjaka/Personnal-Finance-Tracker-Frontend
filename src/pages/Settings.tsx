@@ -24,7 +24,7 @@ export default function Settings() {
     }, []);
 
     return (
-        <div className="mx-auto h-[96vh] overflow-y-scroll rounded-lg bg-gray-100 dark:bg-gray-900 p-8 shadow-md">
+        <div className="mx-auto h-[96vh] overflow-y-scroll dark:border-2 dark:border-gray-800 rounded-lg bg-gray-100 dark:bg-gray-900 p-8 shadow-md">
             <h1 className="mb-6 border-b border-gray-300 dark:border-gray-700 pb-4 text-3xl font-bold text-gray-800 dark:text-gray-100">
                 {t('settings_title', 'Settings')}
             </h1>
@@ -140,22 +140,9 @@ export default function Settings() {
                     )}
                 </p>
             </div>
-
             <LanguageToggle />
             <ThemeToggle />
-
             <CurrencySettings />
-
-            <h2 className="font-semibold text-xl text-gray-900 dark:text-gray-100 mt-6 mb-2">
-                {t("delete_data_title", "Data Managing")}
-            </h2>
-            <p className="text-gray-600 dark:text-gray-400 ml-1">
-                {t(
-                    "delete_data_description",
-                    "Deleting your data is not reversible."
-                )}
-            </p>
-
             <DeleteData />
             <DeleteAccount />
         </div>

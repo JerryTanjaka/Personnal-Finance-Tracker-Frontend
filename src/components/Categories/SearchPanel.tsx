@@ -12,23 +12,22 @@ export default function SearchPanel({ onSearch, onClear }: Props) {
     const searchInputRef = useRef<HTMLInputElement>(null);
 
     return (
-        <div className="relative max-w-[350px] min-w-[250px] bg-white rounded-xl shadow-md p-6 h-fit">
-            <h4 className="text-lg font-semibold text-gray-800 mb-4">{t('search_categories', 'Search Categories')}</h4>
+        <div className="relative bg-gray-50 rounded-xl shadow-sm p-3 h-fit">
             <form
                 onSubmit={(e) => {
                     e.preventDefault();
                     onSearch(searchInputRef.current?.value || "");
                 }}
-                className="flex flex-col gap-4"
+                className="flex justify-between gap-3 flex-row"
             >
-                <div className="relative">
+                <div className="relative w-full">
                     <i className="bx bx-search absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"></i>
                     <input
                         type="text"
                         ref={searchInputRef}
                         id="searchFilter"
                         onChange={() => {}}
-                        className="bg-gray-50 w-full h-10 pl-10 pr-4 rounded-lg text-gray-800 border border-gray-200 focus:ring-2 focus:ring-blue-500 outline-none"
+                        className="bg-white w-full h-10 pl-10 pr-4 rounded-lg text-gray-800 border border-gray-200 focus:ring-2 focus:ring-blue-500 outline-none"
                         placeholder={t('search_placeholder', 'Search by name...')}
                     />
                 </div>
