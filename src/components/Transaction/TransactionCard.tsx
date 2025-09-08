@@ -16,6 +16,7 @@ import { useTranslation } from "react-i18next";
 import { CurrencyContext } from "../../context/CurrencyContext";
 import { formatCurrency } from "../../utils/currency";
 import formatName from "../../utils/FormatTransactionName";
+import useWindowDimensions from "../../hooks/useWindowDimensions";
 
 type TransactionCardProps = {
   transaction: Transaction;
@@ -53,6 +54,8 @@ export default function TransactionCard({
 }: TransactionCardProps) {
   const { currency } = useContext(CurrencyContext);
   const { t } = useTranslation();
+    const { width } = useWindowDimensions()
+    const isWideViewPort = () => width > 1024
 
   const formattedDate = new Date(transaction.date).toLocaleDateString(t("local_date_format", "en-US"), {
     day: "2-digit",
@@ -88,7 +91,7 @@ export default function TransactionCard({
       border-gray-300  bg-gray-100 dark:border-gray-700 dark:bg-gray-800  dark:shadow-emerald-950 shadow-sm
       p-4  transition-transform duration-200 
       hover:scale-100 hover:shadow-md 
-      ${view === "list" ? "h-24" : "h-auto"}`}
+      ${(view === "list" && isWideViewPort()) ? "h-24" : "h-auto"}`}
     >
       {/* Badge icon */}
       <div
@@ -101,7 +104,7 @@ export default function TransactionCard({
       <div className="flex justify-between items-start">
         <div
           className={
-            view === "list" ? "flex flex-col justify-between ml-12" : ""
+            (view === "list" && isWideViewPort()) ? "flex flex-col justify-between ml-12" : ""
           }
         >
           {/* Name & Amount */}
