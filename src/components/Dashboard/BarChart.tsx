@@ -2,10 +2,10 @@ import { Chart as ChartJS, BarController, BarElement, CategoryScale, LinearScale
 import { useContext, useEffect, useState } from "react";
 import { Bar } from "react-chartjs-2";
 import { useTranslation } from "react-i18next";
-import type { Transaction } from "./Transaction/Types";
-import { CurrencyContext } from "../context/CurrencyContext";
-import { formatCurrency } from "../utils/currency";
-import useDarkMode from "../hooks/useDarkMode";
+import type { Transaction } from "../Transaction/Types";
+import { CurrencyContext } from "../../context/CurrencyContext";
+import { formatCurrency } from "../../utils/currency";
+import useDarkMode from "../../hooks/useDarkMode";
 
 ChartJS.register(BarController, BarElement, CategoryScale, LinearScale, Tooltip);
 
