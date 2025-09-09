@@ -10,6 +10,7 @@ export default function AiAdvice() {
     const [categories, setCategories] = useState([]);
     const [advice, setAdvice] = useState("");
     const [loading, setLoading] = useState(false);
+    const [showAdvice, setShowAdvice] = useState(false);
 
     const language = localStorage.getItem("appLanguage") || "en";
     const accessToken = localStorage.getItem("accessToken");
@@ -17,6 +18,7 @@ export default function AiAdvice() {
     useEffect(() => {
         const fetchData = async () => {
             setLoading(true);
+            setShowAdvice(false);
             try {
                 const headers = { Authorization: "Bearer " + accessToken };
 
@@ -37,17 +39,19 @@ export default function AiAdvice() {
                 setCategories(categoriesData);
 
                 const prompt = `
-          Give the answer in the given language: ${language}
-          - English if 'en', French if 'fr'
-          Give in one short sentence (max 20 words) a clever financial advice based on expenses, incomes, and categories.
-          Incomes: ${JSON.stringify(incomesData)}
-          Categories: ${JSON.stringify(categoriesData)}
-          Expenses: ${JSON.stringify(expensesData)}
-        `;
+                    Give the answer in the given language: ${language}
+                    - English if 'en', French if 'fr'
+                    Give in one short sentence (max 20 words) a clever financial advice based on expenses, incomes, and categories.
+                    Incomes: ${JSON.stringify(incomesData)}
+                    Categories: ${JSON.stringify(categoriesData)}
+                    Expenses: ${JSON.stringify(expensesData)}
+                `;
 
                 const result = await model.generateContent(prompt);
                 const text = result.response.text();
                 setAdvice(text);
+
+                setTimeout(() => setShowAdvice(true), 50);
             } catch (err) {
                 console.error(err);
             } finally {
@@ -58,26 +62,27 @@ export default function AiAdvice() {
         fetchData();
     }, [accessToken, language]);
 
-
     return (
         <section className="flex flex-wrap items-end text-gray-800 gap-6 border border-gray-300 dark:border-gray-800 dark:bg-gray-800 dark:text-white rounded-lg px-6 py-4 m-4 mb-0 mx-0">
             {loading ? (
                 <div className="flex items-center gap-2">
                     <span className="text-sm font-medium">AI is thinking</span>
-                    <span className="flex gap-1">
-                        <span className="w-2 h-2 rounded-full bg-blue-500 animate-bounce [animation-delay:0ms]" />
-                        <span className="w-2 h-2 rounded-full bg-blue-500 animate-bounce [animation-delay:150ms]" />
-                        <span className="w-2 h-2 rounded-full bg-blue-500 animate-bounce [animation-delay:300ms]" />
+                    <span className="flex gap-1 pt-1">
+                        <span className="w-2 h-4 rounded-full bg-blue-500 animate-bounce [animation-delay:0ms]" />
+                        <span className="w-2 h-4 rounded-full bg-blue-500 animate-bounce [animation-delay:150ms]" />
+                        <span className="w-2 h-4 rounded-full bg-blue-500 animate-bounce [animation-delay:300ms]" />
                     </span>
                 </div>
             ) : (
-                <p className="text-sm flex items-center gap-2">
+                <p
+                    className={`text-sm flex items-center gap-2 transition-opacity duration-700 ${
+                        showAdvice ? "opacity-100" : "opacity-0"
+                    }`}
+                >
                     <i className="bx bx-light-bulb text-lg"></i>
                     <span>Tips: {advice}</span>
                 </p>
             )}
         </section>
     );
-
-
 }

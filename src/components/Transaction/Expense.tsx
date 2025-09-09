@@ -2,13 +2,12 @@ import { AnimatePresence, motion } from 'framer-motion';
 import fileDownload from 'js-file-download';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { FaFilter, FaList, FaPlus, FaThLarge } from 'react-icons/fa';
+import { FaList, FaPlus, FaThLarge } from 'react-icons/fa';
 import { fetchCategories, fetchExpenses } from '../../utils/fetch/Fetch.ts';
 import ExpenseFilter from '../UI/ExpenseFilter.tsx';
 import Input from './../UI/searchButton.tsx';
 import TransactionCard from './TransactionCard';
 import type { Category, Transaction } from './Types';
-import useWindowDimensions from '../../hooks/useWindowDimensions.ts';
 
 type ChartOptions = {
     start: Date;
@@ -24,9 +23,6 @@ export default function Expense() {
             (localStorage.getItem('transactionView') as 'grid' | 'list') ||
             'grid',
     );
-    const { width } = useWindowDimensions()
-    const isWideViewPort = () => width > 1024
-    const [isFilterVisible, setIsFilterVisible] = useState<boolean>(false)
 
     const toggleView = () => {
         const newView = view === 'grid' ? 'list' : 'grid';
@@ -119,7 +115,7 @@ export default function Expense() {
             if (
                 target.endDate?.value &&
                 new Date(target.startDate?.value) <=
-                new Date(target.endDate?.value)
+                    new Date(target.endDate?.value)
             )
                 formData.append('endDate', target.endDate.value);
             else return;
@@ -254,9 +250,9 @@ export default function Expense() {
             ).then(async (res) =>
                 res.ok
                     ? fileDownload(
-                        await res.blob(),
-                        `${id}.${res.headers.get('content-type')?.split('/')[1]}`,
-                    )
+                          await res.blob(),
+                          `${id}.${res.headers.get('content-type')?.split('/')[1]}`,
+                      )
                     : null,
             );
         } catch (err) {
@@ -278,18 +274,18 @@ export default function Expense() {
     };
 
     return (
-        <div className={`z-50 flex ${isWideViewPort() ? "h-[96vh]" : "h-[calc(96vh-120px)]"} w-full flex-col items-center rounded-lg  bg-gray-100 dark:border-2 dark:border-gray-800 dark:bg-gray-900  `}>
-            <div className="flex min-h-full w-full flex-col rounded-2xl">
+        <div className="z-50 flex h-[96vh] w-full flex-col dark:border-2 dark:border-gray-800 items-center rounded-lg bg-gray-100 dark:bg-gray-900">
+            <div className="flex min-h-full w-full max-w-7xl flex-col rounded-2xl p-6">
                 {/* Header */}
-                <div className="flex flex-col border-b border-gray-300 pb-2 text-3xl font-bold md:flex-row md:items-center md:justify-between p-5">
+                <div className="flex flex-col border-b border-gray-300 pb-2 text-3xl font-bold md:flex-row md:items-center md:justify-between">
                     <h1 className="text-3xl font-bold dark:text-gray-100">
                         {t('expenses', 'Expenses')}
                     </h1>
-                    <div className="flex space-y-2 flex-row justify-center md:items-center md:space-y-0 space-x-2 pt-3 lg:pt-0">
+                    <div className="flex flex-col space-y-2 md:flex-row md:items-center md:space-y-0 md:space-x-2">
                         {/* Add button */}
                         <button
                             onClick={() => setIsModalOpen(true)}
-                            className="flex max-w-fit cursor-pointer items-center gap-2 rounded-lg bg-gray-200 px-4 py-2 text-lg font-medium text-gray-800 shadow-sm transition-all duration-200 hover:bg-gray-300 hover:shadow-md active:scale-95"
+                            className="flex cursor-pointer items-center gap-2 rounded-lg bg-gray-200 px-4 py-2 text-lg font-medium text-gray-800 shadow-sm transition-all duration-200 hover:bg-gray-300 hover:shadow-md active:scale-95"
                         >
                             <FaPlus className="text-lg text-gray-600" />
                             <span>{t('add', 'Add')}</span>
@@ -305,45 +301,32 @@ export default function Expense() {
                         </div>
 
                         {/* View toggle */}
-                        {isWideViewPort() ?
-                            (<div className="flex space-x-2">
-                                <button
-                                    onClick={toggleView}
-                                    className="flex h-12 w-12 items-center justify-center rounded-lg border border-gray-300 bg-gray-200 text-gray-800 transition hover:bg-gray-300 active:scale-95"
-                                >
-                                    {view === 'grid' ? <FaList /> : <FaThLarge />}
-                                </button>
-                            </div>) :
-                            (<div className="flex space-x-2">
-                                <button
-                                    onClick={() => setIsFilterVisible(!isFilterVisible)}
-                                    className="flex h-12 w-12 items-center justify-center rounded-lg border border-gray-300 bg-gray-200 text-gray-800 transition hover:bg-gray-300 active:scale-95"
-                                >
-                                    <FaFilter />
-                                </button>
-                            </div>
-                            )
-                        }
+                        <div className="flex space-x-2">
+                            <button
+                                onClick={toggleView}
+                                className="flex h-12 w-12 items-center justify-center rounded-lg border border-gray-300 bg-gray-200 text-gray-800 transition hover:bg-gray-300 active:scale-95"
+                            >
+                                {view === 'grid' ? <FaList /> : <FaThLarge />}
+                            </button>
+                        </div>
                     </div>
                 </div>
-                {(isWideViewPort() || (!isWideViewPort() && isFilterVisible)) && (
-                    <div className="p-4">
-                        <ExpenseFilter
-                            chartOptions={chartOptions}
-                            setChartOptions={setChartOptions}
-                            categoryList={categoryList}
-                        />
-                    </div>
-                )}
+
+                <ExpenseFilter
+                    chartOptions={chartOptions}
+                    setChartOptions={setChartOptions}
+                    categoryList={categoryList}
+                />
 
                 {/* Transactions */}
                 <AnimatePresence>
                     <motion.div
                         layout
-                        className={`mt-2 min-w-full overflow-y-auto pt-3 p-4 ${view === 'grid'
-                            ? 'grid grid-cols-1 gap-3 pb-10 md:grid-cols-2 2xl:grid-cols-3'
-                            : 'flex flex-col space-y-4'
-                            }`}
+                        className={`mt-2 w-full overflow-y-auto pt-3 ${
+                            view === 'grid'
+                                ? 'grid grid-cols-1 gap-4 pb-4 sm:grid-cols-2 lg:grid-cols-3'
+                                : 'flex flex-col space-y-4'
+                        }`}
                         style={{ maxHeight: 'calc(100vh - 220px)' }}
                     >
                         {filteredTransactions.map((t) => (
