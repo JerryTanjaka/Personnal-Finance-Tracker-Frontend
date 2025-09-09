@@ -176,7 +176,7 @@ export default function TransactionCard({
 
                         <button
                             onClick={actions?.onDelete}
-                            className="group/btn flex h-10 w-10 items-center justify-center rounded-xl bg-red-500/80 text-gray-100 shadow-md transition-all duration-200 hover:scale-105 hover:bg-red-700 hover:shadow-lg active:scale-95"
+                            className="group/btn flex h-10 w-10 items-center justify-center rounded-xl bg-red-700/80 text-gray-100 shadow-md transition-all duration-200 hover:scale-105 hover:bg-red-700 hover:shadow-lg active:scale-95"
                         >
                             <FaTrash className="text-sm transition-transform duration-200 group-hover/btn:scale-110" />
                         </button>
