@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { NavLink } from 'react-router-dom';
-import useLocalStorage from '../hooks/useLocalStorage';
+import useLocalStorage from '../../hooks/useLocalStorage';
 
 export default function NavBar() {
     const [isExpanded, setIsExpanded] = useState(false);
@@ -43,7 +43,7 @@ export default function NavBar() {
         settings: {
             bg: 'bg-gray-500 dark:bg-gray-950',
             text: 'text-white dark:text-white',
-            hover: 'hover:bg-gray-500 dark:hover:bg-gray-950 hover:text-gray-950 dark:hover:text-white',
+            hover: 'hover:bg-gray-500 dark:hover:bg-gray-950 hover:text-white dark:hover:text-white',
         },
         support: {
             bg: 'bg-sky-300 dark:bg-sky-800',

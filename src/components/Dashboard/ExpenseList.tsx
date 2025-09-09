@@ -1,10 +1,10 @@
 import { useContext, useEffect, useState } from "react";
 import { t } from "i18next";
-import { getExpenses } from "../data/DataFetch.ts";
-import LoadingSpinner from "./UI/LoadingSpinner.tsx";
-import ErrorMessage from "./UI/ErrorMessage.tsx";
-import { CurrencyContext } from "../context/CurrencyContext.tsx";
-import { formatCurrency } from "../utils/currency.ts";
+import { getExpenses } from "../../data/DataFetch.ts";
+import LoadingSpinner from "../UI/LoadingSpinner.tsx";
+import ErrorMessage from "../UI/ErrorMessage.tsx";
+import { CurrencyContext } from "../../context/CurrencyContext.tsx";
+import { formatCurrency } from "../../utils/currency.ts";
 
 interface Expense {
     id: number;
