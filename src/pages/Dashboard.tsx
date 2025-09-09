@@ -85,7 +85,7 @@ export default function Dashboard() {
 
     return (
         <section className={'flex h-full'}>
-            <div className={`${isWideViewPort() ? "h-[96vh]" : "h-[calc(96vh-120px)]"} w-full rounded-lg bg-gray-100 dark:bg-gray-900 dark:border-2 dark:border-gray-800 p-5 overflow-scroll dark:text-white`}>
+            <div className={`${isWideViewPort() ? "h-[96vh]" : "h-[calc(96vh-120px)]"} w-full rounded-lg bg-gray-100 dark:bg-gray-900 dark:border-2 dark:border-gray-800 p-5 overflow-y-scroll overflow-x-hidden dark:text-white`}>
                 <div className="flex justify-between border-b border-gray-300 dark:border-gray-500 items-center mb-5">
                     <h1 className="text-3xl font-bold p-2 mb-3">
                         {t("dashboard_title", "Dashboard")}
