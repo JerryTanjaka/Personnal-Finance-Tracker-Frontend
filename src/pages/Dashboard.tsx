@@ -125,7 +125,7 @@ export default function Dashboard() {
                 />
                 <div className={`flex flex-col m-5`}>
                     <h1 className={`text-2xl font-semibold`}>{t('expenses_categories', 'Expenses Categories')}</h1>
-                    <div className="grid grid-cols-1 lg:grid-cols-2 max-w-[1200px] w-full gap-6 items-start m-auto mt-5">
+                    <div className="flex flex-row max-w-[1200px] w-full gap-6 items-start mt-5">
                         <PieChart chartValueOptions={chartOptions} />
                         <BarChart chartValueOptions={chartOptions} />
                     </div>

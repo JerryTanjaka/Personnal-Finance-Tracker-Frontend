@@ -322,7 +322,7 @@ export default function Expense() {
                 <AnimatePresence>
                     <motion.div
                         layout
-                        className={`mt-2 w-full overflow-y-auto pt-3 pl-2 ${
+                        className={`mt-2 w-full overflow-y-auto pt-3 ${
                             view === 'grid'
                                 ? 'grid grid-cols-1 gap-4 pb-4 sm:grid-cols-2 lg:grid-cols-3'
                                 : 'flex flex-col space-y-4'
