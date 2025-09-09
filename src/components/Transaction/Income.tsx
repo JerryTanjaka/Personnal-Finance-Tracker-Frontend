@@ -4,6 +4,7 @@ import { FaList, FaPlus, FaSearch, FaThLarge } from 'react-icons/fa';
 import { useTranslation } from 'react-i18next';
 import TransactionCard from './TransactionCard';
 import type { Transaction } from './Types';
+import useWindowDimensions from '../../hooks/useWindowDimensions';
 
 type ActionsModel = {
     status: boolean;
@@ -17,6 +18,8 @@ export default function Income() {
             (localStorage.getItem('transactionView') as 'grid' | 'list') ||
             'grid',
     );
+    const { width } = useWindowDimensions()
+    const isWideViewPort = () => width > 1024
 
     const toggleView = () => {
         const newView = view === 'grid' ? 'list' : 'grid';
@@ -173,24 +176,24 @@ export default function Income() {
     };
 
     return (
-        <div className="z-50 flex h-[96vh] dark:border-2 dark:border-gray-800 w-full flex-col items-center rounded-lg  bg-gray-100 dark:bg-gray-900">
+        <div className={`z-50 flex ${isWideViewPort() ? "h-[96vh]" : "h-[calc(96vh-120px)]"} dark:border-2 dark:border-gray-800 w-full flex-col items-center rounded-lg  bg-gray-100 dark:bg-gray-900`}>
             <div className="flex min-h-full w-full max-w-7xl flex-col rounded-2xl p-6">
                 {/* Header */}
                 <div className="flex flex-col border-b border-gray-300 dark:text-gray-100 dark:border-gray-500 pb-2 text-3xl font-bold md:flex-row md:items-center md:justify-between">
-                    <h1 className="text-3xl font-bold">{t('incomes','Incomes')}</h1>
+                    <h1 className="text-3xl font-bold">{t('incomes', 'Incomes')}</h1>
 
-                    <div className="flex flex-col md:flex-row md:items-center md:space-x-2 space-y-2 md:space-y-0">
+                    <div className="flex flex-row justify-center md:items-center space-x-2 space-y-2 pt-3 lg:pt-0 md:space-y-0">
                         {/* Add Button */}
                         <button
                             onClick={openModal}
-                            className="flex items-center cursor-pointer gap-2 rounded-lg bg-gray-200 px-4 py-2 text-gray-800 text-lg font-medium shadow-sm transition-all duration-200 hover:bg-gray-300 hover:shadow-md active:scale-95"
+                            className="flex items-center max-w-fit cursor-pointer gap-2 rounded-lg bg-gray-200 px-4 py-2 text-gray-800 text-lg font-medium shadow-sm transition-all duration-200 hover:bg-gray-300 hover:shadow-md active:scale-95"
                         >
-                                <FaPlus className="text-gray-600 text-lg" />
-                                <span>{t('add', 'Add')}</span>
+                            <FaPlus className="text-gray-600 text-lg" />
+                            <span>{t('add', 'Add')}</span>
                         </button>
 
                         {/* Search Input */}
-                        <div className="relative flex items-center w-full md:w-64">
+                        <div className="relative flex items-center">
                             <FaSearch className="pointer-events-none absolute left-3 text-gray-600 text-lg" />
                             <input
                                 type="text"
@@ -203,7 +206,7 @@ export default function Income() {
                         {/* View Toggle Button */}
                         <button
                             onClick={toggleView}
-                            className="flex h-12 w-12 items-center justify-center rounded-lg border border-gray-300 bg-gray-200 text-gray-800 transition hover:bg-gray-300 active:scale-95"
+                            className="hidden lg:flex h-12 w-12 items-center justify-center rounded-lg border border-gray-300 bg-gray-200 text-gray-800 transition hover:bg-gray-300 active:scale-95"
                         >
                             {view === 'grid' ? <FaList /> : <FaThLarge />}
                         </button>
@@ -318,13 +321,13 @@ export default function Income() {
 
                             {/* Buttons */}
                             <div className="flex justify-end space-x-3 mt-2">
-                                    <button
-                                        type="button"
-                                        onClick={closeModal}
-                                        className="rounded-lg bg-gray-200 px-5 py-2 text-gray-800 font-medium hover:bg-gray-300 transition"
-                                    >
-                                        {t('cancel', 'Cancel')}
-                                    </button>
+                                <button
+                                    type="button"
+                                    onClick={closeModal}
+                                    className="rounded-lg bg-gray-200 px-5 py-2 text-gray-800 font-medium hover:bg-gray-300 transition"
+                                >
+                                    {t('cancel', 'Cancel')}
+                                </button>
                                 <button
                                     type="submit"
                                     className={`rounded-lg px-5 py-2 font-medium text-white transition ${isModifying.current.isDeleting

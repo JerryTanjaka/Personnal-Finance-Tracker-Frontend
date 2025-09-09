@@ -20,6 +20,7 @@ export default function BarChart({ chartValueOptions }: any) {
     const chartOptions = {
         base: 0,
         responsive: true,
+        borderRadius: 4,
         scales: {
             y: {
                 beginAtZero: true,
@@ -221,7 +222,7 @@ export default function BarChart({ chartValueOptions }: any) {
     }
 
     return (
-        <div className="h-[40vh] flex-1/2 min-w-[600px] max-w-[720px] cursor-pointer">
+        <div className="w-[100%] self-center aspect-video max-h-fit flex-1/2 max-w-[720px] cursor-pointer">
             {chartData && <Bar data={chartData} options={chartOptions} />}
         </div>
     );

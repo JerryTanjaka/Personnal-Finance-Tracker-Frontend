@@ -10,12 +10,14 @@ import {
   FaTaxi,
   FaTrash,
   FaUtensils,
+  FaQuestion,
 } from "react-icons/fa";
 import type { Transaction } from "./Types";
 import { useTranslation } from "react-i18next";
 import { CurrencyContext } from "../../context/CurrencyContext";
 import { formatCurrency } from "../../utils/currency";
 import formatName from "../../utils/FormatTransactionName";
+import useWindowDimensions from "../../hooks/useWindowDimensions";
 
 type TransactionCardProps = {
   transaction: Transaction;
@@ -53,6 +55,8 @@ export default function TransactionCard({
 }: TransactionCardProps) {
   const { currency } = useContext(CurrencyContext);
   const { t } = useTranslation();
+  const { width } = useWindowDimensions()
+  const isWideViewPort = () => width > 1024
 
   const formattedDate = new Date(transaction.date).toLocaleDateString(
     t("local_date_format", "en-US"),
@@ -61,15 +65,19 @@ export default function TransactionCard({
 
   const formattedEndDate = transaction.end_date
     ? new Date(transaction.end_date).toLocaleDateString(
-        t("local_date_format", "en-US"),
-        { day: "2-digit", month: "short", year: "numeric" }
-      )
+      t("local_date_format", "en-US"),
+      { day: "2-digit", month: "short", year: "numeric" }
+    )
     : t("unset", "Unset");
 
   const icon: React.ReactNode =
-    transaction.type === "income"
-      ? <FaMoneyBillWave className="text-white" />
-      : categoryIcons[transaction.category || ""] || <FaUtensils className="text-white" />;
+    transaction.type === "income" ? (
+      <FaMoneyBillWave className="text-white" />
+    ) : (
+      categoryIcons[transaction.category || ""] || (
+        <FaQuestion className="text-white" />
+      )
+    );
 
   const bgColor =
     transaction.type === "income"
@@ -78,9 +86,8 @@ export default function TransactionCard({
 
   return (
     <div
-      className={`group relative mb-2 scale-99 cursor-pointer rounded-xl border border-gray-600/60 bg-gray-100 px-4 py-3 shadow-sm backdrop-blur-sm transition-transform duration-200 hover:scale-100 hover:shadow-md hover:before:opacity-100 dark:bg-gray-900 ${
-        view === "list" ? "h-24 sm:h-28" : "h-auto"
-      }`}
+      className={`group relative h-full scale-99 cursor-pointer rounded-xl border border-gray-400/60 bg-gray-100 px-3 py-5 shadow-sm backdrop-blur-sm transition-transform duration-200 hover:scale-100 hover:shadow-md hover:before:opacity-100 dark:bg-gray-900 ${(view === "list" && isWideViewPort()) ? "h-fit" : "h-auto"
+        }`}
     >
       {/* Badge icon */}
       <div
@@ -90,26 +97,25 @@ export default function TransactionCard({
       </div>
 
       {/* Main content */}
-      <div className="flex items-start justify-between">
+      <div className="flex items-start justify-between ml-2 mt-1">
         {/* Info */}
         <div
           className={
-            view === "list"
-              ? "ml-12 flex flex-col justify-between w-full"
+            (view === "list" && isWideViewPort())
+              ? "flex flex-col justify-between w-full"
               : "flex flex-col space-y-2"
           }
         >
           {/* Name & Amount */}
-          <div className="mt-6 flex w-fit items-center justify-between space-x-4 capitalize">
+          <div className="flex w-fit mt-2 xl:flex-row flex-col lg:items-center justify-between space-x-4 capitalize">
             <h2 className="mb-1 truncate pl-1.5 text-xl leading-tight font-semibold text-gray-900 dark:text-gray-100">
               {formatName(transaction.name)}
             </h2>
             <p
-              className={`text-2xl font-bold tracking-tight ${
-                transaction.type === "expense"
-                  ? "text-red-600 dark:text-red-500/75"
-                  : "text-emerald-600 dark:text-emerald-400"
-              }`}
+              className={`text-2xl font-bold tracking-tight ${transaction.type === "expense"
+                ? "text-red-600 dark:text-red-500/75"
+                : "text-emerald-600 dark:text-emerald-400"
+                }`}
             >
               {transaction.type === "expense" ? "-" : "+"}
               {formatCurrency(transaction.amount, currency, true)}
@@ -120,41 +126,43 @@ export default function TransactionCard({
           </div>
 
           {/* Category / Source & Date */}
-          <div className="text-md mt-1 flex flex-wrap items-center gap-4 text-gray-500 dark:text-gray-400">
-            <span className="rounded-full bg-gray-100 px-3 py-1.5 font-medium text-gray-700 dark:bg-gray-800 dark:text-gray-300 truncate max-w-[150px]">
+          <div className="text-md mt-1 flex flex-wrap flex-col lg:flex-row lg:items-center gap-x-4 gap-y-1 text-gray-500 dark:text-gray-400">
+            <span className="rounded-full w-fit bg-gray-100 px-3 py-1.5 font-medium text-gray-700 dark:bg-gray-800 dark:text-gray-300 truncate max-w-[100px] lg:max-w-[150px]">
               {formatName(
                 transaction.type === "expense"
                   ? transaction.category || "Uncategorized"
                   : transaction.source || "Unknown"
               )}
             </span>
-            <span className="font-medium text-gray-500 dark:text-gray-400">
-              {formattedDate}
-            </span>
-            {transaction.start_date && (
-              <>
-                <span className="text-gray-300 dark:text-gray-600">→</span>
-                <span className="font-medium">{formattedEndDate}</span>
-              </>
-            )}
+            <div className={`w-fit flex flex-wrap`}>
+              <span className="font-medium text-gray-500 dark:text-gray-400 text-nowrap">
+                {formattedDate}
+              </span>
+              {transaction.start_date && (
+                <>
+                  <span className="text-gray-500 dark:text-gray-600 mx-2 text-nowrap">{"->"}</span>
+                  <span className="font-medium text-nowrap">{formattedEndDate}</span>
+                </>
+              )}
+            </div>
           </div>
         </div>
 
         {/* Action buttons */}
-        <div className="ml-4 flex min-h-full mt-2">
+        <div className="flex min-h-full">
           {transaction.receipt_id && (
             <button
               onClick={actions?.onDownload}
-              className="group/btn flex h-10 w-10 items-center justify-center rounded-xl bg-blue-600 text-white shadow-md transition-all duration-200 hover:scale-105 hover:bg-blue-700 hover:shadow-lg active:scale-95"
+              className="group/btn flex mr-2 h-10 w-10 items-center justify-center rounded-xl bg-blue-600 text-white shadow-md transition-all duration-200 hover:scale-105 hover:bg-blue-700 hover:shadow-lg active:scale-95"
             >
               <FaFileDownload className="text-sm transition-transform duration-200 group-hover/btn:scale-110" />
             </button>
           )}
 
           <div
-            className={`flex ${
-              view === "grid" ? "flex-col items-center space-y-2" : "flex-col justify-between h-full gap-2"
-            }`}
+            className={`flex ${(
+              view === "grid" || !isWideViewPort()) ? "flex-col items-center space-y-2" : "flex-col justify-between h-full gap-2"
+              }`}
           >
             <button
               onClick={actions?.onChange}
