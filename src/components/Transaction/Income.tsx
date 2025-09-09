@@ -182,7 +182,7 @@ export default function Income() {
                 <div className="flex flex-col border-b border-gray-300 dark:text-gray-100 dark:border-gray-500 pb-2 text-3xl font-bold md:flex-row md:items-center md:justify-between">
                     <h1 className="text-3xl font-bold">{t('incomes', 'Incomes')}</h1>
 
-                    <div className="flex flex-row md:items-center space-x-2 space-y-2 pt-3 lg:pt-0 md:space-y-0">
+                    <div className="flex flex-row justify-center md:items-center space-x-2 space-y-2 pt-3 lg:pt-0 md:space-y-0">
                         {/* Add Button */}
                         <button
                             onClick={openModal}
@@ -193,7 +193,7 @@ export default function Income() {
                         </button>
 
                         {/* Search Input */}
-                        <div className="relative flex items-center w-full lg:w-64">
+                        <div className="relative flex items-center">
                             <FaSearch className="pointer-events-none absolute left-3 text-gray-600 text-lg" />
                             <input
                                 type="text"

@@ -33,11 +33,11 @@ export default function Settings() {
                 <h2 className="mb-2 text-xl font-semibold text-gray-900 dark:text-gray-100">
                     {t('general_account_informations', "General account informations")}
                 </h2>
-                <div className='my-1 bg-gray-50 dark:bg-gray-800 w-fit min-w-[300px] p-2 px-4 rounded-lg border border-gray-200 dark:border-gray-700 flex items-center gap-3'>
+                <div className='my-1 bg-gray-50 dark:bg-gray-800 w-[300px] min-w-[150px] max-w-full p-2 px-4 rounded-lg border border-gray-200 dark:border-gray-700 flex items-center gap-3'>
                     <h4 className='font-medium text-gray-800 dark:text-gray-100 text-[16px]'>Email:</h4>
                     <p className='text-gray-600 dark:text-gray-400'>{userSummary.email}</p>
                 </div>
-                <div className='my-1 bg-gray-50 dark:bg-gray-800 w-fit min-w-[300px] p-2 px-4 rounded-lg border border-gray-200 dark:border-gray-700 flex items-center gap-3'>
+                <div className='my-1 bg-gray-50 dark:bg-gray-800 w-[300px] min-w-[150px] max-w-full p-2 px-4 rounded-lg border border-gray-200 dark:border-gray-700 flex items-center gap-3'>
                     <h4 className='font-medium text-gray-800 dark:text-gray-100 text-[16px]'>{t("join_date", "Join Date")}:</h4>
                     <p className='text-gray-600 dark:text-gray-400'>{new Date(userSummary.createdAt).toLocaleDateString(t("local_date_format", "en-US"), { year: "numeric", month: "short", day: "2-digit" })}</p>
                 </div>
