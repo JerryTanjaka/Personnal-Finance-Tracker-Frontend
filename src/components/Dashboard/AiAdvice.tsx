@@ -52,6 +52,7 @@ export default function AiAdvice() {
                 console.error(err);
             } finally {
                 setLoading(false);
+                //put to false in production, (optimize api call)
             }
         };
 
@@ -64,10 +65,10 @@ export default function AiAdvice() {
             {loading ? (
                 <div className="flex items-center gap-2">
                     <span className="text-sm font-medium">AI is thinking</span>
-                    <span className="flex gap-1">
-                        <span className="w-2 h-2 rounded-full bg-blue-500 animate-bounce [animation-delay:0ms]" />
-                        <span className="w-2 h-2 rounded-full bg-blue-500 animate-bounce [animation-delay:150ms]" />
-                        <span className="w-2 h-2 rounded-full bg-blue-500 animate-bounce [animation-delay:300ms]" />
+                    <span className="flex gap-1 pt-1">
+                        <span className="w-2 h-4 rounded-full bg-blue-500 animate-bounce [animation-delay:0ms]" />
+                        <span className="w-2 h-4 rounded-full bg-blue-500 animate-bounce [animation-delay:150ms]" />
+                        <span className="w-2 h-4 rounded-full bg-blue-500 animate-bounce [animation-delay:300ms]" />
                     </span>
                 </div>
             ) : (
