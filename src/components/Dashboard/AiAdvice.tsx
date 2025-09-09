@@ -71,7 +71,10 @@ export default function AiAdvice() {
                     </span>
                 </div>
             ) : (
-                <p className="text-sm">💡 Tips: {advice}</p>
+                <p className="text-sm flex items-center gap-2">
+                    <i className="bx bx-light-bulb text-lg"></i>
+                    <span>Tips: {advice}</span>
+                </p>
             )}
         </section>
     );
