@@ -1,12 +1,13 @@
-import StatCard from '../components/StatCard.tsx';
-import { PieChart } from "../components/PieChart.tsx";
-import ExpenseList from "../components/ExpenseList.tsx";
+import StatCard from '../components/Dashboard/StatCard.tsx';
+import { PieChart } from "../components/Dashboard/PieChart.tsx";
+import ExpenseList from "../components/Dashboard/ExpenseList.tsx";
 import { useTranslation } from 'react-i18next';
 import { useEffect, useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
-import BarChart from '../components/BarChart.tsx';
+import BarChart from '../components/Dashboard/BarChart.tsx';
 import ExpenseFilter from '../components/UI/ExpenseFilter.tsx';
 import useWindowDimensions from '../hooks/useWindowDimensions.ts';
+import AiAdvice from '../components/Dashboard/AiAdvice.tsx';
 
 type MonthlySummaryType = {
     year: number
@@ -116,6 +117,7 @@ export default function Dashboard() {
                         color={'text-blue-600'}
                     />
                 </div>
+                <AiAdvice />
                 <ExpenseFilter
                     chartOptions={chartOptions}
                     setChartOptions={setChartOptions}

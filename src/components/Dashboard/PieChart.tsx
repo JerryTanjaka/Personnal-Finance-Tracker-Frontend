@@ -2,9 +2,9 @@ import { useContext, useEffect, useState } from "react";
 import { Doughnut } from "react-chartjs-2";
 import { Chart as ChartJS, Tooltip, Legend, ArcElement } from "chart.js";
 import { useTranslation } from 'react-i18next';
-import { CurrencyContext } from "../context/CurrencyContext";
-import { formatCurrency } from "../utils/currency";
-import useDarkMode from "../hooks/useDarkMode";
+import { CurrencyContext } from "../../context/CurrencyContext";
+import { formatCurrency } from "../../utils/currency";
+import useDarkMode from "../../hooks/useDarkMode";
 
 ChartJS.register(Tooltip, Legend, ArcElement);
 

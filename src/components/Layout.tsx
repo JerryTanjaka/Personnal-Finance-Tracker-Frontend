@@ -1,5 +1,5 @@
 import { Outlet } from 'react-router-dom';
-import NavBar from './NavBar';
+import NavBar from './Dashboard/NavBar';
 import useWindowDimensions from '../hooks/useWindowDimensions';
 
 export default function Layout() {
