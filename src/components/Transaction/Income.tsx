@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { FaList, FaPlus, FaThLarge } from 'react-icons/fa';
 import TransactionCard from './TransactionCard';
 import type { Transaction } from './Types';
+import { getAccessToken } from '../../utils/getCookiesToken';
 import Input from './searchButton';
 
 type ActionsModel = {
@@ -40,7 +41,7 @@ export default function Income() {
     };
 
     const [transactions, setTransactions] = useState<Transaction[]>([]);
-    const token = localStorage.getItem('accessToken');
+    const token = getAccessToken();
 
     const [searchTerm, setSearchTerm] = useState('');
     const filteredTransactions = transactions.filter((t) => {
@@ -53,12 +54,10 @@ export default function Income() {
     const fetchTransactions = async () => {
         if (!token) return;
         try {
-            const res = await fetch(
-                `${import.meta.env.VITE_API_URL}/api/incomes`,
-                {
-                    headers: { Authorization: `Bearer ${token}` },
-                },
-            );
+            const res = await fetch(`${import.meta.env.VITE_API_URL}/api/incomes`, {
+                mode: 'cors', credentials: 'include',
+                headers: { Authorization: `${token}` },
+            });
             const data = await res.json();
             const formatted: Transaction[] = data.map((item: any) => ({
                 id: item.id,
@@ -90,22 +89,20 @@ export default function Income() {
         const source = formData.get('source') as string;
 
         try {
-            const res = await fetch(
-                `${import.meta.env.VITE_API_URL}/api/incomes`,
-                {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        Authorization: `Bearer ${token}`,
-                    },
-                    body: JSON.stringify({
-                        amount,
-                        date,
-                        source,
-                        description: name,
-                    }),
+            const res = await fetch(`${import.meta.env.VITE_API_URL}/api/incomes`, {
+                mode: 'cors', credentials: 'include',
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `${token}`,
                 },
-            );
+                body: JSON.stringify({
+                    amount,
+                    date,
+                    source,
+                    description: name,
+                }),
+            });
 
             if (!res.ok) throw new Error('Error creating income');
 
@@ -132,10 +129,11 @@ export default function Income() {
 
         try {
             fetch(`${import.meta.env.VITE_API_URL}/api/incomes/` + incomeId, {
+                mode: 'cors', credentials: 'include',
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
-                    Authorization: `Bearer ${token}`,
+                    Authorization: `${token}`,
                 },
                 body: JSON.stringify({
                     amount,
@@ -163,10 +161,11 @@ export default function Income() {
         incomeId = cardIdRef.current;
         try {
             fetch(`${import.meta.env.VITE_API_URL}/api/incomes/` + incomeId, {
+                mode: 'cors', credentials: 'include',
                 method: 'DELETE',
                 headers: {
                     'Content-Type': 'application/json',
-                    Authorization: `Bearer ${token}`,
+                    Authorization: `${token}`,
                 },
             })
                 .then(() => fetchTransactions())

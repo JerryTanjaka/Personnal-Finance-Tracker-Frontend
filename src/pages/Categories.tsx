@@ -5,6 +5,7 @@ import { useTranslation } from "react-i18next";
 import CategoryList from "../components/Categories/CategoryList";
 import CategoryModal from "../components/Categories/CategoryModal";
 import SearchPanel from "../components/Categories/SearchPanel";
+import { getAccessToken } from "../utils/getCookiesToken";
 
 type Category = {
     id: string;
@@ -18,8 +19,8 @@ type Message = {
 };
 
 export default function Categories() {
-    const token = localStorage.getItem("accessToken");
     const { t } = useTranslation();
+    const token = getAccessToken()
 
     const [categoryReload, setCategoryReload] = useState<boolean>(false);
     const [categoryList, setCategoryList] = useState<Array<Category> | null>(
@@ -42,7 +43,8 @@ export default function Categories() {
 
     useEffect(() => {
         fetch(`${import.meta.env.VITE_API_URL}/api/categories/`, {
-            headers: { Authorization: "Bearer " + token },
+            mode: 'cors', credentials: 'include',
+            headers: { Authorization: `${token}` },
         })
             .then(async (res) => {
                 return await res.json().then((res) => {
@@ -76,10 +78,11 @@ export default function Categories() {
             return;
         }
         fetch(`${import.meta.env.VITE_API_URL}/api/categories/`, {
+            mode: 'cors', credentials: 'include',
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
-                Authorization: "Bearer " + token,
+                Authorization: `${token}`
             },
             body: JSON.stringify({ name: categoryName }),
         })
@@ -100,9 +103,10 @@ export default function Categories() {
         }
         fetch(`${import.meta.env.VITE_API_URL}/api/categories/${categoryId}`, {
             method: "PUT",
+            mode: 'cors', credentials: 'include',
             headers: {
                 "Content-Type": "application/json",
-                Authorization: "Bearer " + token,
+                Authorization: `${token}`
             },
             body: JSON.stringify({ name: categoryName }),
         })
@@ -115,8 +119,9 @@ export default function Categories() {
         fetch(
             `${import.meta.env.VITE_API_URL}/api/categories/${categoryId}?force=${force}`,
             {
+                mode: 'cors', credentials: 'include',
+                headers: { Authorization: `${token}` },
                 method: "DELETE",
-                headers: { Authorization: "Bearer " + token },
             }
         )
             .then(async (res) => await handleNotification(res))
