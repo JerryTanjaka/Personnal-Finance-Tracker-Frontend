@@ -1,9 +1,5 @@
-import { GoogleGenerativeAI } from "@google/generative-ai";
 import { useState, useEffect } from "react";
 import { getAccessToken } from "../../utils/getCookiesToken";
-
-const genAI = new GoogleGenerativeAI(import.meta.env.VITE_GEMINI_API_KEY);
-const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
 
 export default function AiAdvice() {
     const [incomes, setIncomes] = useState([]);
@@ -20,18 +16,32 @@ export default function AiAdvice() {
         const fetchData = async () => {
             setLoading(true);
             setShowAdvice(false);
+
             try {
+                const cachedAdvice = localStorage.getItem("aiAdvice");
+                const cachedTime = localStorage.getItem("aiAdviceTime");
+
+                if (cachedAdvice && cachedTime && Date.now() - Number(cachedTime) < 5 * 60 * 1000) {
+                    setAdvice(cachedAdvice);
+                    setShowAdvice(true);
+                    setLoading(false);
+                    return;
+                }
+
                 const [expensesRes, incomesRes, categoriesRes] = await Promise.all([
                     fetch(`${import.meta.env.VITE_API_URL}/api/expenses`, {
-                        mode: 'cors', credentials: 'include',
+                        mode: "cors",
+                        credentials: "include",
                         headers: { Authorization: `${token}` },
                     }),
                     fetch(`${import.meta.env.VITE_API_URL}/api/incomes`, {
-                        mode: 'cors', credentials: 'include',
+                        mode: "cors",
+                        credentials: "include",
                         headers: { Authorization: `${token}` },
                     }),
                     fetch(`${import.meta.env.VITE_API_URL}/api/categories`, {
-                        mode: 'cors', credentials: 'include',
+                        mode: "cors",
+                        credentials: "include",
                         headers: { Authorization: `${token}` },
                     }),
                 ]);
@@ -47,21 +57,33 @@ export default function AiAdvice() {
                 setCategories(categoriesData);
 
                 const prompt = `
-                    Give the answer in the given language: ${language}
-                    - English if 'en', French if 'fr'
-                    Give in one short sentence (max 20 words) a clever financial advice based on expenses, incomes, and categories.
-                    Incomes: ${JSON.stringify(incomesData)}
-                    Categories: ${JSON.stringify(categoriesData)}
-                    Expenses: ${JSON.stringify(expensesData)}
-                `;
+          Give the answer in the given language: ${language}
+          - English if 'en', French if 'fr'
+          Give in one short sentence (max 20 words) a clever financial advice based on expenses, incomes, and categories.
+          Incomes: ${JSON.stringify(incomesData)}
+          Categories: ${JSON.stringify(categoriesData)}
+          Expenses: ${JSON.stringify(expensesData)}
+        `;
 
-                const result = await model.generateContent(prompt);
-                const text = result.response.text();
-                setAdvice(text);
+                let aiResult;
+                try {
+                    aiResult = await window.apifree.chat(prompt);
+                } catch (err: any) {
+                    if (err.message.includes("429")) {
+                        aiResult = "AI service is busy. Please try again later.";
+                    } else {
+                        aiResult = "Failed to get AI advice.";
+                        console.error("AI Error:", err);
+                    }
+                }
+
+                setAdvice(aiResult);
+                localStorage.setItem("aiAdvice", aiResult);
+                localStorage.setItem("aiAdviceTime", Date.now().toString());
 
                 setTimeout(() => setShowAdvice(true), 50);
             } catch (err) {
-                console.error(err);
+                console.error("Data Fetch Error:", err);
             } finally {
                 setLoading(false);
             }
@@ -83,9 +105,8 @@ export default function AiAdvice() {
                 </div>
             ) : (
                 <p
-                    className={`text-sm flex items-center gap-2 transition-opacity duration-700 ${
-                        showAdvice ? "opacity-100" : "opacity-0"
-                    }`}
+                    className={`text-sm flex items-center gap-2 transition-opacity duration-700 ${showAdvice ? "opacity-100" : "opacity-0"
+                        }`}
                 >
                     <i className="bx bx-light-bulb text-lg"></i>
                     <span>Tips: {advice}</span>
