@@ -18,15 +18,8 @@ export default function AiAdvice() {
             setShowAdvice(false);
 
             try {
-                const cachedAdvice = localStorage.getItem("aiAdvice");
-                const cachedTime = localStorage.getItem("aiAdviceTime");
-
-                if (cachedAdvice && cachedTime && Date.now() - Number(cachedTime) < 5 * 60 * 1000) {
-                    setAdvice(cachedAdvice);
-                    setShowAdvice(true);
-                    setLoading(false);
-                    return;
-                }
+                localStorage.removeItem("aiAdvice");
+                localStorage.removeItem("aiAdviceTime");
 
                 const [expensesRes, incomesRes, categoriesRes] = await Promise.all([
                     fetch(`${import.meta.env.VITE_API_URL}/api/expenses`, {
@@ -90,7 +83,7 @@ export default function AiAdvice() {
         };
 
         fetchData();
-    }, [token, language]);
+    }, [token, language]); 
 
     return (
         <section className="flex flex-wrap items-end text-gray-800 gap-6 border border-gray-300 dark:border-gray-800 dark:bg-gray-800 dark:text-white rounded-lg px-6 py-4 m-4 mb-0 mx-0">
