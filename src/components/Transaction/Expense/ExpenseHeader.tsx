@@ -1,6 +1,6 @@
 
 import { FaFilter, FaList, FaPlus, FaThLarge } from 'react-icons/fa';
-import SearchButton from '../searchButton';
+import SearchButton from '../SearchButton';
 
 type Props = {
   t: any;

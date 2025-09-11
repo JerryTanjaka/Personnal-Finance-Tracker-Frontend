@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next';
 import { FaList, FaPlus, FaThLarge } from 'react-icons/fa';
 import TransactionCard from '../TransactionCard';
 import { getAccessToken } from '../../../utils/getCookiesToken';
-import SearchButton from '../searchButton';
+import SearchButton from '../SearchButton';
 import SessionExpiryBox from '../../UI/SessionExpiryBox';
 import type { Transaction } from '../Types';
 
@@ -93,7 +93,6 @@ export default function Income() {
 
   return (
     <div className="z-50 flex lg:h-[96vh] h-[calc(96vh-120px)] w-full flex-col items-center rounded-lg bg-gray-100 dark:border-2 dark:border-gray-800 dark:bg-gray-900">
-      <SessionExpiryBox />
       <div className="flex min-h-full w-full flex-col rounded-2xl">
         <div className="flex flex-col pb-2.5 border-gray-300 px-5 pt-5 text-3xl font-bold md:flex-row md:items-center md:justify-between">
           <div className="flex flex-col md:flex-row w-full md:items-center justify-between border-b border-gray-300 dark:border-gray-700">
@@ -129,19 +128,19 @@ export default function Income() {
       <AnimatePresence>
         {isModalOpen && (
           <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
-            <motion.div initial={{scale:0,opacity:0}} exit={{scale:0,opacity:0}} animate={{scale:1,opacity:1}} transition={{duration:0.15}} className="w-full max-sm:mx-2 max-w-md rounded-xl bg-white p-6 shadow-lg">
+            <motion.div initial={{scale:0,opacity:0}} exit={{scale:0,opacity:0}} animate={{scale:1,opacity:1}} transition={{duration:0.15}} className="w-full max-sm:mx-2 max-w-md rounded-xl bg-white dark:bg-gray-800 dark:text-gray-200 max-sm:m-1.5 p-6 shadow-lg">
               <h2 className="mb-3 text-2xl font-bold">{isModifying.current.status ? isModifying.current.isDeleting ? t('delete','Delete') : t('update','Update') : t('add_new','Add New')} {t('income','Income')}</h2>
               <form className="flex flex-col space-y-4" onSubmit={(e) => isModifying.current.status ? isModifying.current.isDeleting ? handleDeleteTransaction(e) : handleUpdateTransaction(e) : handleAddTransaction(e)}>
                 {!isModifying.current.isDeleting && (
                   <>
-                    <input name="name" type="text" placeholder={t('name','Name')} className="rounded-lg border border-gray-300 p-3" required />
-                    <input name="amount" type="number" placeholder={t('amount','Amount')} className="rounded-lg border border-gray-300 p-3" required />
-                    <input name="date" type="date" className="rounded-lg border border-gray-300 p-3" required />
-                    <input name="source" type="text" placeholder={t('source','Source')} className="rounded-lg border border-gray-300 p-3" required />
+                    <input name="name" type="text" placeholder={t('name','Name')} className="rounded-lg border border-gray-300 p-3 max-sm:p-1.5" required />
+                    <input name="amount" type="number" placeholder={t('amount','Amount')} className="rounded-lg border border-gray-300 p-3 max-sm:p-1.5" required />
+                    <input name="date" type="date" className="rounded-lg border border-gray-300 p-3 max-sm:p-1.5" required />
+                    <input name="source" type="text" placeholder={t('source','Source')} className="rounded-lg border border-gray-300 p-3 max-sm:p-1.5" required />
                   </>
                 )}
                 <div className="mt-2 flex justify-end space-x-3">
-                  <button type="button" onClick={closeModal} className="rounded-lg bg-gray-200 px-5 py-2">{t('cancel','Cancel')}</button>
+                  <button type="button" onClick={closeModal} className="rounded-lg bg-gray-200 dark:text-black px-5 py-2">{t('cancel','Cancel')}</button>
                   <button type="submit" className={`rounded-lg px-5 py-2 text-white ${isModifying.current.isDeleting ? 'bg-red-700 hover:bg-red-800' : 'bg-emerald-600 hover:bg-emerald-700'}`}>{isModifying.current.status ? isModifying.current.isDeleting ? t('delete','Delete') : t('update','Update') : t('add','Add')}</button>
                 </div>
               </form>
