@@ -5,6 +5,7 @@ import type { Category, Transaction } from '../../Types';
 import { fetchCategories, fetchExpenses } from '../../../../utils/fetch/Fetch';
 import downloadReceipt from 'js-file-download'
 
+
 type Params = {
     setTransactions: Dispatch<SetStateAction<Transaction[]>>;
     setCategories: Dispatch<SetStateAction<Category[]>>;
@@ -24,10 +25,12 @@ export default function useExpenseActions({
     setEditingId,
     setIsConfirmModalOpen,
     setErrorMessage,
+
     t,
 }: Params) {
     const token = getAccessToken();
     const base = import.meta.env.VITE_API_URL;
+
     const getErrorMessage = (error?: { message?: string, error?: string }, customError?: string) => setErrorMessage?.(error?.error || error?.message || customError || "Unexpected error")
 
     const fetchAllTransactions = async () => {
@@ -41,6 +44,7 @@ export default function useExpenseActions({
     };
 
     const fetchAllCategories = async () => {
+
         if (!token) return getErrorMessage?.(undefined, 'No token available');
         try {
             await fetchCategories(token, setCategories, setCategoryList)
@@ -61,7 +65,6 @@ export default function useExpenseActions({
         if (!token) return;
         const form = e.currentTarget;
         const fd = new FormData(form);
-
         const startDate = String(fd.get('startDate'))
         const endDate = String(fd.get('endDate'))
 
@@ -69,7 +72,6 @@ export default function useExpenseActions({
             if (Boolean(new Date(startDate).getTime()) && new Date(endDate) < new Date(startDate)) {
                 return getErrorMessage?.(undefined, 'End date must be after start date')
             }
-
             const res = await fetch(`${base}/api/expenses`, {
                 mode: 'cors',
                 credentials: 'include',
@@ -79,16 +81,18 @@ export default function useExpenseActions({
             });
 
             if (!res.ok) {
+
                 const error = await res.json()
                 return getErrorMessage?.(error, 'Error when creating')
             }
-
             await refreshAll();
             setIsModalOpen?.(false);
             form.reset();
+
         } catch (err: any) {
             console.error('handleAddTransaction error', err);
             return getErrorMessage?.()
+
         }
     };
 
@@ -113,7 +117,6 @@ export default function useExpenseActions({
                 if (Boolean(new Date(startDate).getTime()) && new Date(endDate) < new Date(startDate)) {
                     return getErrorMessage?.(undefined, 'End date must be after start date')
                 }
-
                 const res = await fetch(`${base}/api/expenses/${txId}`, {
                     mode: 'cors',
                     credentials: 'include',
@@ -124,14 +127,17 @@ export default function useExpenseActions({
                 if (!res.ok) {
                     const error = await res.json()
                     return getErrorMessage?.(error, 'Error when updating')
+
                 }
                 await refreshAll();
                 setIsModalOpen?.(false);
                 setEditingId?.(null);
                 form.reset();
+
             } catch (err: any) {
                 console.error('handleUpdateTransaction error', err);
                 return getErrorMessage?.()
+
             }
         } else {
             try {
@@ -145,6 +151,7 @@ export default function useExpenseActions({
                     },
                     body: JSON.stringify({}),
                 });
+
                 if (!res.ok) {
                     const error = await res.json()
                     return getErrorMessage?.(error, 'Error when updating')
@@ -155,6 +162,7 @@ export default function useExpenseActions({
             } catch (err: any) {
                 console.error('programmatic update error', err);
                 return getErrorMessage?.()
+
             }
         }
     };
@@ -169,15 +177,19 @@ export default function useExpenseActions({
                 headers: { Authorization: `${token}` },
             });
             if (!res.ok) {
+
                 const error = await res.json()
                 return getErrorMessage?.(error, 'Error when deleting')
+
             }
             await refreshAll();
             setIsConfirmModalOpen?.(false);
             setEditingId?.(null);
+
         } catch (err: any) {
             console.error('delete error', err);
             getErrorMessage?.()
+
         }
     };
 
@@ -194,6 +206,7 @@ export default function useExpenseActions({
                 credentials: 'include',
                 headers: { Authorization: `${token}` },
             });
+
             if (!res.ok) {
                 const error = await res.json()
                 return getErrorMessage?.(error, 'Error when downloading receipt')
@@ -212,6 +225,7 @@ export default function useExpenseActions({
         } catch (err: any) {
             console.error('download error', err);
             getErrorMessage?.()
+
         }
     };
 
