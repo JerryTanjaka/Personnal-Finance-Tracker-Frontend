@@ -6,8 +6,11 @@ const genAI = new GoogleGenerativeAI(import.meta.env.VITE_GEMINI_API_KEY);
 const geminiModel = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
 
 export default function AiAdvice() {
+    //@ts-ignore
     const [incomes, setIncomes] = useState([]);
+    //@ts-ignore
     const [expenses, setExpenses] = useState([]);
+    //@ts-ignore
     const [categories, setCategories] = useState([]);
     const [advice, setAdvice] = useState("");
     const [loading, setLoading] = useState(false);
@@ -64,6 +67,7 @@ export default function AiAdvice() {
 
                 let aiResult;
                 try {
+                    //@ts-ignore
                     aiResult = await window.apifree.chat(prompt);
                 } catch (err: any) {
                     console.warn("apifreellm failed, trying Gemini fallback...", err);

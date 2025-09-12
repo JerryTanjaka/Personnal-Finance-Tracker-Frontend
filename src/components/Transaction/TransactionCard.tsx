@@ -15,11 +15,8 @@ import {
     FaTaxi,
     FaTrash,
     FaUtensils,
-    FaFile,
-    FaUbuntu,
-    FaGrinTongueWink,
     FaMoneyBill,
-    FaPuzzlePiece
+    
 } from 'react-icons/fa';
 import { CurrencyContext } from '../../context/CurrencyContext';
 import useWindowDimensions from '../../hooks/useWindowDimensions';
