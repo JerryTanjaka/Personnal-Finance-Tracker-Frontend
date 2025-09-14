@@ -16,48 +16,32 @@ export default function LogIn() {
     const [error, setError] = useState<string>('');
     const [loading, setLoading] = useState<boolean>(false);
     const navigate = useNavigate();
+const handleLogIn = async (e: FormEvent<HTMLFormElement>) => {
+  e.preventDefault();
+  setLoading(true);
 
-    const handleLogIn = async (e: FormEvent<HTMLFormElement>) => {
-        e.preventDefault();
+  try {
+    const res = await fetch(`${import.meta.env.VITE_API_URL}/api/auth/login`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      credentials: 'include', 
+      body: JSON.stringify({ email, password, rememberMe }),
+    });
 
-        try {
-            setLoading(true);
-            const res = await fetch(
-                `${import.meta.env.VITE_API_URL}/api/auth/login`,
-                {
-                    method: 'POST',
-                    mode: 'cors',
-                    credentials: 'include',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ email, password, rememberMe }),
-                },
-            );
+    const data = await res.json();
+    if (res.ok) {
+      console.log('Utilisateur:', data.user); 
+      navigate('/dashboard'); 
+    } else {
+      setError(data.message || 'Erreur inconnue');
+    }
+  } catch (err) {
+    setError(err instanceof Error ? err.message : 'Erreur inconnue');
+  } finally {
+    setLoading(false);
+  }
+};
 
-            const text = await res.text();
-            let data;
-            try {
-                data = JSON.parse(text);
-            } catch {
-                throw new Error('Réponse non JSON');
-            }
-
-            if (res.ok) {
-                if (data.accessToken)
-                    localStorage.setItem('accessToken', data.accessToken);
-                if (data.refreshToken)
-                    localStorage.setItem('refreshToken', data.refreshToken);
-
-                navigate('/dashboard');
-            } else {
-                setError(data.message || 'Erreur inconnue');
-            }
-        } catch (err) {
-            setError(err instanceof Error ? err.message : 'Erreur inconnue');
-            setLoading(false);
-        } finally {
-            setLoading(false);
-        }
-    };
 
     const googleLogin = useGoogleLogin({
         onSuccess: async (tokenResponse) => {
@@ -84,15 +68,14 @@ export default function LogIn() {
                     throw new Error('Réponse non JSON');
                 }
 
-            if (res.ok) {
-    if (data.accessToken)
-        localStorage.setItem('accessToken', data.accessToken);
-    if (data.refreshToken)
-        localStorage.setItem('refreshToken', data.refreshToken);
+                if (res.ok) {
+                    if (data.accessToken)
+                        localStorage.setItem('accessToken', data.accessToken);
+                    if (data.refreshToken)
+                        localStorage.setItem('refreshToken', data.refreshToken);
 
-    navigate('/dashboard');
-}
-else {
+                    navigate('/dashboard');
+                } else {
                     setError(data.message || 'Erreur inconnue');
                 }
             } catch (err) {
